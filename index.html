@@ -7,124 +7,6 @@
 <meta name="theme-color" content="#07111f">
 <title>J.A.R.V.I.S. — Avengers Protocol</title>
 
-/* ===== JARVIS VISUAL UPGRADE ===== */
-
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:0;
-  opacity:.13;
-  background-image:
-    linear-gradient(rgba(53,223,255,.12) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(53,223,255,.12) 1px,transparent 1px);
-  background-size:35px 35px;
-  mask-image:linear-gradient(to bottom,black,transparent 85%);
-}
-
-.app{
-  isolation:isolate;
-}
-
-.topbar{
-  box-shadow:0 5px 25px rgba(0,0,0,.25);
-}
-
-.brand{
-  animation:brandGlow 4s infinite alternate;
-}
-
-@keyframes brandGlow{
-  from{text-shadow:0 0 8px rgba(53,223,255,.3)}
-  to{text-shadow:0 0 22px rgba(53,223,255,.9)}
-}
-
-.hero-card{
-  box-shadow:
-    0 0 25px rgba(22,139,255,.09),
-    inset 0 0 30px rgba(53,223,255,.035);
-}
-
-.hero-avatar{
-  animation:reactorPulse 3s infinite ease-in-out;
-}
-
-@keyframes reactorPulse{
-  0%,100%{box-shadow:0 0 12px rgba(53,223,255,.15)}
-  50%{box-shadow:0 0 30px rgba(53,223,255,.45)}
-}
-
-.card,.stat,.hero-tile{
-  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
-}
-
-.card:active,.hero-tile:active{
-  transform:scale(.985);
-  border-color:rgba(53,223,255,.65);
-}
-
-.btn{
-  box-shadow:0 4px 18px rgba(22,139,255,.17);
-  transition:transform .15s ease,filter .15s ease;
-}
-
-.btn:active{
-  transform:scale(.97);
-  filter:brightness(1.15);
-}
-
-.btn:disabled{
-  opacity:.55;
-  cursor:default;
-}
-
-.nav-btn{
-  position:relative;
-  transition:color .2s ease;
-}
-
-.nav-btn.active:after{
-  content:"";
-  position:absolute;
-  top:-9px;
-  width:24px;
-  height:2px;
-  background:var(--cyan);
-  box-shadow:0 0 12px var(--cyan);
-  border-radius:10px;
-}
-
-.nav-icon{
-  transition:transform .2s ease;
-}
-
-.nav-btn.active .nav-icon{
-  transform:translateY(-2px) scale(1.12);
-}
-
-input,select{
-  color-scheme:dark;
-}
-
-input[type="checkbox"]{
-  accent-color:var(--cyan);
-  width:18px;
-  height:18px;
-}
-
-::selection{
-  background:rgba(53,223,255,.3);
-  color:white;
-}
-
-@media(prefers-reduced-motion:reduce){
-  *,*:before,*:after{
-    animation-duration:.01ms!important;
-    transition-duration:.01ms!important;
-  }
-}
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -544,6 +426,125 @@ h3{font-size:14px}
 @media(min-width:500px){
   .page{padding:25px}
   .hero-card{padding:27px}
+}
+
+
+/* ===== JARVIS VISUAL UPGRADE ===== */
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:.13;
+  background-image:
+    linear-gradient(rgba(53,223,255,.12) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(53,223,255,.12) 1px,transparent 1px);
+  background-size:35px 35px;
+  mask-image:linear-gradient(to bottom,black,transparent 85%);
+}
+
+.app{
+  isolation:isolate;
+}
+
+.topbar{
+  box-shadow:0 5px 25px rgba(0,0,0,.25);
+}
+
+.brand{
+  animation:brandGlow 4s infinite alternate;
+}
+
+@keyframes brandGlow{
+  from{text-shadow:0 0 8px rgba(53,223,255,.3)}
+  to{text-shadow:0 0 22px rgba(53,223,255,.9)}
+}
+
+.hero-card{
+  box-shadow:
+    0 0 25px rgba(22,139,255,.09),
+    inset 0 0 30px rgba(53,223,255,.035);
+}
+
+.hero-avatar{
+  animation:reactorPulse 3s infinite ease-in-out;
+}
+
+@keyframes reactorPulse{
+  0%,100%{box-shadow:0 0 12px rgba(53,223,255,.15)}
+  50%{box-shadow:0 0 30px rgba(53,223,255,.45)}
+}
+
+.card,.stat,.hero-tile{
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+
+.card:active,.hero-tile:active{
+  transform:scale(.985);
+  border-color:rgba(53,223,255,.65);
+}
+
+.btn{
+  box-shadow:0 4px 18px rgba(22,139,255,.17);
+  transition:transform .15s ease,filter .15s ease;
+}
+
+.btn:active{
+  transform:scale(.97);
+  filter:brightness(1.15);
+}
+
+.btn:disabled{
+  opacity:.55;
+  cursor:default;
+}
+
+.nav-btn{
+  position:relative;
+  transition:color .2s ease;
+}
+
+.nav-btn.active:after{
+  content:"";
+  position:absolute;
+  top:-9px;
+  width:24px;
+  height:2px;
+  background:var(--cyan);
+  box-shadow:0 0 12px var(--cyan);
+  border-radius:10px;
+}
+
+.nav-icon{
+  transition:transform .2s ease;
+}
+
+.nav-btn.active .nav-icon{
+  transform:translateY(-2px) scale(1.12);
+}
+
+input,select{
+  color-scheme:dark;
+}
+
+input[type="checkbox"]{
+  accent-color:var(--cyan);
+  width:18px;
+  height:18px;
+}
+
+::selection{
+  background:rgba(53,223,255,.3);
+  color:white;
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
 }
 </style>
 </head>
@@ -1160,8 +1161,5 @@ document.getElementById("weightDate").value=
 
 render();
 </script>
-</body>
-</html>
-
 </body>
 </html>
