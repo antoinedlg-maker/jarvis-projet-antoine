@@ -1,0 +1,1167 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#07111f">
+<title>J.A.R.V.I.S. — Avengers Protocol</title>
+
+/* ===== JARVIS VISUAL UPGRADE ===== */
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  opacity:.13;
+  background-image:
+    linear-gradient(rgba(53,223,255,.12) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(53,223,255,.12) 1px,transparent 1px);
+  background-size:35px 35px;
+  mask-image:linear-gradient(to bottom,black,transparent 85%);
+}
+
+.app{
+  isolation:isolate;
+}
+
+.topbar{
+  box-shadow:0 5px 25px rgba(0,0,0,.25);
+}
+
+.brand{
+  animation:brandGlow 4s infinite alternate;
+}
+
+@keyframes brandGlow{
+  from{text-shadow:0 0 8px rgba(53,223,255,.3)}
+  to{text-shadow:0 0 22px rgba(53,223,255,.9)}
+}
+
+.hero-card{
+  box-shadow:
+    0 0 25px rgba(22,139,255,.09),
+    inset 0 0 30px rgba(53,223,255,.035);
+}
+
+.hero-avatar{
+  animation:reactorPulse 3s infinite ease-in-out;
+}
+
+@keyframes reactorPulse{
+  0%,100%{box-shadow:0 0 12px rgba(53,223,255,.15)}
+  50%{box-shadow:0 0 30px rgba(53,223,255,.45)}
+}
+
+.card,.stat,.hero-tile{
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+
+.card:active,.hero-tile:active{
+  transform:scale(.985);
+  border-color:rgba(53,223,255,.65);
+}
+
+.btn{
+  box-shadow:0 4px 18px rgba(22,139,255,.17);
+  transition:transform .15s ease,filter .15s ease;
+}
+
+.btn:active{
+  transform:scale(.97);
+  filter:brightness(1.15);
+}
+
+.btn:disabled{
+  opacity:.55;
+  cursor:default;
+}
+
+.nav-btn{
+  position:relative;
+  transition:color .2s ease;
+}
+
+.nav-btn.active:after{
+  content:"";
+  position:absolute;
+  top:-9px;
+  width:24px;
+  height:2px;
+  background:var(--cyan);
+  box-shadow:0 0 12px var(--cyan);
+  border-radius:10px;
+}
+
+.nav-icon{
+  transition:transform .2s ease;
+}
+
+.nav-btn.active .nav-icon{
+  transform:translateY(-2px) scale(1.12);
+}
+
+input,select{
+  color-scheme:dark;
+}
+
+input[type="checkbox"]{
+  accent-color:var(--cyan);
+  width:18px;
+  height:18px;
+}
+
+::selection{
+  background:rgba(53,223,255,.3);
+  color:white;
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --bg:#050b14;
+  --panel:#0b1727;
+  --panel2:#102239;
+  --cyan:#35dfff;
+  --blue:#168bff;
+  --gold:#f4bd55;
+  --green:#42e6a4;
+  --red:#ff5574;
+  --text:#eef7ff;
+  --muted:#8499ad;
+  --border:rgba(73,190,255,.2);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:
+    radial-gradient(ellipse at 50% -20%,#153d60 0%,transparent 55%),
+    linear-gradient(160deg,#050b14,#071321 55%,#030810);
+  color:var(--text);
+  font-family:Inter,sans-serif;
+  min-height:100vh;
+  padding-bottom:100px;
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+  width:100%;
+  max-width:600px;
+  margin:auto;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 19px 14px;
+  border-bottom:1px solid var(--border);
+  background:rgba(4,12,23,.75);
+  backdrop-filter:blur(15px);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.brand{
+  font-family:Orbitron,sans-serif;
+  font-size:18px;
+  letter-spacing:3px;
+  font-weight:800;
+  color:var(--cyan);
+  text-shadow:0 0 16px #168bff;
+}
+
+.brand small{
+  display:block;
+  color:var(--muted);
+  font:9px Inter,sans-serif;
+  letter-spacing:3px;
+  margin-top:4px;
+}
+
+.status{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--green);
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.status-dot{
+  width:7px;height:7px;
+  background:var(--green);
+  border-radius:50%;
+  box-shadow:0 0 12px var(--green);
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  50%{opacity:.35;box-shadow:0 0 3px var(--green)}
+}
+
+.page{
+  display:none;
+  padding:20px 17px 30px;
+  animation:appear .35s ease;
+}
+
+.page.active{display:block}
+
+@keyframes appear{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.eyebrow{
+  color:var(--cyan);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:2.5px;
+  margin-bottom:8px;
+}
+
+h1{
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+  letter-spacing:1px;
+  line-height:1.35;
+}
+
+h2{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:1px;
+}
+
+h3{font-size:14px}
+
+.subtitle{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  margin-top:7px;
+}
+
+.card{
+  background:linear-gradient(145deg,rgba(17,39,61,.96),rgba(8,20,35,.97));
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:17px;
+  margin-top:15px;
+  box-shadow:0 8px 30px rgba(0,0,0,.2);
+  position:relative;
+  overflow:hidden;
+}
+
+.card:before{
+  content:"";
+  position:absolute;
+  top:0;left:15px;right:15px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  opacity:.6;
+}
+
+.hero-card{
+  background:
+    radial-gradient(circle at 85% 20%,rgba(53,223,255,.2),transparent 35%),
+    linear-gradient(135deg,#102b47,#071321);
+  border:1px solid rgba(53,223,255,.4);
+  border-radius:22px;
+  padding:21px;
+  margin-top:20px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-card:after{
+  content:"A";
+  position:absolute;
+  right:10px;
+  bottom:-48px;
+  font-family:Orbitron,sans-serif;
+  font-size:170px;
+  font-weight:800;
+  color:rgba(53,223,255,.055);
+  pointer-events:none;
+}
+
+.hero-label{
+  color:var(--gold);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:2px;
+}
+
+.hero-name{
+  font-family:Orbitron,sans-serif;
+  font-size:21px;
+  margin:9px 0;
+}
+
+.hero-message{
+  color:#c4d9e9;
+  font-size:12px;
+  line-height:1.7;
+  max-width:85%;
+}
+
+.hero-avatar{
+  width:66px;height:66px;
+  border:1px solid var(--cyan);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:30px;
+  background:rgba(53,223,255,.1);
+  box-shadow:0 0 25px rgba(53,223,255,.2);
+  margin-bottom:13px;
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:25px 0 12px;
+}
+
+.section-title span{
+  color:var(--muted);
+  font-size:10px;
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+
+.stat{
+  background:rgba(12,29,48,.9);
+  border:1px solid var(--border);
+  padding:14px;
+  border-radius:14px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:10px;
+}
+
+.stat-value{
+  font-family:Orbitron,sans-serif;
+  font-size:21px;
+  margin-top:8px;
+  color:var(--cyan);
+}
+
+.stat-unit{
+  color:var(--muted);
+  font:10px Inter,sans-serif;
+}
+
+.progress-track{
+  width:100%;
+  height:8px;
+  background:#172b40;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:12px;
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  border-radius:20px;
+  box-shadow:0 0 12px var(--cyan);
+  transition:width .4s;
+}
+
+.btn{
+  width:100%;
+  border:1px solid rgba(53,223,255,.5);
+  border-radius:11px;
+  padding:13px;
+  color:#00121d;
+  background:linear-gradient(100deg,var(--cyan),#70bfff);
+  font-weight:800;
+  font-size:12px;
+  letter-spacing:.5px;
+  margin-top:12px;
+}
+
+.btn-secondary{
+  background:rgba(53,223,255,.08);
+  color:var(--cyan);
+}
+
+.field{
+  width:100%;
+  background:#071321;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:13px;
+  color:white;
+  margin-top:8px;
+  outline:none;
+}
+
+.field:focus{border-color:var(--cyan)}
+
+.field-label{
+  color:var(--muted);
+  font-size:11px;
+  display:block;
+  margin-top:14px;
+}
+
+.two-col{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.list-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  background:rgba(5,16,29,.7);
+  border:1px solid rgba(73,190,255,.12);
+  padding:12px;
+  border-radius:11px;
+  margin-top:8px;
+  font-size:12px;
+}
+
+.delete-btn{
+  color:var(--red);
+  background:none;
+  border:0;
+  font-size:17px;
+  padding:4px 8px;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:12px;
+}
+
+.hero-tile{
+  background:linear-gradient(145deg,#142c45,#091523);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+}
+
+.hero-symbol{
+  font-size:28px;
+  margin-bottom:9px;
+}
+
+.hero-tile strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.hero-tile p{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:6px;
+  line-height:1.5;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:600px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  background:rgba(4,12,23,.96);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  padding:9px 4px calc(9px + env(safe-area-inset-bottom));
+  z-index:50;
+}
+
+.nav-btn{
+  border:0;
+  background:none;
+  color:#728ba1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  font-size:9px;
+  padding:5px 0;
+}
+
+.nav-btn .nav-icon{font-size:19px}
+.nav-btn.active{color:var(--cyan)}
+.nav-btn.active .nav-icon{text-shadow:0 0 14px var(--cyan)}
+
+.notice{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+  margin-top:10px;
+}
+
+.empty{
+  color:var(--muted);
+  text-align:center;
+  font-size:11px;
+  padding:18px 5px;
+}
+
+@media(min-width:500px){
+  .page{padding:25px}
+  .hero-card{padding:27px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="topbar">
+  <div class="brand">J.A.R.V.I.S.<small>AVENGERS PROTOCOL</small></div>
+  <div class="status"><span class="status-dot"></span> SYSTEM ONLINE</div>
+</header>
+
+<main>
+
+<section class="page active" id="page-home">
+  <div class="eyebrow">PERSONAL ASSISTANT / 01</div>
+  <h1>Bienvenue,<br>Avenger.</h1>
+  <p class="subtitle">Chaque jour est une nouvelle mission. Le progrès commence maintenant.</p>
+
+  <div class="hero-card">
+    <div class="hero-avatar">🤖</div>
+    <div class="hero-label">TON ASSISTANT PERSONNEL</div>
+    <div class="hero-name">TONY STARK</div>
+    <p class="hero-message" id="tonyMessage">Les grandes transformations ne se font pas en un jour. On avance étape par étape. Je m'occupe des calculs, tu t'occupes de la mission.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="stat-label">NIVEAU</div>
+      <div class="stat-value" id="levelValue">01</div>
+      <div class="stat-unit">Recrue Avengers</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">EXPÉRIENCE</div>
+      <div class="stat-value" id="xpValue">0 XP</div>
+      <div class="stat-unit">Points gagnés</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">POIDS ACTUEL</div>
+      <div class="stat-value" id="homeWeight">--</div>
+      <div class="stat-unit">Kilogrammes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">MISSIONS</div>
+      <div class="stat-value" id="missionCount">0</div>
+      <div class="stat-unit">Accomplies</div>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <h2>PROTOCOLE DU JOUR</h2>
+    <span id="todayDate"></span>
+  </div>
+  <div class="card">
+    <h3>🎯 Ta prochaine étape</h3>
+    <p class="subtitle">Enregistre ton premier poids et lance ta progression.</p>
+    <button class="btn" onclick="navigate('weight')">ACCÉDER À MA PROGRESSION</button>
+  </div>
+
+  <div class="section-title"><h2>ÉQUIPE AVENGERS</h2><span>TES ALLIÉS</span></div>
+  <div class="hero-grid">
+    <div class="hero-tile"><div class="hero-symbol">🦾</div><strong>IRON MAN</strong><p>Stratégie, nutrition et analyse</p></div>
+    <div class="hero-tile"><div class="hero-symbol">🛡️</div><strong>CAPTAIN AMERICA</strong><p>Discipline et régularité</p></div>
+    <div class="hero-tile"><div class="hero-symbol">⚡</div><strong>THOR</strong><p>Force et entraînement</p></div>
+    <div class="hero-tile"><div class="hero-symbol">💚</div><strong>HULK</strong><p>Défis et dépassement</p></div>
+  </div>
+</section>
+
+<!-- PAGE 2 : SUIVI DU POIDS -->
+<section class="page" id="page-weight">
+  <div class="eyebrow">IRON MAN / BODY ANALYTICS</div>
+  <h1>Évolution physique</h1>
+  <p class="subtitle">Chaque kilo perdu est une victoire. On mesure les progrès, sans précipitation.</p>
+
+  <div class="hero-card">
+    <div class="hero-label">OBJECTIF PERSONNEL</div>
+    <div class="stat-value" id="weightDifference">-- kg</div>
+    <p class="hero-message">Évolution totale depuis ton premier relevé.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-label">POIDS ACTUEL</div><div class="stat-value" id="currentWeight">--</div><div class="stat-unit">kg</div></div>
+    <div class="stat"><div class="stat-label">OBJECTIF</div><div class="stat-value" id="goalWeight">--</div><div class="stat-unit">kg</div></div>
+  </div>
+
+  <div class="card">
+    <h2>ENREGISTRER UN POIDS</h2>
+    <label class="field-label">Ton poids du jour (kg)</label>
+    <input class="field" type="number" id="weightInput" placeholder="Ex : 145.5" step="0.1" min="1">
+    <label class="field-label">Date de la pesée</label>
+    <input class="field" type="date" id="weightDate">
+    <button class="btn" onclick="addWeight()">ENREGISTRER LA PESÉE</button>
+  </div>
+
+  <div class="card">
+    <h2>MON OBJECTIF DE POIDS</h2>
+    <label class="field-label">Poids cible (kg)</label>
+    <input class="field" type="number" id="goalInput" placeholder="Ex : 120" step="0.1" min="1">
+    <button class="btn btn-secondary" onclick="saveGoal()">DÉFINIR MON OBJECTIF</button>
+    <div class="progress-track"><div class="progress-fill" id="weightProgress"></div></div>
+    <p class="notice" id="weightProgressText">Ton parcours commencera avec ta première pesée.</p>
+  </div>
+
+  <div class="section-title"><h2>HISTORIQUE</h2><span>TES RELEVÉS</span></div>
+  <div class="card" id="weightHistory"><div class="empty">Aucune pesée enregistrée.</div></div>
+</section>
+
+<!-- PAGE 3 : NUTRITION ET COURSES -->
+<section class="page" id="page-nutrition">
+  <div class="eyebrow">STARK INDUSTRIES / NUTRITION</div>
+  <h1>Centre nutrition</h1>
+  <p class="subtitle">Bien manger, se faire plaisir et avancer durablement.</p>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-label">CALORIES DU JOUR</div><div class="stat-value" id="dailyCalories">0</div><div class="stat-unit">kcal consommées</div></div>
+    <div class="stat"><div class="stat-label">PROTÉINES</div><div class="stat-value" id="dailyProtein">0</div><div class="stat-unit">grammes</div></div>
+  </div>
+
+  <div class="card">
+    <h2>AJOUTER UN REPAS</h2>
+    <label class="field-label">Nom du repas / aliment</label>
+    <input class="field" id="mealName" placeholder="Ex : Poulet et riz">
+    <div class="two-col">
+      <div><label class="field-label">Calories (kcal)</label><input class="field" type="number" id="mealCalories" placeholder="450" min="0"></div>
+      <div><label class="field-label">Protéines (g)</label><input class="field" type="number" id="mealProtein" placeholder="35" min="0"></div>
+    </div>
+    <label class="field-label">Moment de la journée</label>
+    <select class="field" id="mealType">
+      <option value="Petit-déjeuner">Petit-déjeuner</option>
+      <option value="Déjeuner">Déjeuner</option>
+      <option value="Collation">Collation</option>
+      <option value="Dîner">Dîner</option>
+    </select>
+    <button class="btn" onclick="addMeal()">AJOUTER À MON JOURNAL</button>
+  </div>
+
+  <div class="section-title"><h2>MON JOURNAL</h2><span>AUJOURD'HUI</span></div>
+  <div class="card" id="mealList"><div class="empty">Aucun repas enregistré aujourd'hui.</div></div>
+
+  <div class="section-title"><h2>LISTE DE COURSES</h2><span>STARK SUPPLY</span></div>
+  <div class="card">
+    <p class="subtitle">Prépare tes courses et garde le contrôle de ton budget.</p>
+    <input class="field" id="shoppingInput" placeholder="Ex : Blanc de poulet, skyr...">
+    <div class="two-col">
+      <div><label class="field-label">Quantité</label><input class="field" id="shoppingQty" placeholder="Ex : 1 kg"></div>
+      <div><label class="field-label">Prix estimé (€)</label><input class="field" type="number" id="shoppingPrice" placeholder="5.00" min="0" step="0.01"></div>
+    </div>
+    <button class="btn" onclick="addShopping()">AJOUTER AUX COURSES</button>
+    <div class="section-title"><h2>MON PANIER</h2><span id="shoppingTotal">0,00 €</span></div>
+    <div id="shoppingList"><div class="empty">Ta liste de courses est vide.</div></div>
+  </div>
+</section>
+
+<!-- PAGE 4 : ENTRAINEMENT -->
+<section class="page" id="page-training">
+  <div class="eyebrow">THOR / TRAINING PROTOCOL</div>
+  <h1>Zone d'entraînement</h1>
+  <p class="subtitle">La régularité construit la force. Chaque séance compte.</p>
+
+  <div class="hero-card">
+    <div class="hero-label">TON PARCOURS SPORTIF</div>
+    <div class="hero-name">PROJECT STRONG</div>
+    <p class="hero-message">Progresse à ton rythme. L'objectif est de devenir plus fort, pas de te détruire à chaque séance.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-label">SÉANCES</div><div class="stat-value" id="workoutCount">0</div><div class="stat-unit">Terminées</div></div>
+    <div class="stat"><div class="stat-label">XP SPORT</div><div class="stat-value" id="workoutXP">0</div><div class="stat-unit">Points gagnés</div></div>
+  </div>
+
+  <div class="card">
+    <h2>ENREGISTRER UNE SÉANCE</h2>
+    <label class="field-label">Nom de la séance</label>
+    <input class="field" id="workoutName" placeholder="Ex : Haut du corps">
+    <label class="field-label">Type d'entraînement</label>
+    <select class="field" id="workoutType">
+      <option>Renforcement musculaire</option>
+      <option>Cardio doux</option>
+      <option>Marche</option>
+      <option>Mobilité / récupération</option>
+      <option>Full body</option>
+    </select>
+    <div class="two-col">
+      <div><label class="field-label">Durée (minutes)</label><input class="field" type="number" id="workoutDuration" placeholder="40" min="1"></div>
+      <div><label class="field-label">Intensité</label><select class="field" id="workoutIntensity"><option>Douce</option><option>Modérée</option><option>Intense</option></select></div>
+    </div>
+    <label class="field-label">Notes (facultatif)</label>
+    <input class="field" id="workoutNotes" placeholder="Ex : haltères, marche...">
+    <button class="btn" onclick="addWorkout()">VALIDER MA SÉANCE</button>
+  </div>
+
+  <div class="section-title"><h2>MES SÉANCES</h2><span>HISTORIQUE</span></div>
+  <div class="card" id="workoutList"><div class="empty">Aucune séance enregistrée.</div></div>
+</section>
+
+<!-- PAGE 5 : MISSIONS ET RECOMPENSES -->
+<section class="page" id="page-missions">
+  <div class="eyebrow">AVENGERS INITIATIVE / LEVEL UP</div>
+  <h1>Centre de missions</h1>
+  <p class="subtitle">Deviens le héros de ta propre progression. Chaque action te rapproche de ton objectif.</p>
+
+  <div class="hero-card">
+    <div class="hero-avatar">🛡️</div>
+    <div class="hero-label">TON GRADE ACTUEL</div>
+    <div class="hero-name" id="rankName">RECRUE AVENGERS</div>
+    <div class="stat-value" id="missionXP">0 XP</div>
+    <div class="progress-track"><div class="progress-fill" id="xpProgress"></div></div>
+    <p class="notice" id="xpNext">100 XP pour atteindre le niveau suivant.</p>
+  </div>
+
+  <div class="section-title"><h2>MISSIONS DU JOUR</h2><span>OBJECTIFS</span></div>
+  <div id="missionList"></div>
+
+  <div class="section-title"><h2>RÉCOMPENSES</h2><span>TES PALIERS</span></div>
+  <div class="card" id="rewardsList">
+    <div class="list-item"><span>🥉 100 XP — Recrue confirmée</span><span>À débloquer</span></div>
+    <div class="list-item"><span>🥈 300 XP — Super-héros</span><span>À débloquer</span></div>
+    <div class="list-item"><span>🥇 600 XP — Avenger confirmé</span><span>À débloquer</span></div>
+    <div class="list-item"><span>🏆 1000 XP — Légende</span><span>À débloquer</span></div>
+  </div>
+
+  <div class="section-title"><h2>TON ÉQUIPE</h2><span>ALLIÉS</span></div>
+  <div class="hero-grid">
+    <div class="hero-tile"><div class="hero-symbol">🦾</div><strong>IRON MAN</strong><p>Intelligence et stratégie</p></div>
+    <div class="hero-tile"><div class="hero-symbol">🛡️</div><strong>CAPTAIN AMERICA</strong><p>Discipline et constance</p></div>
+    <div class="hero-tile"><div class="hero-symbol">⚡</div><strong>THOR</strong><p>Puissance et énergie</p></div>
+    <div class="hero-tile"><div class="hero-symbol">💚</div><strong>HULK</strong><p>Défis et détermination</p></div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- NAVIGATION PRINCIPALE -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" data-page="home" onclick="navigate('home')"><span class="nav-icon">⌂</span>ACCUEIL</button>
+  <button class="nav-btn" data-page="weight" onclick="navigate('weight')"><span class="nav-icon">◉</span>POIDS</button>
+  <button class="nav-btn" data-page="nutrition" onclick="navigate('nutrition')"><span class="nav-icon">✚</span>NUTRITION</button>
+  <button class="nav-btn" data-page="training" onclick="navigate('training')"><span class="nav-icon">⚡</span>SPORT</button>
+  <button class="nav-btn" data-page="missions" onclick="navigate('missions')"><span class="nav-icon">★</span>MISSIONS</button>
+</nav>
+</div>
+
+<script>
+const STORAGE_KEY = "jarvis_avengers_final";
+
+const defaultState = {
+  weights: [],
+  goal: null,
+  meals: [],
+  shopping: [],
+  workouts: [],
+  xp: 0,
+  completedMissions: [],
+  missionDate: new Date().toLocaleDateString("en-CA")
+};
+
+let state = loadState();
+
+function loadState(){
+  try{
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if(saved){
+      return {...defaultState,...JSON.parse(saved)};
+    }
+  }catch(error){
+    console.warn("Sauvegarde inaccessible",error);
+  }
+  return {...defaultState};
+}
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+  }catch(error){
+    alert("Impossible de sauvegarder les données sur cet appareil.");
+  }
+}
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[char]));
+}
+
+function numberValue(id){
+  return Number(document.getElementById(id).value);
+}
+
+function formatDate(date){
+  return new Date(date+"T12:00:00").toLocaleDateString("fr-FR",{
+    day:"2-digit",month:"short",year:"numeric"
+  });
+}
+
+function navigate(page){
+  document.querySelectorAll(".page").forEach(el=>el.classList.remove("active"));
+  const target=document.getElementById("page-"+page);
+  if(!target)return;
+  target.classList.add("active");
+
+  document.querySelectorAll(".nav-btn").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.page===page);
+  });
+
+  window.scrollTo({top:0,behavior:"smooth"});
+  render();
+}
+
+function addXP(amount){
+  state.xp+=amount;
+  saveState();
+  render();
+}
+
+function checkNewDay(){
+  const today=new Date().toLocaleDateString("en-CA");
+  if(state.missionDate!==today){
+    state.missionDate=today;
+    state.completedMissions=[];
+    saveState();
+  }
+}
+
+function addWeight(){
+  const weight=numberValue("weightInput");
+  const date=document.getElementById("weightDate").value;
+
+  if(!weight || weight<1 || weight>500){
+    alert("Entre un poids valide.");
+    return;
+  }
+  if(!date){
+    alert("Choisis une date.");
+    return;
+  }
+  if(state.weights.some(item=>item.date===date)){
+    if(!confirm("Une pesée existe déjà à cette date. Ajouter quand même ?"))return;
+  }
+
+  state.weights.push({weight,date});
+  state.weights.sort((a,b)=>a.date.localeCompare(b.date));
+  document.getElementById("weightInput").value="";
+  addXP(15);
+  saveState();
+  render();
+  alert("Pesée enregistrée ! +15 XP");
+}
+
+function saveGoal(){
+  const goal=numberValue("goalInput");
+  if(!goal || goal<1 || goal>500){
+    alert("Entre un objectif valide.");
+    return;
+  }
+  state.goal=goal;
+  saveState();
+  render();
+  alert("Objectif enregistré !");
+}
+
+function addMeal(){
+  const name=document.getElementById("mealName").value.trim();
+  const calories=numberValue("mealCalories");
+  const protein=numberValue("mealProtein");
+  const type=document.getElementById("mealType").value;
+
+  if(!name || calories<0 || protein<0 ||
+     document.getElementById("mealCalories").value==="" ||
+     document.getElementById("mealProtein").value===""){
+    alert("Complète le nom, les calories et les protéines.");
+    return;
+  }
+
+  state.meals.push({
+    name,calories,protein,type,
+    date:new Date().toLocaleDateString("en-CA")
+  });
+
+  document.getElementById("mealName").value="";
+  document.getElementById("mealCalories").value="";
+  document.getElementById("mealProtein").value="";
+  addXP(5);
+  saveState();
+  render();
+}
+
+function addShopping(){
+  const name=document.getElementById("shoppingInput").value.trim();
+  const qty=document.getElementById("shoppingQty").value.trim();
+  const priceInput=document.getElementById("shoppingPrice").value;
+  const price=priceInput===""?0:Number(priceInput);
+
+  if(!name || price<0 || !Number.isFinite(price)){
+    alert("Entre un article et un prix valide.");
+    return;
+  }
+
+  state.shopping.push({name,qty,price,checked:false});
+  document.getElementById("shoppingInput").value="";
+  document.getElementById("shoppingQty").value="";
+  document.getElementById("shoppingPrice").value="";
+  saveState();
+  render();
+}
+
+function toggleShopping(index){
+  state.shopping[index].checked=!state.shopping[index].checked;
+  saveState();
+  render();
+}
+
+function addWorkout(){
+  const name=document.getElementById("workoutName").value.trim();
+  const duration=numberValue("workoutDuration");
+  const type=document.getElementById("workoutType").value;
+  const intensity=document.getElementById("workoutIntensity").value;
+  const notes=document.getElementById("workoutNotes").value.trim();
+
+  if(!name || !duration || duration<1 || duration>600){
+    alert("Entre un nom de séance et une durée valide.");
+    return;
+  }
+
+  state.workouts.push({
+    name,duration,type,intensity,notes,
+    date:new Date().toLocaleDateString("en-CA")
+  });
+
+  document.getElementById("workoutName").value="";
+  document.getElementById("workoutDuration").value="";
+  document.getElementById("workoutNotes").value="";
+  addXP(25);
+  saveState();
+  render();
+  alert("Séance validée ! +25 XP");
+}
+
+function deleteItem(collection,index){
+  if(!confirm("Supprimer cet élément ?"))return;
+  state[collection].splice(index,1);
+  saveState();
+  render();
+}
+
+const missions=[
+  {id:"water",icon:"💧",name:"Hydratation",desc:"Boire suffisamment d'eau aujourd'hui.",xp:10},
+  {id:"walk",icon:"🚶",name:"Bouger un peu",desc:"Faire une marche ou une activité douce.",xp:15},
+  {id:"meal",icon:"🥗",name:"Repas équilibré",desc:"Préparer un repas nourrissant.",xp:10},
+  {id:"sleep",icon:"🌙",name:"Récupération",desc:"Prendre soin de son sommeil.",xp:10},
+  {id:"mind",icon:"🧠",name:"Mental d'acier",desc:"Prendre 5 minutes pour soi.",xp:5}
+];
+
+function completeMission(id){
+  if(state.completedMissions.includes(id))return;
+  const mission=missions.find(m=>m.id===id);
+  if(!mission)return;
+  state.completedMissions.push(id);
+  state.xp+=mission.xp;
+  saveState();
+  render();
+}
+
+function renderWeights(){
+  const latest=state.weights[state.weights.length-1];
+  const first=state.weights[0];
+
+  document.getElementById("homeWeight").textContent=latest?latest.weight.toFixed(1):"--";
+  document.getElementById("currentWeight").textContent=latest?latest.weight.toFixed(1):"--";
+  document.getElementById("goalWeight").textContent=state.goal?state.goal.toFixed(1):"--";
+  document.getElementById("goalInput").value=state.goal||"";
+
+  let difference=first&&latest?latest.weight-first.weight:0;
+  document.getElementById("weightDifference").textContent=
+    first&&latest?(difference>0?"+":"")+difference.toFixed(1)+" kg":"-- kg";
+
+  let progress=0;
+  if(first&&latest&&state.goal!==null&&first.weight!==state.goal){
+    progress=Math.max(0,Math.min(100,
+      ((first.weight-latest.weight)/(first.weight-state.goal))*100
+    ));
+  }
+  document.getElementById("weightProgress").style.width=progress+"%";
+  document.getElementById("weightProgressText").textContent=
+    state.goal&&latest?Math.round(progress)+" % du chemin parcouru. Chaque progrès compte.":
+    "Enregistre ton poids et ton objectif pour suivre ta progression.";
+
+  const history=document.getElementById("weightHistory");
+  history.innerHTML=state.weights.length?
+    [...state.weights].reverse().map((item,index)=>`
+      <div class="list-item">
+        <span>${formatDate(item.date)}</span>
+        <strong>${item.weight.toFixed(1)} kg</strong>
+        <button class="delete-btn" onclick="deleteItem('weights',${state.weights.length-1-index})">×</button>
+      </div>`).join(""):"<div class='empty'>Aucune pesée enregistrée.</div>";
+}
+
+function renderMeals(){
+  const today=new Date().toLocaleDateString("en-CA");
+  const meals=state.meals.filter(m=>m.date===today);
+  const calories=meals.reduce((sum,m)=>sum+m.calories,0);
+  const protein=meals.reduce((sum,m)=>sum+m.protein,0);
+
+  document.getElementById("dailyCalories").textContent=calories;
+  document.getElementById("dailyProtein").textContent=protein;
+
+  document.getElementById("mealList").innerHTML=meals.length?
+    meals.map(meal=>{
+      const index=state.meals.indexOf(meal);
+      return `<div class="list-item">
+        <div><strong>${escapeHTML(meal.name)}</strong>
+        <div class="notice">${escapeHTML(meal.type)} · ${meal.calories} kcal · ${meal.protein} g protéines</div></div>
+        <button class="delete-btn" onclick="deleteItem('meals',${index})">×</button>
+      </div>`;
+    }).join(""):"<div class='empty'>Aucun repas enregistré aujourd'hui.</div>";
+}
+
+function renderShopping(){
+  const total=state.shopping.reduce((sum,item)=>sum+item.price,0);
+  document.getElementById("shoppingTotal").textContent=
+    total.toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
+
+  document.getElementById("shoppingList").innerHTML=state.shopping.length?
+    state.shopping.map((item,index)=>`
+      <div class="list-item">
+        <label style="display:flex;align-items:center;gap:8px;flex:1">
+          <input type="checkbox" ${item.checked?"checked":""} onchange="toggleShopping(${index})">
+          <span style="${item.checked?"text-decoration:line-through;opacity:.5":""}">
+            <strong>${escapeHTML(item.name)}</strong>
+            <div class="notice">${escapeHTML(item.qty||"Quantité non précisée")}</div>
+          </span>
+        </label>
+        <strong>${item.price.toFixed(2)} €</strong>
+        <button class="delete-btn" onclick="deleteItem('shopping',${index})">×</button>
+      </div>`).join(""):"<div class='empty'>Ta liste de courses est vide.</div>";
+}
+
+function renderWorkouts(){
+  document.getElementById("workoutCount").textContent=state.workouts.length;
+  document.getElementById("workoutXP").textContent=state.workouts.length*25;
+
+  document.getElementById("workoutList").innerHTML=state.workouts.length?
+    [...state.workouts].reverse().map((workout,index)=>{
+      const realIndex=state.workouts.length-1-index;
+      return `<div class="list-item">
+        <div><strong>${escapeHTML(workout.name)}</strong>
+        <div class="notice">${formatDate(workout.date)} · ${workout.duration} min · ${escapeHTML(workout.type)}</div>
+        <div class="notice">${escapeHTML(workout.intensity)} ${workout.notes?"· "+escapeHTML(workout.notes):""}</div></div>
+        <button class="delete-btn" onclick="deleteItem('workouts',${realIndex})">×</button>
+      </div>`;
+    }).join(""):"<div class='empty'>Aucune séance enregistrée.</div>";
+}
+
+function renderMissions(){
+  const completed=state.completedMissions.length;
+  document.getElementById("missionCount").textContent=completed;
+  document.getElementById("missionXP").textContent=state.xp+" XP";
+  document.getElementById("xpValue").textContent=state.xp+" XP";
+
+  const level=Math.floor(state.xp/100)+1;
+  const levelXP=state.xp%100;
+  document.getElementById("levelValue").textContent=String(level).padStart(2,"0");
+  document.getElementById("rankName").textContent=
+    level>=10?"LÉGENDE AVENGERS":
+    level>=6?"AVENGER CONFIRMÉ":
+    level>=3?"SUPER-HÉROS":
+    level>=2?"AGENT AVENGERS":"RECRUE AVENGERS";
+
+  document.getElementById("xpProgress").style.width=levelXP+"%";
+  document.getElementById("xpNext").textContent=
+    (100-levelXP)+" XP pour atteindre le niveau suivant.";
+
+  document.getElementById("missionList").innerHTML=missions.map(mission=>{
+    const done=state.completedMissions.includes(mission.id);
+    return `<div class="list-item">
+      <div style="flex:1">
+        <strong>${mission.icon} ${mission.name}</strong>
+        <div class="notice">${mission.desc} · +${mission.xp} XP</div>
+      </div>
+      <button class="btn ${done?"btn-secondary":""}" style="width:auto;margin:0;padding:9px 12px" ${done?"disabled":""} onclick="completeMission('${mission.id}')">
+        ${done?"VALIDÉ":"VALIDER"}
+      </button>
+    </div>`;
+  }).join("");
+
+  const rewards=[
+    [100,"🥉","Recrue confirmée"],
+    [300,"🥈","Super-héros"],
+    [600,"🥇","Avenger confirmé"],
+    [1000,"🏆","Légende"]
+  ];
+  document.getElementById("rewardsList").innerHTML=rewards.map(([xp,icon,name])=>`
+    <div class="list-item">
+      <span>${icon} ${xp} XP — ${name}</span>
+      <strong style="color:${state.xp>=xp?"var(--green)":"var(--muted)"}">
+        ${state.xp>=xp?"DÉBLOQUÉ":"VERROUILLÉ"}
+      </strong>
+    </div>`).join("");
+}
+
+function render(){
+  checkNewDay();
+  renderWeights();
+  renderMeals();
+  renderShopping();
+  renderWorkouts();
+  renderMissions();
+}
+
+document.getElementById("todayDate").textContent=
+  new Date().toLocaleDateString("fr-FR",{day:"2-digit",month:"short"});
+
+document.getElementById("weightDate").value=
+  new Date().toLocaleDateString("en-CA");
+
+render();
+</script>
+</body>
+</html>
+
+</body>
+</html>
