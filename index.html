@@ -546,6 +546,64 @@ input[type="checkbox"]{
     transition-duration:.01ms!important;
   }
 }
+
+/* ===== OFFICIAL AVENGERS CHARACTER ART ===== */
+.character-art{
+  display:block;
+  width:100%;
+  height:118px;
+  object-fit:contain;
+  object-position:center bottom;
+  mix-blend-mode:multiply;
+  filter:drop-shadow(0 0 13px rgba(53,223,255,.28));
+  position:relative;
+  z-index:1;
+}
+.hero-tile{
+  min-height:174px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(53,223,255,.14),transparent 66%),
+    linear-gradient(145deg,#142c45,#091523);
+}
+.hero-tile .character-art{height:124px;margin:-3px auto 7px}
+.hero-tile strong,.hero-tile p{position:relative;z-index:2}
+.hero-avatar{
+  width:116px;height:132px;
+  border:0;border-radius:0;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse,rgba(53,223,255,.17),transparent 70%);
+  box-shadow:none;
+  margin:0 0 8px -8px;
+  overflow:hidden;
+}
+.hero-avatar .character-art{height:138px;width:120px}
+.character-stage{
+  position:absolute;
+  right:4px;
+  top:5px;
+  width:145px;
+  height:190px;
+  opacity:.92;
+  pointer-events:none;
+  overflow:hidden;
+}
+.character-stage img{
+  width:100%;height:100%;object-fit:contain;
+  mix-blend-mode:multiply;
+  filter:drop-shadow(0 0 18px rgba(53,223,255,.35));
+}
+.hero-card{isolation:isolate}
+.hero-card > :not(.character-stage){position:relative;z-index:2}
+.hero-message{max-width:78%}
+@media(max-width:390px){
+  .character-stage{width:112px;height:158px;right:-4px;top:18px}
+  .hero-message{max-width:72%}
+  .hero-tile .character-art{height:108px}
+}
+
 </style>
 </head>
 <body>
@@ -564,7 +622,7 @@ input[type="checkbox"]{
   <p class="subtitle">Chaque jour est une nouvelle mission. Le progrès commence maintenant.</p>
 
   <div class="hero-card">
-    <div class="hero-avatar">🤖</div>
+    <div class="character-stage"><img src="https://newsroom.disney.fr/download-image/5946a90cdf60c495418b459f" alt="Iron Man officiel Marvel"></div><div class="hero-avatar"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a90cdf60c495418b459f" alt="Iron Man"></div>
     <div class="hero-label">TON ASSISTANT PERSONNEL</div>
     <div class="hero-name">TONY STARK</div>
     <p class="hero-message" id="tonyMessage">Les grandes transformations ne se font pas en un jour. On avance étape par étape. Je m'occupe des calculs, tu t'occupes de la mission.</p>
@@ -605,10 +663,10 @@ input[type="checkbox"]{
 
   <div class="section-title"><h2>ÉQUIPE AVENGERS</h2><span>TES ALLIÉS</span></div>
   <div class="hero-grid">
-    <div class="hero-tile"><div class="hero-symbol">🦾</div><strong>IRON MAN</strong><p>Stratégie, nutrition et analyse</p></div>
-    <div class="hero-tile"><div class="hero-symbol">🛡️</div><strong>CAPTAIN AMERICA</strong><p>Discipline et régularité</p></div>
-    <div class="hero-tile"><div class="hero-symbol">⚡</div><strong>THOR</strong><p>Force et entraînement</p></div>
-    <div class="hero-tile"><div class="hero-symbol">💚</div><strong>HULK</strong><p>Défis et dépassement</p></div>
+    <div class="hero-tile"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a90cdf60c495418b459f" alt="Iron Man officiel"><strong>IRON MAN</strong><p>Stratégie, nutrition et analyse</p></div>
+    <div class="hero-tile"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a8fddf60c4d5238b46a4" alt="Captain America officiel"><strong>CAPTAIN AMERICA</strong><p>Discipline et régularité</p></div>
+    <div class="hero-tile"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a917201621de378b462b" alt="Thor officiel"><strong>THOR</strong><p>Force et entraînement</p></div>
+    <div class="hero-tile"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a90661cb7dc4648b45df" alt="Hulk officiel"><strong>HULK</strong><p>Défis et dépassement</p></div>
   </div>
 </section>
 
@@ -746,7 +804,7 @@ input[type="checkbox"]{
   <p class="subtitle">Deviens le héros de ta propre progression. Chaque action te rapproche de ton objectif.</p>
 
   <div class="hero-card">
-    <div class="hero-avatar">🛡️</div>
+    <div class="hero-avatar"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a8fddf60c4d5238b46a4" alt="Captain America"></div>
     <div class="hero-label">TON GRADE ACTUEL</div>
     <div class="hero-name" id="rankName">RECRUE AVENGERS</div>
     <div class="stat-value" id="missionXP">0 XP</div>
@@ -767,10 +825,10 @@ input[type="checkbox"]{
 
   <div class="section-title"><h2>TON ÉQUIPE</h2><span>ALLIÉS</span></div>
   <div class="hero-grid">
-    <div class="hero-tile"><div class="hero-symbol">🦾</div><strong>IRON MAN</strong><p>Intelligence et stratégie</p></div>
-    <div class="hero-tile"><div class="hero-symbol">🛡️</div><strong>CAPTAIN AMERICA</strong><p>Discipline et constance</p></div>
-    <div class="hero-tile"><div class="hero-symbol">⚡</div><strong>THOR</strong><p>Puissance et énergie</p></div>
-    <div class="hero-tile"><div class="hero-symbol">💚</div><strong>HULK</strong><p>Défis et détermination</p></div>
+    <div class="hero-tile"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a90cdf60c495418b459f" alt="Iron Man officiel"><strong>IRON MAN</strong><p>Intelligence et stratégie</p></div>
+    <div class="hero-tile"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a8fddf60c4d5238b46a4" alt="Captain America officiel"><strong>CAPTAIN AMERICA</strong><p>Discipline et constance</p></div>
+    <div class="hero-tile"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a917201621de378b462b" alt="Thor officiel"><strong>THOR</strong><p>Puissance et énergie</p></div>
+    <div class="hero-tile"><img class="character-art" src="https://newsroom.disney.fr/download-image/5946a90661cb7dc4648b45df" alt="Hulk officiel"><strong>HULK</strong><p>Défis et détermination</p></div>
   </div>
 </section>
 
