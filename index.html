@@ -666,6 +666,78 @@ body{background:radial-gradient(ellipse at 50% 0%,#17466a 0%,#071321 38%,#02060d
 .page .section-title{margin-top:27px}.bottom-nav{background:rgba(2,8,16,.97);border-top-color:rgba(88,237,255,.35);box-shadow:0 -10px 35px #0007}
 @media(max-width:390px){.reactor-layout{grid-template-columns:112px 1fr;gap:10px}.reactor-core{width:108px;height:108px}.scanner-layout{grid-template-columns:125px 1fr;gap:9px}.body-scanner{height:190px}.body-silhouette{height:168px}.scan-metric strong{font-size:15px}.hud-panel{padding:13px}}
 
+
+/* ===== JARVIS V4 — CINEMATIC STARK / REALTIME 3D ===== */
+:root{--bg:#050607;--panel:#101316;--panel2:#181c20;--cyan:#8cecff;--blue:#477e91;--gold:#e9b96a;--green:#7ce0b0;--red:#e76c66;--text:#f3f0e9;--muted:#9a9da0;--border:rgba(210,224,228,.14)}
+html{background:#050607}
+body{
+ background:
+ radial-gradient(ellipse at 50% -15%,rgba(103,126,135,.17),transparent 44%),
+ radial-gradient(ellipse at 95% 42%,rgba(120,79,43,.09),transparent 36%),
+ linear-gradient(180deg,#090b0d 0%,#050607 55%,#090a0b 100%);
+ background-attachment:fixed;color:#f3f0e9
+}
+.app{max-width:720px;background:linear-gradient(180deg,rgba(8,10,12,.18),rgba(5,6,7,.38))}
+.topbar{background:rgba(7,8,9,.82);border-bottom:1px solid rgba(233,185,106,.22);backdrop-filter:blur(22px)}
+.topbar:after{color:#c7a46e;opacity:.68}
+.brand{color:#f3f0e9;letter-spacing:4px}
+.status{color:#c7c4bb}
+.status-dot{background:#9fe3bb;box-shadow:0 0 12px #9fe3bb}
+.page{padding-left:17px;padding-right:17px}
+.page h1{color:#f5f1e8;text-shadow:0 8px 35px #000;font-size:clamp(25px,6vw,34px);letter-spacing:-.8px}
+.eyebrow,.section-title h2{color:#d6b47c;letter-spacing:2px}
+.subtitle{color:#b3b4b2}
+.card,.hero-card,.stat,.hud-panel{
+ background:linear-gradient(145deg,rgba(28,31,33,.91),rgba(10,12,13,.94));
+ border:1px solid rgba(226,207,174,.15);
+ box-shadow:0 18px 48px rgba(0,0,0,.46),inset 0 1px rgba(255,255,255,.045);
+ backdrop-filter:blur(18px)
+}
+.stat{border-radius:14px}.stat:after{background:linear-gradient(90deg,transparent,#d5ad70,transparent)}
+.stat-value{color:#f4e7cf;text-shadow:0 0 20px rgba(220,174,104,.18)}
+.hud-panel{border-color:rgba(140,210,220,.2);border-radius:17px;background:linear-gradient(145deg,rgba(24,29,31,.88),rgba(7,10,11,.96));overflow:hidden}
+.hud-panel:before{opacity:.09;background:linear-gradient(rgba(177,209,211,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(177,209,211,.18) 1px,transparent 1px);background-size:34px 34px}
+.hud-head{color:#c9b18b}.hud-live{color:#a7d9bc}
+.readout{border-left-color:#cba56b}.readout small,.scan-metric small{color:#a9a9a4}.readout strong,.scan-metric strong{color:#f3eee4}
+.readout em,.scan-metric span{color:#9dd9df}
+.cinema-banner{height:248px;border:0;border-radius:17px;margin:20px 0 22px;box-shadow:0 24px 55px #000b;isolation:isolate}
+.cinema-banner:after{background:linear-gradient(90deg,rgba(3,5,6,.94) 0%,rgba(3,5,6,.64) 39%,rgba(3,5,6,.04) 100%),linear-gradient(0deg,rgba(3,5,6,.88) 0%,transparent 66%)}
+.cinema-banner:before{inset:10px;border:1px solid rgba(235,207,157,.2);border-radius:11px}
+.cinema-banner img{filter:contrast(1.13) saturate(.82) brightness(.82);transform:scale(1.035);transition:transform 8s ease}
+.cinema-banner:active img{transform:scale(1.09)}
+.cinema-banner .banner-kicker{color:#e8c78f}
+.cinema-banner .banner-title{font-size:clamp(18px,5vw,23px);text-shadow:0 3px 18px #000}
+.cinema-banner .banner-note{color:#dedbd2}
+.hero-card.home-hero{min-height:430px;padding-top:255px;border:1px solid rgba(220,190,139,.25);border-radius:18px;background:linear-gradient(180deg,transparent 0%,rgba(7,8,9,.12) 25%,#0b0d0e 69%,#0b0d0e 100%);box-shadow:0 24px 58px #0009}
+.avengers-wall{height:310px;background-image:linear-gradient(180deg,rgba(3,5,6,.02) 25%,rgba(5,6,7,.32) 58%,#0b0d0e 100%),linear-gradient(90deg,rgba(4,5,6,.24),transparent 55%),url("https://lumiere-a.akamaihd.net/v1/images/p_avengersendgame_19751_e14a0104.jpeg");background-size:cover;background-position:center 22%;filter:saturate(.84) contrast(1.08)}
+.home-hero .hero-name{color:#f0d4a4;text-shadow:0 2px 20px #000}
+.hero-message{color:#c4c3bd}
+.btn{background:linear-gradient(110deg,#b78a50,#e3c18b);color:#17120b;border:0;box-shadow:0 8px 22px rgba(197,151,84,.2);font-weight:800}
+.btn-secondary{background:linear-gradient(110deg,#353b3e,#1a2022);color:#e9e5dc;border:1px solid #6c7778}
+.field,input,select{background:#101416!important;color:#f2eee5!important;border-color:rgba(216,198,166,.25)!important}
+.bottom-nav{background:rgba(6,7,8,.94);border-top:1px solid rgba(220,190,139,.2);backdrop-filter:blur(22px);box-shadow:0 -12px 40px #0009}
+.nav-btn{color:#a8aaa8}.nav-btn.active{color:#f1cf96;text-shadow:0 0 14px rgba(230,187,119,.3)}
+.reactor-core{background:radial-gradient(circle,#fff8df 0 2%,#e9c47d 5%,#9e6b38 12%,#283b40 27%,#101619 44%,transparent 67%);filter:drop-shadow(0 0 24px rgba(232,177,100,.42))}
+.reactor-core:before,.reactor-core:after{border-color:rgba(221,192,143,.7);box-shadow:0 0 15px rgba(220,170,99,.55),inset 0 0 12px rgba(220,170,99,.25)}
+.reactor-core span{color:#fff3d6;text-shadow:0 0 15px #e7bd78}
+.body-scanner{height:280px;border:1px solid rgba(155,212,214,.25);border-radius:14px;background:radial-gradient(ellipse at 50% 48%,rgba(96,160,166,.2),transparent 64%),linear-gradient(180deg,#171d20,#080a0b);box-shadow:inset 0 0 35px #000,0 15px 36px #0008}
+.body-scanner:before{inset:12px 18px;border-color:rgba(202,177,129,.22)}
+.body-silhouette{display:none}
+.scanline{background:#d8c08e;box-shadow:0 0 15px 4px rgba(213,180,120,.55)}
+.chart-wrap{filter:drop-shadow(0 0 8px rgba(135,211,216,.15))}
+.training-module{background:linear-gradient(145deg,#24292a,#0b0e0f);border-color:rgba(220,190,139,.2)}
+.training-module b{color:#f1dfc0}.training-module span{color:#d8b77e}
+.roster-card{background:linear-gradient(120deg,rgba(39,42,42,.94),rgba(10,12,13,.98));border-color:rgba(220,190,139,.2)}
+.roster-card i{filter:grayscale(.35) drop-shadow(0 0 8px #d0a86d)}
+.hud-3d{position:absolute;inset:0;width:100%;height:100%;display:block}
+.reactor-core{overflow:visible}
+.body-scanner{overflow:hidden}
+.scanner-3d{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.body-scanner:before{z-index:2;pointer-events:none}
+.scanline{z-index:3;pointer-events:none}
+.scanner-caption{position:absolute;z-index:4;bottom:9px;left:0;right:0;text-align:center;font:8px Orbitron;letter-spacing:2px;color:#d7c39c;text-shadow:0 2px 8px #000}
+@media(max-width:390px){.cinema-banner{height:218px}.hero-card.home-hero{min-height:395px;padding-top:230px}.avengers-wall{height:280px}.body-scanner{height:255px}}
+
 </style>
 </head>
 <body>
@@ -682,7 +754,7 @@ body{background:radial-gradient(ellipse at 50% 0%,#17466a 0%,#071321 38%,#02060d
   <div class="eyebrow">PERSONAL ASSISTANT / 01</div>
   <h1>Bienvenue,<br>Avenger.</h1>
   <p class="subtitle">Chaque jour est une nouvelle mission. Le progrès commence maintenant.</p>
-  <div class="hud-panel"><div class="hud-head"><span>STARK MAINFRAME / REACTOR CORE</span><span class="hud-live">ONLINE</span></div><div class="reactor-layout"><div class="reactor-core"><span>ARC<br>REACTOR</span></div><div class="reactor-readouts"><div class="readout"><small>AVENGER LEVEL</small><strong id="hudLevel">01</strong><em>PERSONAL EVOLUTION</em></div><div class="readout"><small>EXPERIENCE</small><strong id="hudXP">0 XP</strong><em>MISSION ENERGY</em></div><div class="readout"><small>BODY STATUS</small><strong id="hudWeight">-- kg</strong><em>LAST RECORDED</em></div></div></div></div>
+  <div class="hud-panel"><div class="hud-head"><span>STARK MAINFRAME / REACTOR CORE</span><span class="hud-live">ONLINE</span></div><div class="reactor-layout"><div class="reactor-core"><canvas id="reactor3D" class="hud-3d" aria-label="Réacteur Stark en 3D"></canvas><span>ARC<br>REACTOR</span></div><div class="reactor-readouts"><div class="readout"><small>AVENGER LEVEL</small><strong id="hudLevel">01</strong><em>PERSONAL EVOLUTION</em></div><div class="readout"><small>EXPERIENCE</small><strong id="hudXP">0 XP</strong><em>MISSION ENERGY</em></div><div class="readout"><small>BODY STATUS</small><strong id="hudWeight">-- kg</strong><em>LAST RECORDED</em></div></div></div></div>
 
   <div class="hero-card home-hero">
     <div class="avengers-wall" role="img" aria-label="Les Avengers réunis dans Avengers Endgame"></div>
@@ -731,7 +803,7 @@ body{background:radial-gradient(ellipse at 50% 0%,#17466a 0%,#071321 38%,#02060d
   <div class="eyebrow">IRON MAN / BODY ANALYTICS</div>
   <h1>Évolution physique</h1>
   <p class="subtitle">Chaque kilo perdu est une victoire. On mesure les progrès, sans précipitation.</p>
-  <div class="hud-panel"><div class="hud-head"><span>BIOMETRIC SCAN / SUBJECT 001</span><span class="hud-live">SCANNER READY</span></div><div class="scanner-layout"><div class="body-scanner"><div class="scanline"></div><svg class="body-silhouette" viewBox="0 0 100 220" role="img" aria-label="Silhouette humanoïde holographique"><defs><linearGradient id="bodyGlow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9ffff"/><stop offset=".45" stop-color="#43dfff"/><stop offset="1" stop-color="#0878ba"/></linearGradient></defs><circle cx="50" cy="23" r="17" fill="url(#bodyGlow)" opacity=".88"/><path d="M31 47 Q50 39 69 47 L78 95 Q75 112 68 118 L72 166 L64 213 L50 213 L46 163 L42 213 L27 213 L32 164 L32 118 Q22 109 22 95Z" fill="url(#bodyGlow)" opacity=".58" stroke="#a8fbff" stroke-width="1.5"/><path d="M31 51 L14 110 L20 114 L39 73 M69 51 L86 110 L80 114 L61 73" fill="none" stroke="#7ceeff" stroke-width="10" stroke-linecap="round" opacity=".7"/><path d="M35 54 Q50 64 65 54 M34 88 Q50 96 66 88 M34 119 Q50 126 66 119" fill="none" stroke="#d5ffff" stroke-opacity=".65"/></svg></div><div class="scan-metrics"><div class="scan-metric"><small>DERNIÈRE MESURE</small><strong id="scannerWeight">-- kg</strong><span id="scannerDate">EN ATTENTE DE DONNÉES</span></div><div class="scan-metric"><small>OBJECTIF CIBLE</small><strong id="scannerGoal">-- kg</strong><span>PERSONAL TARGET</span></div><div class="scan-metric"><small>ÉVOLUTION TOTALE</small><strong id="scannerDelta">--</strong><span>DEPUIS LE PREMIER SCAN</span></div></div></div><div class="hud-head" style="margin:14px 0 0"><span>WEIGHT TRAJECTORY</span><span>HISTORIQUE RÉEL</span></div><div class="chart-wrap" id="weightChart"><div class="empty">Les relevés apparaîtront ici après tes pesées.</div></div></div>
+  <div class="hud-panel"><div class="hud-head"><span>BIOMETRIC SCAN / SUBJECT 001</span><span class="hud-live">SCANNER READY</span></div><div class="scanner-layout"><div class="body-scanner"><canvas id="avatar3D" class="scanner-3d" aria-label="Avatar corporel en 3D"></canvas><div class="scanner-caption">3D BODY SCAN / LIVE RENDER</div><div class="scanline"></div><svg class="body-silhouette" viewBox="0 0 100 220" role="img" aria-label="Silhouette humanoïde holographique"><defs><linearGradient id="bodyGlow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9ffff"/><stop offset=".45" stop-color="#43dfff"/><stop offset="1" stop-color="#0878ba"/></linearGradient></defs><circle cx="50" cy="23" r="17" fill="url(#bodyGlow)" opacity=".88"/><path d="M31 47 Q50 39 69 47 L78 95 Q75 112 68 118 L72 166 L64 213 L50 213 L46 163 L42 213 L27 213 L32 164 L32 118 Q22 109 22 95Z" fill="url(#bodyGlow)" opacity=".58" stroke="#a8fbff" stroke-width="1.5"/><path d="M31 51 L14 110 L20 114 L39 73 M69 51 L86 110 L80 114 L61 73" fill="none" stroke="#7ceeff" stroke-width="10" stroke-linecap="round" opacity=".7"/><path d="M35 54 Q50 64 65 54 M34 88 Q50 96 66 88 M34 119 Q50 126 66 119" fill="none" stroke="#d5ffff" stroke-opacity=".65"/></svg></div><div class="scan-metrics"><div class="scan-metric"><small>DERNIÈRE MESURE</small><strong id="scannerWeight">-- kg</strong><span id="scannerDate">EN ATTENTE DE DONNÉES</span></div><div class="scan-metric"><small>OBJECTIF CIBLE</small><strong id="scannerGoal">-- kg</strong><span>PERSONAL TARGET</span></div><div class="scan-metric"><small>ÉVOLUTION TOTALE</small><strong id="scannerDelta">--</strong><span>DEPUIS LE PREMIER SCAN</span></div></div></div><div class="hud-head" style="margin:14px 0 0"><span>WEIGHT TRAJECTORY</span><span>HISTORIQUE RÉEL</span></div><div class="chart-wrap" id="weightChart"><div class="empty">Les relevés apparaîtront ici après tes pesées.</div></div></div>
 
   <div class="cinema-banner banner-weight"><img src="https://lumiere-a.akamaihd.net/v1/images/g_avengersendgame_09_17734_94c4e398.jpeg?region=0%2C0%2C1200%2C560" alt="Steve Rogers dans Avengers Endgame"><div class="banner-copy"><span class="banner-kicker">BODY ANALYTICS / PROTOCOLE 02</span><span class="banner-title">CHAQUE JOUR COMPTE</span><span class="banner-note">Mesure tes progrès. Construis ta transformation.</span></div></div>
 
@@ -1293,6 +1365,72 @@ document.getElementById("weightDate").value=
   new Date().toLocaleDateString("en-CA");
 
 render();
+</script>
+
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+
+function makeRenderer(canvas){
+  if(!canvas || !window.WebGLRenderingContext) return null;
+  try{
+    const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));
+    renderer.setClearColor(0x000000,0);
+    return renderer;
+  }catch(e){console.warn("WebGL indisponible",e);return null}
+}
+function fit(renderer,camera,el){
+  const w=el.clientWidth||160,h=el.clientHeight||160;
+  renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
+}
+function buildReactor(){
+ const canvas=document.getElementById("reactor3D"),host=canvas?.parentElement,renderer=makeRenderer(canvas);if(!renderer)return;
+ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,1,.1,100);camera.position.set(0,0,5.3);
+ scene.add(new THREE.AmbientLight(0x8ca6b2,1.6));
+ const key=new THREE.PointLight(0xffd08b,35,9);key.position.set(1.5,1.4,2.5);scene.add(key);
+ const blue=new THREE.PointLight(0x5ddcff,18,8);blue.position.set(-2,-1,1);scene.add(blue);
+ const core=new THREE.Mesh(new THREE.IcosahedronGeometry(.67,2),new THREE.MeshPhysicalMaterial({color:0xe9c58c,emissive:0x9a5a1c,emissiveIntensity:1.5,metalness:.65,roughness:.18,clearcoat:1}));
+ scene.add(core);
+ const rings=[];
+ [1.05,1.28,1.48].forEach((r,i)=>{const ring=new THREE.Mesh(new THREE.TorusGeometry(r,.018,8,120),new THREE.MeshStandardMaterial({color:i===1?0xe5c18a:0x8ddde4,emissive:i===1?0x8b5520:0x1b7888,emissiveIntensity:1.1,metalness:.8,roughness:.22}));ring.rotation.set(.5+i*.42,.2+i*.35,.1);scene.add(ring);rings.push(ring)});
+ const halo=new THREE.Mesh(new THREE.SphereGeometry(.82,32,32),new THREE.MeshBasicMaterial({color:0xffd99a,transparent:true,opacity:.08,side:THREE.BackSide}));scene.add(halo);
+ const clock=new THREE.Clock();
+ function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();core.rotation.y=t*.45;core.rotation.x=t*.22;rings.forEach((r,i)=>{r.rotation.z+=.003*(i+1);r.rotation.x+=.0015});halo.scale.setScalar(1+Math.sin(t*2)*.035);if(host)fit(renderer,camera,host);renderer.render(scene,camera)}
+ animate();
+}
+function buildAvatar(){
+ const canvas=document.getElementById("avatar3D"),host=canvas?.parentElement,renderer=makeRenderer(canvas);if(!renderer)return;
+ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(32,1,.1,100);camera.position.set(0,1.35,7.8);camera.lookAt(0,1.05,0);
+ scene.add(new THREE.HemisphereLight(0xc8e8ed,0x24201a,2));
+ const rim=new THREE.DirectionalLight(0x9cecff,3.2);rim.position.set(-3,4,4);scene.add(rim);
+ const warm=new THREE.PointLight(0xffc77b,24,10);warm.position.set(2,2,2);scene.add(warm);
+ const mat=new THREE.MeshPhysicalMaterial({color:0x9bb6b9,metalness:.48,roughness:.32,clearcoat:.65,emissive:0x15353a,emissiveIntensity:.28});
+ const skin=new THREE.MeshStandardMaterial({color:0xb58c70,roughness:.68});
+ const dark=new THREE.MeshStandardMaterial({color:0x20272a,metalness:.3,roughness:.5});
+ const avatar=new THREE.Group();scene.add(avatar);
+ function part(geo,material,x,y,z,sx=1,sy=1,sz=1){const m=new THREE.Mesh(geo,material);m.position.set(x,y,z);m.scale.set(sx,sy,sz);avatar.add(m);return m}
+ const sphere=(x,y,z,sx,sy,sz,material=mat)=>part(new THREE.SphereGeometry(1,24,18),material,x,y,z,sx,sy,sz);
+ const cyl=(x,y,z,rt,rb,h,material=mat)=>part(new THREE.CylinderGeometry(rt,rb,h,20),material,x,y,z);
+ // Stylized but volumetric human body; proportions intentionally neutral until personal photos are supplied.
+ sphere(0,2.55,0,.37,.43,.32,skin);
+ sphere(0,2.08,0,.69,.43,.34,mat);
+ sphere(0,1.43,0,.72,.72,.4,mat);
+ sphere(-.82,1.98,0,.24,.48,.25,mat);sphere(.82,1.98,0,.24,.48,.25,mat);
+ sphere(-1.0,1.36,0,.2,.58,.21,mat);sphere(1.0,1.36,0,.2,.58,.21,mat);
+ sphere(-1.04,.76,.02,.17,.17,.18,skin);sphere(1.04,.76,.02,.17,.17,.18,skin);
+ sphere(-.29,.45,0,.27,.63,.3,dark);sphere(.29,.45,0,.27,.63,.3,dark);
+ sphere(-.3,-.12,.12,.29,.17,.42,dark);sphere(.3,-.12,.12,.29,.17,.42,dark);
+ // Subtle glowing scan bands around the subject.
+ const scanMat=new THREE.MeshBasicMaterial({color:0x9cecff,transparent:true,opacity:.48});
+ for(let y=.25;y<2.9;y+=.27){const band=new THREE.Mesh(new THREE.TorusGeometry(.62+(y>1.9?.05:0),.006,5,64),scanMat);band.position.y=y;band.scale.y=.62;avatar.add(band)}
+ const platform=new THREE.Mesh(new THREE.CylinderGeometry(1.35,1.5,.12,64),new THREE.MeshStandardMaterial({color:0x252b2d,metalness:.9,roughness:.2}));platform.position.y=-.38;scene.add(platform);
+ const rimRing=new THREE.Mesh(new THREE.TorusGeometry(1.28,.025,8,80),new THREE.MeshBasicMaterial({color:0xd4b47b,transparent:true,opacity:.9}));rimRing.rotation.x=Math.PI/2;rimRing.position.y=-.29;scene.add(rimRing);
+ const grid=new THREE.GridHelper(8,24,0x48646b,0x25363a);grid.position.y=-.45;scene.add(grid);
+ const clock=new THREE.Clock();
+ function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();avatar.rotation.y=Math.sin(t*.45)*.13;avatar.position.y=Math.sin(t*1.4)*.025;platform.rotation.y=t*.08;rimRing.rotation.z=-t*.12;if(host)fit(renderer,camera,host);renderer.render(scene,camera)}
+ animate();
+}
+buildReactor();buildAvatar();
 </script>
 </body>
 </html>
