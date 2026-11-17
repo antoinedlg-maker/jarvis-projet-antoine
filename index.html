@@ -1,11 +1,142 @@
-{
-  "name": "JARVIS Projet Antoine",
-  "short_name": "JARVIS",
-  "description": "Assistant personnel JARVIS",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#020b14",
-  "theme_color": "#00e5ff",
-  "orientation": "portrait"
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#020b14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JARVIS">
+<link rel="manifest" href="./manifest.json">
+<title>JARVIS - Projet Antoine</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#020b14;color:#eafaff;font-family:Arial,sans-serif;padding:20px}
+header{text-align:center;padding:25px 0}
+h1{color:#00e5ff;letter-spacing:5px;font-size:32px;margin:0}
+header p{color:#8aa8b8}
+.card{background:#0b1c2b;border:1px solid #153b50;border-radius:16px;padding:18px;margin:14px 0}
+h2{font-size:17px;color:#00e5ff;margin:0 0 14px}
+.stat{font-size:28px;font-weight:bold}
+small{color:#8aa8b8}
+button{background:#00cde8;color:#00131c;border:0;border-radius:10px;padding:12px 15px;font-weight:bold;margin-top:10px}
+input{width:100%;background:#06121e;border:1px solid #28516a;border-radius:9px;padding:12px;color:white;margin:6px 0}
+.mission{display:flex;gap:10px;align-items:center;padding:9px 0}
+.mission input{width:20px}
+.progress{height:10px;background:#173044;border-radius:10px;overflow:hidden}
+#bar{height:100%;width:0;background:#00e5ff}
+footer{text-align:center;color:#587487;font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+<header>
+<h1>J.A.R.V.I.S</h1>
+<p>ASSISTANT PERSONNEL • PROJET ANTOINE</p>
+</header>
+
+<div class="card">
+<h2>TABLEAU DE BORD</h2>
+<div class="stat" id="level">Niveau 1</div>
+<small id="xp">0 XP</small>
+<div class="progress" style="margin-top:12px"><div id="bar"></div></div>
+<p id="quote">Chaque jour compte. Continue à avancer.</p>
+</div>
+
+<div class="card">
+<h2>🎯 MISSIONS DU JOUR</h2>
+<div class="mission"><input type="checkbox" class="missionCheck"> Boire suffisamment d'eau</div>
+<div class="mission"><input type="checkbox" class="missionCheck"> Bouger et faire de l'exercice</div>
+<div class="mission"><input type="checkbox" class="missionCheck"> Manger équilibré</div>
+<div class="mission"><input type="checkbox" class="missionCheck"> Avancer sur un projet personnel</div>
+<div class="mission"><input type="checkbox" class="missionCheck"> Bien dormir</div>
+<small id="missionsCount">0 / 5 missions terminées</small>
+</div>
+
+<div class="card">
+<h2>⚖️ SUIVI DU POIDS</h2>
+<input id="weight" type="number" step="0.1" placeholder="Ton poids en kg">
+<button onclick="saveWeight()">Enregistrer mon poids</button>
+<p id="weightResult"></p>
+<div id="history"></div>
+</div>
+
+<div class="card">
+<h2>⭐ MES OBJECTIFS</h2>
+<p>Construire une meilleure version de moi-même.</p>
+<p>Progresser chaque jour, sans chercher la perfection.</p>
+</div>
+
+<div class="card">
+<h2>💾 MES DONNÉES</h2>
+<button onclick="exportData()">Exporter mes données</button>
+<button onclick="resetMissions()">Réinitialiser les missions</button>
+</div>
+
+<footer>JARVIS • VERSION 1.0 • PROJET PERSONNEL</footer>
+
+<script>
+const today = new Date().toLocaleDateString("fr-FR");
+let data = JSON.parse(localStorage.getItem("jarvisData") || '{"xp":0,"weights":[]}');
+
+function save(){
+ localStorage.setItem("jarvisData",JSON.stringify(data));
+ render();
 }
+
+function render(){
+ const level=Math.floor(data.xp/100)+1;
+ document.getElementById("level").textContent="Niveau "+level;
+ document.getElementById("xp").textContent=data.xp+" XP";
+ document.getElementById("bar").style.width=(data.xp%100)+"%";
+ const checks=[...document.querySelectorAll(".missionCheck")];
+ const done=checks.filter(c=>c.checked).length;
+ document.getElementById("missionsCount").textContent=done+" / 5 missions terminées";
+ document.getElementById("history").innerHTML=data.weights.slice().reverse().map(w=>"<p>"+w.date+" : <b>"+w.value+" kg</b></p>").join("");
+}
+
+document.querySelectorAll(".missionCheck").forEach((c,i)=>{
+ c.checked=JSON.parse(localStorage.getItem("jarvisMissions")||"[]")[i]||false;
+ c.addEventListener("change",()=>{
+  const checks=[...document.querySelectorAll(".missionCheck")];
+  const values=checks.map(x=>x.checked);
+  localStorage.setItem("jarvisMissions",JSON.stringify(values));
+  data.xp+=c.checked?10:-10;
+  data.xp=Math.max(0,data.xp);
+  save();
+ });
+});
+
+function saveWeight(){
+ const value=parseFloat(document.getElementById("weight").value);
+ if(!value||value<1){alert("Entre un poids valide.");return;}
+ data.weights.push({date:today,value});
+ document.getElementById("weightResult").textContent="Poids enregistré : "+value+" kg";
+ document.getElementById("weight").value="";
+ save();
+}
+
+function resetMissions(){
+ localStorage.removeItem("jarvisMissions");
+ document.querySelectorAll(".missionCheck").forEach(c=>c.checked=false);
+ render();
+}
+
+function exportData(){
+ const file=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(file);
+ const a=document.createElement("a");
+ a.href=url;a.download="jarvis-donnees.json";a.click();
+ URL.revokeObjectURL(url);
+}
+
+render();
+
+if("serviceWorker" in navigator){
+ window.addEventListener("load",()=>{
+  navigator.serviceWorker.register("./sw.js").catch(console.error);
+ });
+}
+</script>
+</body>
+</html>
