@@ -803,7 +803,7 @@ body{
   <div class="eyebrow">IRON MAN / BODY ANALYTICS</div>
   <h1>Évolution physique</h1>
   <p class="subtitle">Chaque kilo perdu est une victoire. On mesure les progrès, sans précipitation.</p>
-  <div class="hud-panel"><div class="hud-head"><span>BIOMETRIC SCAN / SUBJECT 001</span><span class="hud-live">SCANNER READY</span></div><div class="scanner-layout"><div class="body-scanner"><canvas id="avatar3D" class="scanner-3d" aria-label="Avatar corporel en 3D"></canvas><div class="scanner-caption">3D BODY SCAN / LIVE RENDER</div><div class="scanline"></div><svg class="body-silhouette" viewBox="0 0 100 220" role="img" aria-label="Silhouette humanoïde holographique"><defs><linearGradient id="bodyGlow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9ffff"/><stop offset=".45" stop-color="#43dfff"/><stop offset="1" stop-color="#0878ba"/></linearGradient></defs><circle cx="50" cy="23" r="17" fill="url(#bodyGlow)" opacity=".88"/><path d="M31 47 Q50 39 69 47 L78 95 Q75 112 68 118 L72 166 L64 213 L50 213 L46 163 L42 213 L27 213 L32 164 L32 118 Q22 109 22 95Z" fill="url(#bodyGlow)" opacity=".58" stroke="#a8fbff" stroke-width="1.5"/><path d="M31 51 L14 110 L20 114 L39 73 M69 51 L86 110 L80 114 L61 73" fill="none" stroke="#7ceeff" stroke-width="10" stroke-linecap="round" opacity=".7"/><path d="M35 54 Q50 64 65 54 M34 88 Q50 96 66 88 M34 119 Q50 126 66 119" fill="none" stroke="#d5ffff" stroke-opacity=".65"/></svg></div><div class="scan-metrics"><div class="scan-metric"><small>DERNIÈRE MESURE</small><strong id="scannerWeight">-- kg</strong><span id="scannerDate">EN ATTENTE DE DONNÉES</span></div><div class="scan-metric"><small>OBJECTIF CIBLE</small><strong id="scannerGoal">-- kg</strong><span>PERSONAL TARGET</span></div><div class="scan-metric"><small>ÉVOLUTION TOTALE</small><strong id="scannerDelta">--</strong><span>DEPUIS LE PREMIER SCAN</span></div></div></div><div class="hud-head" style="margin:14px 0 0"><span>WEIGHT TRAJECTORY</span><span>HISTORIQUE RÉEL</span></div><div class="chart-wrap" id="weightChart"><div class="empty">Les relevés apparaîtront ici après tes pesées.</div></div></div>
+  <div class="hud-panel"><div class="hud-head"><span>BIOMETRIC SCAN / SUBJECT 001</span><span class="hud-live">SCANNER READY</span></div><div class="scanner-layout"><div class="body-scanner"><canvas id="avatar3D" class="scanner-3d" aria-label="Avatar corporel en 3D"></canvas><div class="scanner-caption" id="avatarStatus">3D HUMAN MODEL / GLB LOADING</div><div class="scanline"></div><svg class="body-silhouette" viewBox="0 0 100 220" role="img" aria-label="Silhouette humanoïde holographique"><defs><linearGradient id="bodyGlow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9ffff"/><stop offset=".45" stop-color="#43dfff"/><stop offset="1" stop-color="#0878ba"/></linearGradient></defs><circle cx="50" cy="23" r="17" fill="url(#bodyGlow)" opacity=".88"/><path d="M31 47 Q50 39 69 47 L78 95 Q75 112 68 118 L72 166 L64 213 L50 213 L46 163 L42 213 L27 213 L32 164 L32 118 Q22 109 22 95Z" fill="url(#bodyGlow)" opacity=".58" stroke="#a8fbff" stroke-width="1.5"/><path d="M31 51 L14 110 L20 114 L39 73 M69 51 L86 110 L80 114 L61 73" fill="none" stroke="#7ceeff" stroke-width="10" stroke-linecap="round" opacity=".7"/><path d="M35 54 Q50 64 65 54 M34 88 Q50 96 66 88 M34 119 Q50 126 66 119" fill="none" stroke="#d5ffff" stroke-opacity=".65"/></svg></div><div class="scan-metrics"><div class="scan-metric"><small>DERNIÈRE MESURE</small><strong id="scannerWeight">-- kg</strong><span id="scannerDate">EN ATTENTE DE DONNÉES</span></div><div class="scan-metric"><small>OBJECTIF CIBLE</small><strong id="scannerGoal">-- kg</strong><span>PERSONAL TARGET</span></div><div class="scan-metric"><small>ÉVOLUTION TOTALE</small><strong id="scannerDelta">--</strong><span>DEPUIS LE PREMIER SCAN</span></div></div></div><div class="hud-head" style="margin:14px 0 0"><span>WEIGHT TRAJECTORY</span><span>HISTORIQUE RÉEL</span></div><div class="chart-wrap" id="weightChart"><div class="empty">Les relevés apparaîtront ici après tes pesées.</div></div></div>
 
   <div class="cinema-banner banner-weight"><img src="https://lumiere-a.akamaihd.net/v1/images/g_avengersendgame_09_17734_94c4e398.jpeg?region=0%2C0%2C1200%2C560" alt="Steve Rogers dans Avengers Endgame"><div class="banner-copy"><span class="banner-kicker">BODY ANALYTICS / PROTOCOLE 02</span><span class="banner-title">CHAQUE JOUR COMPTE</span><span class="banner-note">Mesure tes progrès. Construis ta transformation.</span></div></div>
 
@@ -1368,7 +1368,7 @@ render();
 </script>
 
 <script type="module">
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";\nimport { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 
 function makeRenderer(canvas){
   if(!canvas || !window.WebGLRenderingContext) return null;
@@ -1400,37 +1400,32 @@ function buildReactor(){
 }
 function buildAvatar(){
  const canvas=document.getElementById("avatar3D"),host=canvas?.parentElement,renderer=makeRenderer(canvas);if(!renderer)return;
- const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(32,1,.1,100);camera.position.set(0,1.35,7.8);camera.lookAt(0,1.05,0);
- scene.add(new THREE.HemisphereLight(0xc8e8ed,0x24201a,2));
- const rim=new THREE.DirectionalLight(0x9cecff,3.2);rim.position.set(-3,4,4);scene.add(rim);
- const warm=new THREE.PointLight(0xffc77b,24,10);warm.position.set(2,2,2);scene.add(warm);
- const mat=new THREE.MeshPhysicalMaterial({color:0x9bb6b9,metalness:.48,roughness:.32,clearcoat:.65,emissive:0x15353a,emissiveIntensity:.28});
- const skin=new THREE.MeshStandardMaterial({color:0xb58c70,roughness:.68});
- const dark=new THREE.MeshStandardMaterial({color:0x20272a,metalness:.3,roughness:.5});
+ const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(30,1,.1,100);camera.position.set(0,1.05,5.4);camera.lookAt(0,1.05,0);
+ scene.add(new THREE.HemisphereLight(0xe7f7ff,0x171b20,2.1));
+ const key=new THREE.DirectionalLight(0xffffff,3.5);key.position.set(3,4,4);scene.add(key);
+ const rim=new THREE.DirectionalLight(0x79e9ff,4);rim.position.set(-3,3,-2);scene.add(rim);
+ const warm=new THREE.PointLight(0xffc77b,18,9);warm.position.set(2,1.5,2);scene.add(warm);
  const avatar=new THREE.Group();scene.add(avatar);
- function part(geo,material,x,y,z,sx=1,sy=1,sz=1){const m=new THREE.Mesh(geo,material);m.position.set(x,y,z);m.scale.set(sx,sy,sz);avatar.add(m);return m}
- const sphere=(x,y,z,sx,sy,sz,material=mat)=>part(new THREE.SphereGeometry(1,24,18),material,x,y,z,sx,sy,sz);
- const cyl=(x,y,z,rt,rb,h,material=mat)=>part(new THREE.CylinderGeometry(rt,rb,h,20),material,x,y,z);
- // Stylized but volumetric human body; proportions intentionally neutral until personal photos are supplied.
- sphere(0,2.55,0,.37,.43,.32,skin);
- sphere(0,2.08,0,.69,.43,.34,mat);
- sphere(0,1.43,0,.72,.72,.4,mat);
- sphere(-.82,1.98,0,.24,.48,.25,mat);sphere(.82,1.98,0,.24,.48,.25,mat);
- sphere(-1.0,1.36,0,.2,.58,.21,mat);sphere(1.0,1.36,0,.2,.58,.21,mat);
- sphere(-1.04,.76,.02,.17,.17,.18,skin);sphere(1.04,.76,.02,.17,.17,.18,skin);
- sphere(-.29,.45,0,.27,.63,.3,dark);sphere(.29,.45,0,.27,.63,.3,dark);
- sphere(-.3,-.12,.12,.29,.17,.42,dark);sphere(.3,-.12,.12,.29,.17,.42,dark);
- // Subtle glowing scan bands around the subject.
- const scanMat=new THREE.MeshBasicMaterial({color:0x9cecff,transparent:true,opacity:.48});
- for(let y=.25;y<2.9;y+=.27){const band=new THREE.Mesh(new THREE.TorusGeometry(.62+(y>1.9?.05:0),.006,5,64),scanMat);band.position.y=y;band.scale.y=.62;avatar.add(band)}
- const platform=new THREE.Mesh(new THREE.CylinderGeometry(1.35,1.5,.12,64),new THREE.MeshStandardMaterial({color:0x252b2d,metalness:.9,roughness:.2}));platform.position.y=-.38;scene.add(platform);
- const rimRing=new THREE.Mesh(new THREE.TorusGeometry(1.28,.025,8,80),new THREE.MeshBasicMaterial({color:0xd4b47b,transparent:true,opacity:.9}));rimRing.rotation.x=Math.PI/2;rimRing.position.y=-.29;scene.add(rimRing);
- const grid=new THREE.GridHelper(8,24,0x48646b,0x25363a);grid.position.y=-.45;scene.add(grid);
+ const scanMat=new THREE.MeshBasicMaterial({color:0x8ceeff,transparent:true,opacity:.3});
+ const scan=new THREE.Mesh(new THREE.TorusGeometry(.72,.012,8,96),scanMat);scan.rotation.x=Math.PI/2;scan.position.y=1.05;scene.add(scan);
+ const platform=new THREE.Mesh(new THREE.CylinderGeometry(1.15,1.28,.12,64),new THREE.MeshStandardMaterial({color:0x252b2d,metalness:.85,roughness:.24}));platform.position.y=-.1;scene.add(platform);
+ const rimRing=new THREE.Mesh(new THREE.TorusGeometry(1.12,.026,8,96),new THREE.MeshBasicMaterial({color:0xd4b47b,transparent:true,opacity:.95}));rimRing.rotation.x=Math.PI/2;rimRing.position.y=-.035;scene.add(rimRing);
+ const grid=new THREE.GridHelper(6,24,0x42616a,0x23343a);grid.position.y=-.17;scene.add(grid);
+ const loader=new GLTFLoader();
+ const modelUrl="https://files.innerscene.com/library/daniel-3d-person-standing-casual-f788af5a/9e300a9cc460f5e7c2d7/daniel-man.glb";
+ loader.load(modelUrl,gltf=>{
+   const model=gltf.scene;
+   model.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false;if(o.material){o.material.needsUpdate=true}}});
+   const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
+   const targetHeight=2.22,scale=targetHeight/size.y;
+   model.scale.setScalar(scale);
+   model.position.x-=center.x*scale;model.position.z-=center.z*scale;model.position.y-=box.min.y*scale;
+   avatar.add(model);
+ },undefined,error=>{console.warn("GLB avatar loading failed",error);const status=document.getElementById("avatarStatus");if(status)status.textContent="MODÈLE 3D INDISPONIBLE — vérifie la connexion"});
  const clock=new THREE.Clock();
- function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();avatar.rotation.y=Math.sin(t*.45)*.13;avatar.position.y=Math.sin(t*1.4)*.025;platform.rotation.y=t*.08;rimRing.rotation.z=-t*.12;if(host)fit(renderer,camera,host);renderer.render(scene,camera)}
+ function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();avatar.rotation.y=Math.sin(t*.32)*.16;avatar.position.y=Math.sin(t*1.1)*.012;platform.rotation.y=t*.06;rimRing.rotation.z=-t*.1;scan.rotation.z=t*.28;if(host)fit(renderer,camera,host);renderer.render(scene,camera)}
  animate();
-}
-buildReactor();buildAvatar();
+}buildReactor();buildAvatar();
 </script>
 </body>
 </html>
