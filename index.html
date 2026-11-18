@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#07111f">
-<title>J.A.R.V.I.S. — Avengers Protocol</title>
+<title>J.A.R.V.I.S. — IRON PARADISE</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
@@ -547,7 +547,7 @@ input[type="checkbox"]{
   }
 }
 
-/* ===== MCU AVENGERS VISUAL SYSTEM ===== */
+/* ===== MCU IRON PARADISE VISUAL SYSTEM ===== */
 .character-art{
   display:block;width:100%;height:100%;object-fit:cover;object-position:center 24%;
   filter:contrast(1.06) saturate(1.08);position:relative;z-index:1;
@@ -592,7 +592,7 @@ input[type="checkbox"]{
   border-color:rgba(53,223,255,.52);
   box-shadow:0 0 35px rgba(23,154,255,.14),inset 0 0 24px rgba(53,223,255,.08);
 }
-.avengers-wall{
+.iron paradise-wall{
   position:absolute;left:0;right:0;top:0;height:265px;z-index:0;
   background-image:linear-gradient(180deg,rgba(4,11,20,.02) 45%,#071321 100%),url("https://lumiere-a.akamaihd.net/v1/images/p_avengersendgame_19751_e14a0104.jpeg");
   background-size:cover;background-position:center 22%;
@@ -624,7 +624,7 @@ input[type="checkbox"]{
 body{background:radial-gradient(ellipse at 50% 0%,#17466a 0%,#071321 38%,#02060d 100%);background-attachment:fixed}
 .app{max-width:680px}
 .topbar{padding:17px 19px;background:rgba(2,9,18,.9);border-bottom:1px solid rgba(88,237,255,.35)}
-.topbar:after{content:"STARK INTERFACE / HOLOGRAPHIC OS";position:absolute;right:18px;top:58px;color:#68dff0;font:7px Orbitron;letter-spacing:1.5px;opacity:.7}
+.topbar:after{content:"IRON PARADISE / DISCIPLINE SYSTEM";position:absolute;right:18px;top:58px;color:#68dff0;font:7px Orbitron;letter-spacing:1.5px;opacity:.7}
 .brand{font-size:19px;letter-spacing:3.5px}
 .page{padding-top:25px}
 .page h1{font-size:clamp(23px,6vw,30px);text-shadow:0 0 24px rgba(53,223,255,.18)}
@@ -758,7 +758,7 @@ body{
   <div class="hud-panel"><div class="hud-head"><span>STARK MAINFRAME / REACTOR CORE</span><span class="hud-live">ONLINE</span></div><div class="reactor-layout"><div class="reactor-core"><canvas id="reactor3D" class="hud-3d" aria-label="Réacteur Stark en 3D"></canvas><span>ARC<br>REACTOR</span></div><div class="reactor-readouts"><div class="readout"><small>AVENGER LEVEL</small><strong id="hudLevel">01</strong><em>PERSONAL EVOLUTION</em></div><div class="readout"><small>EXPERIENCE</small><strong id="hudXP">0 XP</strong><em>MISSION ENERGY</em></div><div class="readout"><small>BODY STATUS</small><strong id="hudWeight">-- kg</strong><em>LAST RECORDED</em></div></div></div></div>
 
   <div class="hero-card home-hero">
-    <div class="avengers-wall" role="img" aria-label="Les Avengers réunis dans Avengers Endgame"></div>
+    <div class="avengers-wall" role="img" aria-label="Les IRON PARADISE réunis dans Avengers Endgame"></div>
     <div class="hero-label">TON ASSISTANT PERSONNEL</div>
     <div class="hero-name">TONY STARK</div>
     <p class="hero-message" id="tonyMessage">Les grandes transformations ne se font pas en un jour. On avance étape par étape. Je m'occupe des calculs, tu t'occupes de la mission.</p>
@@ -960,7 +960,7 @@ body{
   <div class="section-title"><h2>RÉCOMPENSES</h2><span>TES PALIERS</span></div>
   <div class="card" id="rewardsList">
     <div class="list-item"><span>🥉 100 XP — Recrue confirmée</span><span>À débloquer</span></div>
-    <div class="list-item"><span>🥈 300 XP — Super-héros</span><span>À débloquer</span></div>
+    <div class="list-item"><span>🥈 300 XP — Athlète</span><span>À débloquer</span></div>
     <div class="list-item"><span>🥇 600 XP — Avenger confirmé</span><span>À débloquer</span></div>
     <div class="list-item"><span>🏆 1000 XP — Légende</span><span>À débloquer</span></div>
   </div>
@@ -1323,7 +1323,7 @@ function renderMissions(){
   document.getElementById("rankName").textContent=
     level>=10?"LÉGENDE AVENGERS":
     level>=6?"AVENGER CONFIRMÉ":
-    level>=3?"SUPER-HÉROS":
+    level>=3?"ATHLÈTE":
     level>=2?"AGENT AVENGERS":"RECRUE AVENGERS";
 
   document.getElementById("xpProgress").style.width=levelXP+"%";
@@ -1447,3 +1447,35 @@ function buildAvatar(){
 </script>
 </body>
 </html>
+
+/* ===== IRON PARADISE — THE ROCK THEME ===== */
+:root{--bg:#090909;--panel:#171717;--panel2:#242424;--cyan:#d8ad62;--blue:#a97832;--gold:#f1c477;--green:#a8d18d;--red:#d96b5f;--text:#f7f4ef;--muted:#a8a19a;--border:rgba(220,177,104,.22)}
+body{background:radial-gradient(ellipse at 50% -10%,#49331d 0%,#171411 32%,#080808 78%);background-attachment:fixed;color:#f6f1e9}
+body:before{opacity:.035;background-image:linear-gradient(rgba(220,177,104,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(220,177,104,.1) 1px,transparent 1px);background-size:42px 42px}
+.topbar{background:rgba(8,8,8,.94);border-bottom:1px solid rgba(220,177,104,.28);box-shadow:0 10px 24px #0008}
+.brand{color:#e8bd73;text-shadow:0 0 15px #b77a2a55;animation:none}.brand small{color:#9c8b73}
+.status{color:#c5a06a}.status-dot{background:#c5a06a;box-shadow:0 0 10px #c5a06a;animation:none}
+.topbar:after{content:"IRON PARADISE / DISCIPLINE • PROGRESSION • CONSISTENCY";color:#c8a56e;opacity:.8}
+.eyebrow{color:#c8a56e}h1,h2{font-family:Inter,sans-serif;letter-spacing:.4px}h1{font-weight:800}h2{font-weight:700}
+.card,.hero-card,.stat,.hero-tile{background:linear-gradient(145deg,#20201e,#111110);border-color:rgba(220,177,104,.19);box-shadow:0 12px 28px #0005,inset 0 1px #ffffff08;backdrop-filter:blur(10px)}
+.card:before{background:linear-gradient(90deg,transparent,#c8a56e,transparent);opacity:.35}
+.hero-card{background:linear-gradient(140deg,#2c2115,#10100f);border-color:rgba(220,177,104,.3)}.hero-card:after{content:"RISE";font-family:Inter;font-size:80px;letter-spacing:6px;color:#c8a56e08;bottom:-15px;right:0}
+.hero-label{color:#c8a56e}.hero-name{font-family:Inter,sans-serif;font-weight:800;letter-spacing:0}.hero-message{color:#d0c6b8}
+.hero-avatar{border-color:#c8a56e;background:#171411;box-shadow:0 0 22px #c8a56e22;animation:none}
+.stat{border-radius:13px}.stat-value{color:#e1b86f;text-shadow:0 0 14px #c8a56e30;font-family:Inter;font-weight:800}
+.progress-track{background:#302a23}.progress-fill{background:linear-gradient(90deg,#8b5d29,#e5bd75);box-shadow:0 0 10px #c8a56e44}
+.btn{background:linear-gradient(100deg,#d5ad6c,#f0d29a);border-color:#e4c17d;color:#17120b;box-shadow:0 5px 18px #c8a56e20}.btn-secondary{background:#29231b;color:#d9b576;border-color:#70542d}
+.field{background:#111110;border-color:#42372a}.field:focus{border-color:#c8a56e}
+.nav-btn{color:#81776a}.nav-btn.active{color:#e0b873}.nav-btn.active .nav-icon{text-shadow:0 0 12px #c8a56e55}.nav-btn.active:after{background:#c8a56e;box-shadow:0 0 10px #c8a56e}
+.bottom-nav{background:rgba(8,8,8,.96);border-top:1px solid rgba(220,177,104,.2)}
+.hud-panel{background:linear-gradient(130deg,#262018,#10100f);border-color:#c8a56e44;box-shadow:0 12px 28px #0006}.hud-panel:before{opacity:.07;background-image:linear-gradient(#c8a56e 1px,transparent 1px),linear-gradient(90deg,#c8a56e 1px,transparent 1px)}
+.hud-head{color:#d8b273}.hud-live{color:#b5d59a}.reactor-core{filter:drop-shadow(0 0 12px #c8a56e44)}.reactor-core:before,.reactor-core:after{border-color:#c8a56e;box-shadow:0 0 12px #c8a56e33,inset 0 0 12px #c8a56e33}.reactor-core span{color:#f2d9a6;text-shadow:0 0 12px #c8a56e}.readout{border-left-color:#c8a56e}.readout small{color:#a69a88}.readout em{color:#d8b273}
+.scanner-layout,.body-scanner{border-color:#c8a56e22}.body-scanner{background:radial-gradient(ellipse at 50% 48%,#c8a56e15,transparent 62%),linear-gradient(#171411,#090909)}.body-scanner:before{border-color:#c8a56e22}.scanline{background:#d8b273;box-shadow:0 0 12px 3px #c8a56e;opacity:.45}.scan-metric{border-color:#c8a56e22}.scan-metric small{color:#a69a88}.scan-metric span{color:#d8b273}
+.lab-ring{background:conic-gradient(#d8b273 0 68%,#3a3025 68% 100%);box-shadow:0 0 20px #c8a56e20}.lab-ring:before{background:#15120f;border-color:#c8a56e33}.lab-ring small{color:#a69a88}
+.cinema-banner,.avengers-wall,.character-art{display:none!important}
+.workout-hero-image{background-image:linear-gradient(135deg,#3b2b18,#141311)!important;min-height:150px}.workout-hero-image:after{content:"IRON PARADISE";display:block;position:absolute;right:14px;bottom:12px;font:800 12px Inter;letter-spacing:2px;color:#d7b16f;opacity:.75}
+.training-mission{border-color:#c8a56e33;background:#171411}.training-mission .mission-image{display:none}
+.hero-grid{gap:10px}.hero-tile{min-height:160px;padding:16px;justify-content:center}.hero-tile .character-art{display:none!important}.hero-tile strong{color:#e0b873;text-shadow:none}.hero-tile p{text-shadow:none;color:#b8afa3}.hero-symbol{display:block}
+.section-title span{color:#a69a88}.notice,.subtitle{color:#aaa197}
+.delete-btn{color:#cf796d}
+@media(max-width:390px){.topbar:after{font-size:6px;right:10px}.hero-card.home-hero{min-height:290px;padding-top:24px}.avengers-wall{display:none!important}}
