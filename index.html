@@ -738,7 +738,7 @@ body{
 .scanner-caption{position:absolute;z-index:4;bottom:9px;left:0;right:0;text-align:center;font:8px Orbitron;letter-spacing:2px;color:#d7c39c;text-shadow:0 2px 8px #000}
 @media(max-width:390px){.cinema-banner{height:218px}.hero-card.home-hero{min-height:395px;padding-top:230px}.avengers-wall{height:280px}.body-scanner{height:255px}}
 
-</style>
+.workout-hero-card{overflow:hidden;border:1px solid rgba(130,220,235,.2);border-radius:16px;background:rgba(13,18,23,.92);margin:12px 0}.workout-hero-image{min-height:165px;background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:flex-end;padding:14px}.workout-hero-tag{font-size:9px;letter-spacing:2px;color:#9cecff}.workout-hero-name{font-size:24px;font-weight:900;letter-spacing:1px;color:#fff;text-shadow:0 2px 8px #000}.workout-hero-role{font-size:10px;letter-spacing:1.5px;color:#e4c38e}.workout-hero-details{padding:12px 14px;position:relative}.workout-hero-details .delete-btn{position:absolute;right:10px;top:12px}\n</style>
 </head>
 <body>
 <div class="app">
@@ -1288,19 +1288,23 @@ function renderShopping(){
 function renderWorkouts(){
   document.getElementById("workoutCount").textContent=state.workouts.length;
   document.getElementById("workoutXP").textContent=state.workouts.length*25;
-
+  const heroByType={
+    "Renforcement musculaire":{name:"THOR",role:"FORCE / RENFORCEMENT",img:"https://lumiere-a.akamaihd.net/v1/images/g_avengersendgame_05_17734_63c4c4d6.jpeg?region=0%2C0%2C1200%2C560"},
+    "Cardio doux":{name:"CAPTAIN AMERICA",role:"ENDURANCE / CARDIO",img:"https://lumiere-a.akamaihd.net/v1/images/g_avengersendgame_09_17734_94c4e398.jpeg?region=0%2C0%2C1200%2C560"},
+    "Marche":{name:"SPIDER-MAN",role:"AGILITÉ / MOUVEMENT",img:"https://lumiere-a.akamaihd.net/v1/images/g_avengersendgame_01_17734_737ac855.jpeg?region=0%2C0%2C1200%2C560"},
+    "Mobilité / récupération":{name:"BLACK WIDOW",role:"MOBILITÉ / RÉCUPÉRATION",img:"https://lumiere-a.akamaihd.net/v1/images/g_avengersendgame_08_17734_3fc6fbb0.jpeg?region=0%2C0%2C1200%2C560"},
+    "Full body":{name:"HULK",role:"FULL BODY / PUISSANCE",img:"https://lumiere-a.akamaihd.net/v1/images/g_avengersendgame_05_17734_63c4c4d6.jpeg?region=0%2C0%2C1200%2C560"}
+  };
   document.getElementById("workoutList").innerHTML=state.workouts.length?
     [...state.workouts].reverse().map((workout,index)=>{
       const realIndex=state.workouts.length-1-index;
-      return `<div class="list-item">
-        <div><strong>${escapeHTML(workout.name)}</strong>
-        <div class="notice">${formatDate(workout.date)} · ${workout.duration} min · ${escapeHTML(workout.type)}</div>
-        <div class="notice">${escapeHTML(workout.intensity)} ${workout.notes?"· "+escapeHTML(workout.notes):""}</div></div>
-        <button class="delete-btn" onclick="deleteItem('workouts',${realIndex})">×</button>
+      const hero=heroByType[workout.type]||heroByType["Full body"];
+      return `<div class="workout-hero-card">
+        <div class="workout-hero-image" style="background-image:linear-gradient(90deg,rgba(8,10,13,.15),rgba(8,10,13,.92)),url('${hero.img}')"><div class="workout-hero-tag">AVENGERS TRAINING</div><div class="workout-hero-name">${hero.name}</div><div class="workout-hero-role">${hero.role}</div></div>
+        <div class="workout-hero-details"><strong>${escapeHTML(workout.name)}</strong><div class="notice">${formatDate(workout.date)} · ${workout.duration} min · ${escapeHTML(workout.type)}</div><div class="notice">${escapeHTML(workout.intensity)} ${workout.notes?"· "+escapeHTML(workout.notes):""}</div><button class="delete-btn" onclick="deleteItem('workouts',${realIndex})">×</button></div>
       </div>`;
     }).join(""):"<div class='empty'>Aucune séance enregistrée.</div>";
 }
-
 function renderMissions(){
   const completed=state.completedMissions.length;
   document.getElementById("missionCount").textContent=completed;
@@ -1412,8 +1416,8 @@ function buildAvatar(){
  const rimRing=new THREE.Mesh(new THREE.TorusGeometry(1.12,.026,8,96),new THREE.MeshBasicMaterial({color:0xd4b47b,transparent:true,opacity:.95}));rimRing.rotation.x=Math.PI/2;rimRing.position.y=-.035;scene.add(rimRing);
  const grid=new THREE.GridHelper(6,24,0x42616a,0x23343a);grid.position.y=-.17;scene.add(grid);
  const loader=new GLTFLoader();
- const modelUrl="https://files.innerscene.com/library/daniel-3d-person-standing-casual-f788af5a/9e300a9cc460f5e7c2d7/daniel-man.glb";
- loader.load(modelUrl,gltf=>{
+ const modelUrl="https://files.innerscene.com/library/abstract-white-man-3d-person-standing-9e06c5d7/b8b04e10b17ae2f5edab/abstract-white-man-abstract_man_standing.glb";
+ if(document.getElementById("avatarStatus"))document.getElementById("avatarStatus").textContent="CHARGEMENT DU MODÈLE 3D (3 MB)";\n loader.load(modelUrl,gltf=>{
    const model=gltf.scene;
    model.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false;if(o.material){o.material.needsUpdate=true}}});
    const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
