@@ -1427,11 +1427,11 @@ function buildAvatar(){
  const grid=new THREE.GridHelper(6,24,0x42616a,0x23343a);grid.position.y=-.17;scene.add(grid);
  const loader=new GLTFLoader();
  const modelUrl="https://modelviewer.dev/shared-assets/models/Astronaut.glb";
- if(document.getElementById("avatarStatus"))document.getElementById("avatarStatus").textContent="CHARGEMENT DU MODÈLE 3D";
+ if(document.getElementById("avatarStatus"))document.getElementById("avatarStatus").textContent="SCAN 3D INITIALISÉ";
  const fallback=()=>{if(avatar.children.length)return;const mat=new THREE.MeshStandardMaterial({color:0x9fc5d8,metalness:.35,roughness:.42});const dark=new THREE.MeshStandardMaterial({color:0x24445b,metalness:.4,roughness:.5});const add=(geo,m,x,y,z)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);avatar.add(o);return o};add(new THREE.SphereGeometry(.22,32,24),mat,0,1.92,0);add(new THREE.CylinderGeometry(.19,.24,.62,24),mat,0,1.43,0);add(new THREE.CylinderGeometry(.13,.12,.52,20),dark,-.34,1.45,0).rotation.z=.15;add(new THREE.CylinderGeometry(.13,.12,.52,20),dark,.34,1.45,0).rotation.z=-.15;add(new THREE.CylinderGeometry(.14,.13,.7,20),mat,-.13,.72,0).rotation.z=.08;add(new THREE.CylinderGeometry(.14,.13,.7,20),mat,.13,.72,0).rotation.z=-.08;add(new THREE.BoxGeometry(.28,.12,.48),dark,-.13,.12,.08);add(new THREE.BoxGeometry(.28,.12,.48),dark,.13,.12,.08);};
- let loaded=false;const loadTimer=setTimeout(()=>{if(!loaded){fallback();const status=document.getElementById("avatarStatus");if(status)status.textContent="MODE SCAN DE SECOURS — MODÈLE 3D";}},9000);
+ fallback();let loaded=false;const loadTimer=setTimeout(()=>{if(!loaded){const status=document.getElementById("avatarStatus");if(status)status.textContent="SCAN ACTIF — MODÈLE DE SECOURS";}},9000);
  loader.load(modelUrl,gltf=>{
-   loaded=true;clearTimeout(loadTimer);
+   loaded=true;clearTimeout(loadTimer);avatar.clear();
    const model=gltf.scene;
    model.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false;if(o.material){o.material.needsUpdate=true}}});
    const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
