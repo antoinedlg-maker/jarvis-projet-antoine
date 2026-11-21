@@ -43,4 +43,4 @@ jobs:
       - name: Verify integration points
         run: |
           if [ -f worker/src/index.js ]; then grep -q 'url.pathname === "/act"' worker/src/index.js; fi
-          if [ -f jarvis-actions.js ]; then grep -q './jarvis-actions.js' index.html; fi
+          if grep -q './jarvis-actions.js' index.html; then test -f jarvis-actions.js; fi
