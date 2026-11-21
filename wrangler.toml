@@ -6,3 +6,6 @@ required = ["JARVIS_API_TOKEN"]
 
 [ai]
 binding = "AI"
+
+[triggers]
+crons = ["0 * * * *"]
