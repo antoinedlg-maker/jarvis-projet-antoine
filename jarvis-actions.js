@@ -40,7 +40,7 @@
   });
   function escapeText(value){const d=document.createElement("div");d.textContent=String(value||"");return d.innerHTML;}
   function tryLocalMeal(message){
-    const kcal=message.match(/(\\d{2,4})\\s*kcal/i),protein=message.match(/(\\d{1,3})\\s*g\\s*(?:de\\s*)?protéines?/i),type=message.match(/petit[- ]déjeuner|déjeuner|dîner|collation/i);
+    const kcal=message.match(/(\d{2,4})\s*kcal/i),protein=message.match(/(\d{1,3})\s*g\s*(?:de\s*)?protéines?/i),type=message.match(/petit[- ]déjeuner|déjeuner|dîner|collation/i);
     if(!/ajoute|enregistre|note|saisis/i.test(message)||!kcal||!protein||!type)return null;
     const raw=type[0].toLowerCase().replace("petit déjeuner","petit-déjeuner");
     const mealType={"petit-déjeuner":"Petit-déjeuner","déjeuner":"Déjeuner","dîner":"Dîner","collation":"Collation"}[raw];
