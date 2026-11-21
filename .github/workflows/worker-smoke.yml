@@ -23,8 +23,12 @@ jobs:
           console.log("WORKER_STATUS=" + health.status);
           console.log("AI_BINDING=" + health.ai);
           console.log("TOKEN_CONFIGURED=" + health.tokenConfigured);
+          console.log("TOKEN_BINDING_NAMES=" + (health.tokenBindingNames || []).join(","));
+          console.log("DEPLOYMENT=" + health.deployment);
           console.log("AGENT_COUNT=" + health.agents);
           if (health.status !== "online") throw new Error("Worker is not online");
+          if (health.deployment !== "token-diagnostic-v1") throw new Error("Live Worker has not received the latest diagnostic deployment");
+          if (!health.tokenConfigured) throw new Error("Live Worker cannot see JARVIS_API_TOKEN; token bindings detected: " + (health.tokenBindingNames || []).join(","));
           if (health.agents !== 4) throw new Error("Expected 4 configured agents");
 
           const agentsResponse = await fetch(base + "/agents", { cache: "no-store" });
