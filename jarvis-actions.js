@@ -29,7 +29,7 @@
       const data=await response.json();
       if(!response.ok)throw new Error("Worker HTTP "+response.status);
       const state=data.tokenConfigured?"Clé serveur détectée":"Clé serveur ABSENTE";
-      status.textContent="Worker "+data.status+" · IA "+data.ai+" · "+data.agents+" agents · "+state;
+      status.textContent="Worker "+data.status+" · IA "+data.ai+" · "+data.agents+" agents · "+state+" · Variables token : "+((data.tokenBindingNames||[]).join(", ")||"aucune")+" · "+(data.deployment||"version inconnue");
       $("jarvis-team-results").textContent=data.tokenConfigured
         ?"Le Worker annonce que son secret est configuré. Tu peux lancer les 4 agents."
         :"Le Worker répond, mais Cloudflare ne voit pas JARVIS_API_TOKEN dans cet environnement.";
