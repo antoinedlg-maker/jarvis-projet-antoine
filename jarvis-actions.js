@@ -9,7 +9,7 @@
   launch.id="jarvis-action-launch";launch.textContent="✦ JARVIS";
   const panel=document.createElement("section");
   panel.id="jarvis-action-panel";
-  panel.innerHTML=`<h3>J.A.R.V.I.S. — Centre de commande</h3><div id="jarvis-action-status">Assistant prêt · les actions autorisées seront enregistrées dans cette application.</div><input id="jarvis-action-token" type="password" autocomplete="off" placeholder="Clé d’accès JARVIS"><textarea id="jarvis-action-message" placeholder="Ex : Ajoute à mon journal un déjeuner : poulet, riz et légumes, 650 kcal et 45 g de protéines."></textarea><button id="jarvis-action-send">Exécuter la mission</button><button class="secondary" id="jarvis-action-close">Fermer</button><div id="jarvis-action-result" aria-live="polite"></div>
+  panel.innerHTML=`<h3>J.A.R.V.I.S. — Centre de commande</h3><div id="jarvis-action-status">Assistant prêt · les actions autorisées seront enregistrées dans cette application.</div><input id="jarvis-action-token" type="password" autocomplete="off" placeholder="Clé d’accès JARVIS"><textarea id="jarvis-action-message" placeholder="Ex : Ajoute à mon journal un déjeuner : poulet, riz et légumes, 650 kcal et 45 g de protéines."></textarea><button id="jarvis-action-send">Exécuter la mission</button><button class="secondary" id="jarvis-connection-check">Tester la connexion</button><button class="secondary" id="jarvis-action-close">Fermer</button><div id="jarvis-action-result" aria-live="polite"></div>
   <div id="jarvis-agent-console"><div class="jarvis-agent-head"><b>ÉQUIPE JARVIS</b><span id="jarvis-agent-state">4 spécialistes disponibles</span></div>
   <div class="jarvis-agent-grid">
   <div class="jarvis-agent" data-agent="product"><i>◈</i><b>Architecte produit</b><small>Application & priorités</small><em>En attente</em></div>
@@ -21,6 +21,21 @@
   const $=id=>document.getElementById(id);
   $("jarvis-action-token").value=sessionStorage.getItem(TOKEN_KEY)||"";
   launch.addEventListener("click",()=>panel.classList.toggle("open"));
+  $("jarvis-connection-check").addEventListener("click",async()=>{
+    const button=$("jarvis-connection-check"),status=$("jarvis-action-status");
+    button.disabled=true;status.textContent="Diagnostic du Worker en cours…";
+    try{
+      const response=await fetch(API+"/health",{cache:"no-store"});
+      const data=await response.json();
+      if(!response.ok)throw new Error("Worker HTTP "+response.status);
+      const state=data.tokenConfigured?"Clé serveur détectée":"Clé serveur ABSENTE";
+      status.textContent="Worker "+data.status+" · IA "+data.ai+" · "+data.agents+" agents · "+state;
+      $("jarvis-team-results").textContent=data.tokenConfigured
+        ?"Le Worker annonce que son secret est configuré. Tu peux lancer les 4 agents."
+        :"Le Worker répond, mais Cloudflare ne voit pas JARVIS_API_TOKEN dans cet environnement.";
+    }catch(error){status.textContent="Diagnostic impossible : "+error.message;}
+    finally{button.disabled=false;}
+  });
   $("jarvis-action-close").addEventListener("click",()=>panel.classList.remove("open"));
   const agentCards=[...panel.querySelectorAll(".jarvis-agent")];
   function agentState(state,label){$("jarvis-agent-state").textContent=label;agentCards.forEach(card=>{card.classList.remove("running","done");card.querySelector("em").textContent=state==="running"?"Analyse en cours…":state==="done"?"Analyse terminée":"En attente";if(state!=="idle")card.classList.add(state);});}
@@ -28,6 +43,7 @@
     const message=$("jarvis-action-message").value.trim(),token=$("jarvis-action-token").value.trim();
     if(!message){$("jarvis-team-results").textContent="Écris d’abord une mission dans le champ ci-dessus.";return}
     if(!token){$("jarvis-team-results").textContent="Équipe non connectée : le Worker ne reçoit pas encore le secret d’accès.";agentState("idle","Connexion requise");return}
+    sessionStorage.setItem(TOKEN_KEY,token);
     $("jarvis-team-run").disabled=true;$("jarvis-team-results").textContent="JARVIS distribue la mission aux 4 spécialistes…";agentState("running","4 agents en analyse");
     try{
       const response=await fetch(API+"/team",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({message})});
