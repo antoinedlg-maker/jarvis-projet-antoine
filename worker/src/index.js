@@ -47,7 +47,45 @@ async function askAgent(env, agent, message, context = "") {
   return getReply(result) || "Aucune analyse retournée.";
 }
 
-export default {
+
+async function planActions(env, message, context = "") {
+  const prompt = [
+    "Tu es le planificateur d'actions de JARVIS IRON PARADISE.",
+    "Retourne UNIQUEMENT un objet JSON valide, sans markdown, au format {\"reply\":string,\"actions\":[...]}.",
+    "Actions autorisées :",
+    "- {\"type\":\"add_meal\",\"name\":string,\"calories\":number,\"protein\":number,\"mealType\":\"petit-déjeuner\"|\"déjeuner\"|\"dîner\"|\"collation\"}",
+    "- {\"type\":\"add_workout\",\"name\":string,\"duration\":number,\"workoutType\":string,\"intensity\":\"faible\"|\"modérée\"|\"élevée\",\"notes\":string}",
+    "- {\"type\":\"set_goal\",\"weight\":number}",
+    "- {\"type\":\"add_shopping\",\"name\":string,\"qty\":string,\"price\":number}",
+    "N'invente jamais des calories, protéines, durées, poids ou prix. Si les données nécessaires manquent, pose une question dans reply et renvoie actions: [].",
+    "Ne crée une action que si l'utilisateur demande explicitement de l'enregistrer, ajouter, noter, programmer ou modifier. Les demandes d'information ne déclenchent aucune action.",
+    "Ne propose jamais de suppression, de modification rétroactive, de pesée réelle ni de changement de XP.",
+    "Maximum 5 actions. JSON seulement.",
+    "Demande utilisateur : " + message,
+    "Contexte : " + context
+  ].join("\\n");
+  const result = await env.AI.run(env.AI_MODEL || DEFAULT_MODEL, {
+    messages: [
+      { role: "system", content: "Tu es un moteur d'exécution prudent. Respecte strictement le schéma JSON." },
+      { role: "user", content: prompt }
+    ]
+  });
+  const raw = getReply(result);
+  const cleaned = raw.replace(/^\s*```(?:json)?/i, "").replace(/```\s*$/i, "").trim();
+  let parsed;
+  try { parsed = JSON.parse(cleaned); } catch { throw new Error("Invalid action JSON"); }
+  if (!parsed || typeof parsed.reply !== "string" || !Array.isArray(parsed.actions)) throw new Error("Invalid action schema");
+  const actions = parsed.actions.slice(0, 5).filter(a => {
+    if (!a || typeof a !== "object") return false;
+    if (a.type === "add_meal") return typeof a.name === "string" && a.name.trim() && Number.isFinite(a.calories) && a.calories >= 0 && a.calories <= 5000 && Number.isFinite(a.protein) && a.protein >= 0 && a.protein <= 400 && ["petit-déjeuner","déjeuner","dîner","collation"].includes(a.mealType);
+    if (a.type === "add_workout") return typeof a.name === "string" && a.name.trim() && Number.isInteger(a.duration) && a.duration >= 1 && a.duration <= 600 && typeof a.workoutType === "string" && ["faible","modérée","élevée"].includes(a.intensity);
+    if (a.type === "set_goal") return Number.isFinite(a.weight) && a.weight >= 1 && a.weight <= 500;
+    if (a.type === "add_shopping") return typeof a.name === "string" && a.name.trim() && typeof a.qty === "string" && Number.isFinite(a.price) && a.price >= 0 && a.price <= 100000;
+    return false;
+  });
+  return { reply: parsed.reply.slice(0, 2000), actions };
+}
+\nexport default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin");
     const allowedOrigin = env.ALLOWED_ORIGIN;
@@ -80,6 +118,25 @@ export default {
 
     if (url.pathname === "/agents" && request.method === "GET") {
       return json({ supervisor: "JARVIS", agents: AGENTS }, 200, cors);
+    }
+
+
+    if (url.pathname === "/act" && request.method === "POST") {
+      if (!env.AI) return json({ error: "AI binding is not configured yet." }, 503, cors);
+      if (!env.JARVIS_API_TOKEN || request.headers.get("Authorization") !== `Bearer ${env.JARVIS_API_TOKEN}`) {
+        return json({ error: "Unauthorized" }, 401, cors);
+      }
+      let body;
+      try { body = await request.json(); } catch { return json({ error: "Invalid JSON body." }, 400, cors); }
+      const message = typeof body.message === "string" ? body.message.trim() : "";
+      if (!message || message.length > 2000) return json({ error: "Message required (maximum 2000 characters)." }, 400, cors);
+      const context = typeof body.context === "string" ? body.context.slice(0, 4000) : "";
+      try {
+        const plan = await planActions(env, message, context);
+        return json({ ...plan, mode: "action_planner", requiresClientApply: true }, 200, cors);
+      } catch {
+        return json({ error: "Action planning failed. Check AI binding, model and quota." }, 502, cors);
+      }
     }
 
     if (url.pathname === "/chat" || url.pathname === "/team") {
@@ -159,7 +216,7 @@ export default {
     return json({
       name: "JARVIS IRON PARADISE",
       status: "online",
-      endpoints: ["/health", "/agents", "/chat", "/team"]
+      endpoints: ["/health", "/agents", "/chat", "/team", "/act"]
     }, 200, cors);
   }
 };
