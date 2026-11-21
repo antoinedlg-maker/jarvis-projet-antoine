@@ -1,4 +1,4 @@
-const CACHE = "jarvis-antoine-avengers-v6";
+const CACHE = "jarvis-antoine-avengers-v7";
 
 const FILES = [
   "./",
