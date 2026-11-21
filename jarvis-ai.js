@@ -8,11 +8,6 @@
   let messages = read(CHAT_KEY, []);
   let busy = false;
 
-  const style = document.createElement("link");
-  style.rel = "stylesheet";
-  style.href = new URL("./jarvis-ai.css", document.currentScript?.src || location.href).href;
-  document.head.appendChild(style);
-
   const root = document.createElement("div");
   root.id = "jarvis-ai-root";
   root.innerHTML = \`
