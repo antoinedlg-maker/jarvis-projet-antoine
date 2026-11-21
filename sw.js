@@ -1,4 +1,4 @@
-const CACHE = "jarvis-antoine-avengers-v21";
+const CACHE = "jarvis-antoine-avengers-v22";
 
 const FILES = [
   "./",
@@ -27,10 +27,17 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
-
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request);
-    })
-  );
+  const url = new URL(event.request.url);
+  const isAppDocument = event.request.mode === "navigate" || url.pathname.endsWith("/index.html");
+  if (isAppDocument) {
+    event.respondWith(fetch(event.request).then(response => {
+      if (response && response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE).then(cache => cache.put(event.request, copy));
+      }
+      return response;
+    }).catch(() => caches.match(event.request).then(cached => cached || caches.match("./index.html"))));
+    return;
+  }
+  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request)));
 });
