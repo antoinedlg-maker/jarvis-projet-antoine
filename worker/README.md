@@ -30,3 +30,6 @@ The /health endpoint is public and reports whether the AI binding is present.
 - POST /chat with JSON body { "message": "..." }
 
 This is a backend scaffold. It does not yet connect the PWA UI or read/write personal app data. Do not put personal data or credentials in public repository files.
+
+
+Cloudflare Git deployment trigger: this commit is intended to trigger Workers Builds from the `feature/cloudflare-worker` branch. Wrangler configuration is at the repository root (`/wrangler.toml`) and points to `worker/src/index.js`.
