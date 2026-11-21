@@ -39,13 +39,48 @@ async function runTeam(automatic){
  const message=$("jarvis-action-message").value.trim()||"Audit stratégique de JARVIS IRON PARADISE : sport prioritaire, nutrition synchronisée, récupération, suivi des progrès, expérience Avengers et fonctionnalités gratuites concrètes.";
  const token=$("jarvis-action-token").value.trim();
  if(!token){$("jarvis-team-results").textContent="Clé d’accès absente de cette session. Elle n’est pas enregistrée dans le code. Renseigne-la pour lancer les agents.";setAgentState("idle","Connexion requise");return;}
- sessionStorage.setItem(TOKEN_KEY,token);$("jarvis-team-run").disabled=true;$("jarvis-team-results").textContent=automatic?"JARVIS ouvre le conseil Avengers et distribue l’audit aux 9 agents…":"JARVIS distribue la mission aux 9 spécialistes…";setAgentState("running","9 agents au travail");
+ sessionStorage.setItem(TOKEN_KEY,token);
+ const button=$("jarvis-team-run");button.disabled=true;
+ const host=$("jarvis-team-results");host.textContent="";
+ const context=buildContext(),results=[];
+ const intro=document.createElement("p");intro.textContent=automatic?"JARVIS lance les 9 analyses séparément…":"JARVIS lance les spécialistes un par un…";host.appendChild(intro);
+ $("jarvis-agent-state").textContent="0/9 agents terminés";
+ panel.querySelectorAll(".jarvis-agent").forEach(card=>{card.classList.remove("running","done","failed");card.querySelector("em").textContent="En attente";});
  try{
-  const response=await fetch(API+"/team",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({message,context:buildContext()})}),data=await response.json();
-  if(!response.ok)throw new Error(data.error||"Erreur API "+response.status);
-  renderAgentResults(data);localStorage.setItem("jarvis_avengers_audit_date_v2",new Date().toLocaleDateString("en-CA"));$("jarvis-action-status").textContent="Conseil Avengers terminé · résultats individuels chargés.";
- }catch(error){setAgentState("failed","Mission interrompue");$("jarvis-team-results").textContent="Impossible de terminer le conseil : "+error.message;$("jarvis-action-status").textContent="Vérifie la connexion au Worker.";}
- finally{$("jarvis-team-run").disabled=false;}
+  for(let i=0;i<AGENTS.length;i++){
+   const agent=AGENTS[i],card=panel.querySelector('[data-agent="'+agent[0]+'"]');
+   if(card){card.classList.remove("done","failed");card.classList.add("running");card.querySelector("em").textContent="Analyse "+(i+1)+"/9…";}
+   $("jarvis-agent-state").textContent=(i+1)+"/9 · "+agent[2]+" en cours";
+   const status=document.createElement("p");status.textContent="Analyse "+(i+1)+"/9 — "+agent[2]+"…";host.appendChild(status);
+   try{
+    const response=await fetch(API+"/team",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({agentId:agent[0],message,context})});
+    let data={};try{data=await response.json();}catch(e){}
+    if(!response.ok)throw new Error(data.error||"Erreur API "+response.status);
+    const item=(Array.isArray(data.agentResults)&&data.agentResults[0])||{agent:agent[0],name:agent[2],status:"failed",analysis:"Le Worker n'a renvoyé aucun résultat."};
+    results.push(item);
+    if(card){card.classList.remove("running");card.classList.add(item.status==="completed"?"done":"failed");card.querySelector("em").textContent=item.status==="completed"?"Analyse terminée":"Échec — suite";}
+    const resultCard=document.createElement("div");resultCard.className="agent-result";
+    const heading=document.createElement("strong"),body=document.createElement("div");
+    heading.textContent=(i+1)+". "+String(item.name||agent[2])+" — "+(item.status==="completed"?"TERMINÉ":"ÉCHEC");
+    body.textContent=String(item.analysis||"Aucune analyse renvoyée.");resultCard.append(heading,body);host.appendChild(resultCard);
+   }catch(agentError){
+    const item={agent:agent[0],name:agent[2],status:"failed",analysis:"Erreur : "+agentError.message};results.push(item);
+    if(card){card.classList.remove("running");card.classList.add("failed");card.querySelector("em").textContent="Échec — suite";}
+    const resultCard=document.createElement("div");resultCard.className="agent-result";
+    const heading=document.createElement("strong"),body=document.createElement("div");heading.textContent=(i+1)+". "+agent[2]+" — ÉCHEC";body.textContent=item.analysis;resultCard.append(heading,body);host.appendChild(resultCard);
+   }
+   $("jarvis-agent-state").textContent=(i+1)+"/9 traités · "+results.filter(x=>x.status==="completed").length+" réussis";
+  }
+  const completed=results.filter(x=>x.status==="completed").length;
+  const summary="Conseil Avengers terminé : "+completed+"/9 analyses réussies. Chaque spécialiste a été interrogé dans une requête indépendante. "+(completed<9?"Les agents en échec sont identifiés individuellement et n'ont pas bloqué les suivants.":"Les neuf spécialistes ont répondu.");
+  const top=document.createElement("div");top.className="agent-result";
+  const title=document.createElement("strong"),body=document.createElement("div");title.textContent="JARVIS — BILAN DU CONSEIL";body.textContent=summary;top.prepend(title,body);host.insertBefore(top,host.children[1]||null);
+  const report={reply:summary,executiveSummary:"Les neuf avis sont affichés individuellement ci-dessus. Aucun appel IA de synthèse supplémentaire n'est lancé.",agentResults:results,generatedAt:new Date().toISOString(),message};
+  try{localStorage.setItem("jarvis_avengers_last_report_v2",JSON.stringify(report));localStorage.setItem("jarvis_avengers_audit_date_v2",new Date().toLocaleDateString("en-CA"));}catch(e){}
+  renderSavedReport();$("jarvis-action-status").textContent=summary;
+ }catch(error){
+  $("jarvis-action-status").textContent="Conseil interrompu : "+error.message;
+ }finally{button.disabled=false;}
 }
 $("jarvis-team-run").addEventListener("click",()=>runTeam(false));$("jarvis-weekly-plan").addEventListener("click",launchWeeklyPlan);function launchWeeklyPlan(){panel.classList.add("open");$("jarvis-action-message").value="MISSION PROGRAMME HEBDOMADAIRE : bâtis un plan sportif de 7 jours réaliste et progressif. Le sport est prioritaire. Pour chaque jour, précise objectif, type de séance, durée indicative, niveau d’effort et récupération. Coordonne les conseils nutritionnels et les repas avec les jours d’entraînement. Prévois des jours de repos. N’invente ni matériel, ni disponibilité, ni limitation médicale : indique les informations manquantes et propose des options prudentes. Termine par les 3 premières actions à réaliser.";runTeam(false);}
 $("jarvis-connection-check").addEventListener("click",async()=>{
