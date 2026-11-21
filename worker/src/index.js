@@ -215,29 +215,35 @@ export default {
           return json({ reply, mode: "single_agent", memory: Boolean(memoryKey && env.JARVIS_MEMORY) }, 200, cors);
         }
 
-        // Les spécialistes travaillent en parallèle ; JARVIS arbitre et synthétise.
-        const specialistResults = await Promise.all(
-          AGENTS.map(async agent => ({
-            agent: agent.id,
-            name: agent.name,
-            analysis: await askAgent(env, agent, message, context)
-          }))
-        );
+        // Appels séquentiels : éviter les limites de concurrence Workers AI.
+        // Chaque spécialiste conserve son résultat même si un autre échoue.
+        const specialistResults = [];
+        for (const agent of AGENTS) {
+          try {
+            const analysis = await askAgent(env, agent, message, context);
+            specialistResults.push({ agent: agent.id, name: agent.name, status: "completed", analysis });
+          } catch (agentError) {
+            const detail = agentError instanceof Error ? agentError.message : "Erreur inconnue";
+            specialistResults.push({
+              agent: agent.id,
+              name: agent.name,
+              status: "failed",
+              analysis: `Échec de cet agent : ${detail}`
+            });
+          }
+        }
 
-        const synthesis = await askAgent(
-          env,
-          {
-            name: "JARVIS — Chef d'orchestre",
-            mission: "Tu coordonnes les agents spécialistes. Compare leurs analyses, élimine les contradictions, retiens les actions les plus utiles et produis une réponse unique priorisée. Ne prétends pas avoir exécuté des changements."
-          },
-          message,
-          specialistResults.map(item => `${item.name}:\n${item.analysis}`).join("\n\n")
-        );
+        const successful = specialistResults.filter(item => item.status === "completed");
+        if (!successful.length) {
+          const failures = specialistResults.map(item => `${item.name}: ${item.analysis}`).join(" | ");
+          throw new Error(`Aucun agent n'a obtenu de réponse. ${failures}`);
+        }
 
+        const summary = `Équipe JARVIS : ${successful.length}/${AGENTS.length} agents ont répondu. Les analyses individuelles suivent.`;
         return json({
-          reply: synthesis,
+          reply: summary,
           mode: "multi_agent",
-          agents: specialistResults.map(({ agent, name }) => ({ agent, name, status: "completed" })),
+          agents: specialistResults.map(({ agent, name, status }) => ({ agent, name, status })),
           agentResults: specialistResults
         }, 200, cors);
       } catch (error) {
