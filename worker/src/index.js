@@ -113,7 +113,9 @@ export default {
         status: "online",
         ai: Boolean(env.AI) ? "connected" : "not_configured",
         agents: AGENTS.length,
-        tokenConfigured: Boolean(env.JARVIS_API_TOKEN)
+        tokenConfigured: typeof env.JARVIS_API_TOKEN === "string" && env.JARVIS_API_TOKEN.trim().length > 0,
+        tokenBindingNames: Object.keys(env).filter(key => /TOKEN/i.test(key)).sort(),
+        deployment: "token-diagnostic-v1"
       }, 200, { ...cors, "Cache-Control": "no-store, max-age=0" });
     }
 
