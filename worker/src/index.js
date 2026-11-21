@@ -63,7 +63,7 @@ async function planActions(env, message, context = "") {
     "Maximum 5 actions. JSON seulement.",
     "Demande utilisateur : " + message,
     "Contexte : " + context
-  ].join("\\n");
+  ].join("\n");
   const result = await env.AI.run(env.AI_MODEL || DEFAULT_MODEL, {
     messages: [
       { role: "system", content: "Tu es un moteur d'exécution prudent. Respecte strictement le schéma JSON." },
@@ -169,7 +169,7 @@ export default {
       if (memoryKey && env.JARVIS_MEMORY) {
         try { history = await env.JARVIS_MEMORY.get(memoryKey, "json") || []; } catch { history = []; }
       }
-      const memoryContext = history.slice(-10).map(item => `${item.role}: ${item.content}`).join("\\n");
+      const memoryContext = history.slice(-10).map(item => `${item.role}: ${item.content}`).join("\n");
       const combinedContext = [context, memoryContext].filter(Boolean).join("\\n\\n");
 
       try {
