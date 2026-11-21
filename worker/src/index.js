@@ -181,6 +181,35 @@ export default {
       }
 
       const context = typeof body.context === "string" ? body.context.slice(0, 6000) : "";
+
+      // Mode incrémental : une seule analyse IA par requête HTTP.
+      // Le navigateur orchestre les 9 appels séquentiellement pour éviter le timeout Worker.
+      const requestedAgentId = typeof body.agentId === "string" ? body.agentId : "";
+      if (url.pathname === "/team" && requestedAgentId) {
+        const agent = AGENTS.find(item => item.id === requestedAgentId);
+        if (!agent) return json({ error: "Unknown agentId." }, 400, cors);
+        try {
+          const analysis = await askAgent(env, agent, message, context);
+          return json({
+            reply: agent.name + " a terminé son analyse.",
+            mode: "single_specialist",
+            agentResults: [{ agent: agent.id, name: agent.name, status: "completed", analysis: analysis.slice(0, 5000) }],
+            completedAgents: 1,
+            totalAgents: 1,
+            generatedAt: new Date().toISOString()
+          }, 200, cors);
+        } catch (agentError) {
+          const detail = agentError instanceof Error ? agentError.message : "Erreur inconnue";
+          return json({
+            reply: agent.name + " n'a pas pu terminer.",
+            mode: "single_specialist",
+            agentResults: [{ agent: agent.id, name: agent.name, status: "failed", analysis: "Agent indisponible : " + detail }],
+            completedAgents: 0,
+            totalAgents: 1,
+            generatedAt: new Date().toISOString()
+          }, 200, cors);
+        }
+      }
       const sessionId = typeof body.sessionId === "string" && /^[a-zA-Z0-9_-]{8,80}$/.test(body.sessionId)
         ? body.sessionId : null;
       const memoryKey = sessionId ? `session:${sessionId}` : null;
@@ -204,49 +233,12 @@ export default {
           return json({ reply, mode: "single_agent", memory: Boolean(memoryKey && env.JARVIS_MEMORY) }, 200, cors);
         }
 
-        // Conseil multi-spécialiste séquentiel : stable sur Workers AI et tolérant aux pannes.
-        const specialistResults = [];
-        for (const agent of AGENTS) {
-          try {
-            const analysis = await askAgent(env, agent, message, context);
-            specialistResults.push({ agent: agent.id, name: agent.name, status: "completed", analysis: analysis.slice(0, 5000) });
-          } catch (agentError) {
-            const detail = agentError instanceof Error ? agentError.message : "Erreur inconnue";
-            specialistResults.push({ agent: agent.id, name: agent.name, status: "failed", analysis: "Agent indisponible : " + detail });
-          }
-        }
-
-        const successful = specialistResults.filter(item => item.status === "completed");
-        if (!successful.length) {
-          const failures = specialistResults.map(item => item.name + ": " + item.analysis).join(" | ");
-          throw new Error("Aucun agent n'a obtenu de réponse. " + failures);
-        }
-
-        // JARVIS arbitre les avis et relie les domaines.
-        let executiveSummary = "";
-        try {
-          executiveSummary = await askAgent(env, {
-            name: "JARVIS — Directeur de mission",
-            mission: "Synthétiser les spécialistes, arbitrer les priorités et relier le sport, la nutrition, la récupération et l'expérience produit.",
-            task: "Fournis une synthèse exécutive avec : objectif prioritaire, 3 actions concrètes classées, coordination sport/nutrition/récupération, éléments à mesurer et questions indispensables. Écarte les contradictions et ne transforme pas les hypothèses en faits."
-          }, "Mission utilisateur : " + message, JSON.stringify({
-            analyses: successful.map(item => ({ agent: item.name, analysis: item.analysis })),
-            agentsEnEchec: specialistResults.filter(item => item.status === "failed").map(item => item.name)
-          }).slice(0, 12000));
-        } catch (synthesisError) {
-          executiveSummary = "Synthèse automatique indisponible. Les analyses individuelles restent disponibles. Priorité : progression sportive prudente, puis synchronisation nutrition et récupération.";
-        }
-
+        // Compatibilité : si aucun agentId n'est fourni, demander au client d'orchestrer les appels individuels.
         return json({
-          reply: "Conseil Avengers : " + successful.length + "/" + AGENTS.length + " spécialistes ont répondu.",
-          executiveSummary,
-          mode: "multi_agent_council",
-          agents: specialistResults.map(({ agent, name, status }) => ({ agent, name, status })),
-          agentResults: specialistResults,
-          completedAgents: successful.length,
-          totalAgents: AGENTS.length,
-          generatedAt: new Date().toISOString()
-        }, 200, cors);
+          error: "Le conseil fonctionne désormais agent par agent. Fournis agentId pour lancer un spécialiste.",
+          required: "agentId",
+          agents: AGENTS.map(({id,name}) => ({id,name}))
+        }, 400, cors);
       } catch (error) {
         const detail = error instanceof Error ? error.message : "Erreur inconnue";
         return json({ error: `AI request failed: ${detail}` }, 502, cors);
