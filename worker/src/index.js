@@ -1,4 +1,4 @@
-const DEFAULT_MODEL = "@cf/meta/llama-3.1-8b-instruct";
+const DEFAULT_MODEL = "@cf/google/gemma-4-26b-a4b-it";
 
 const AGENTS = [
   {
