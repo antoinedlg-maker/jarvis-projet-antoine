@@ -1,9 +1,6 @@
 name: JARVIS Worker live smoke test
 
 on:
-  push:
-    branches:
-      - feature/cloudflare-worker
   workflow_dispatch:
 
 permissions:
