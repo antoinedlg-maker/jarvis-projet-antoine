@@ -27,7 +27,7 @@ jobs:
           console.log("DEPLOYMENT=" + health.deployment);
           console.log("AGENT_COUNT=" + health.agents);
           if (health.status !== "online") throw new Error("Worker is not online");
-          if (health.deployment !== "avengers-nine-agents-council-v2") throw new Error("Live Worker has not received the latest diagnostic deployment");
+          if (health.deployment !== "avengers-nine-agents-one-request-v3") throw new Error("Live Worker has not received the latest diagnostic deployment");
           if (!health.tokenConfigured) throw new Error("Live Worker cannot see JARVIS_API_TOKEN; token bindings detected: " + (health.tokenBindingNames || []).join(","));
           if (health.agents !== 9) throw new Error("Expected 9 configured agents");
 
