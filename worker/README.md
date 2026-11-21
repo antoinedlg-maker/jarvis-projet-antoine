@@ -1,51 +1,22 @@
 # JARVIS Cloudflare Worker
 
-This directory contains the Cloudflare Worker API. It is intentionally separate from the existing PWA.
-
-## Cloudflare Git deployment
-
-Connect this repository to the existing Worker using Cloudflare Workers Builds:
-- Repository: antoinedlg-maker/jarvis-projet-antoine
-- Production branch: feature/cloudflare-worker (temporary setup branch)
-- Root directory: worker
-- Deploy command: npx wrangler deploy
-
-The Worker name is jarvis-iron-paradise, matching the Worker created in the Cloudflare dashboard.
-
-## Required configuration
-
-The Wrangler config declares a Workers AI binding named AI. Enable Workers AI for this Worker in Cloudflare.
-
-Add these Worker variables/secrets in Cloudflare:
-- ALLOWED_ORIGIN: the exact origin of the published JARVIS PWA (for example, https://your-site.example; no trailing slash).
-- JARVIS_API_TOKEN: a long random secret, stored as a secret, never in frontend JavaScript.
-- AI_MODEL (optional): override the default model identifier.
-
-The /chat endpoint requires the Authorization header: Bearer <JARVIS_API_TOKEN>.
-The /health endpoint is public and reports whether the AI binding is present.
+## Runtime
+- Entrypoint: `worker/src/index.js`
+- Root Wrangler config: `wrangler.toml`
+- Workers AI binding: `AI`
+- Model: `@cf/google/gemma-4-26b-a4b-it`
 
 ## Endpoints
+- `GET /health`: runtime and configuration diagnostics (never returns secrets)
+- `GET /agents`: specialist descriptions
+- `POST /chat`: JARVIS single-agent response
+- `POST /team`: four specialists in parallel plus JARVIS synthesis
+- `POST /act`: validated action plan for the PWA to apply
 
-- GET /health
-- POST /chat with JSON body { "message": "..." }
+## Authentication
+All POST endpoints require `Authorization: Bearer <token>`.
+Configure `JARVIS_API_TOKEN` as a Cloudflare Worker **Secret** in the same deployed Worker environment. Never commit the token to this repository or place it in frontend source.
+The PWA stores the token in session storage and sends it only in the Authorization header.
 
-This is a backend scaffold. It does not yet connect the PWA UI or read/write personal app data. Do not put personal data or credentials in public repository files.
-
-
-Cloudflare Git deployment trigger: this commit is intended to trigger Workers Builds from the `feature/cloudflare-worker` branch. Wrangler configuration is at the repository root (`/wrangler.toml`) and points to `worker/src/index.js`.
-
-
-## Équipe d'agents JARVIS
-
-- `GET /agents` : liste les quatre spécialistes et leurs missions.
-- `POST /team` : fait travailler les spécialistes en parallèle, puis JARVIS synthétise leurs analyses.
-- `POST /chat` : réponse rapide par l'assistant principal, en un seul appel IA.
-
-Spécialistes : architecte produit, coach sportif, nutrition, ingénieur qualité.
-
-Les agents produisent des analyses et des propositions. Ils ne modifient pas seuls le dépôt GitHub, les données personnelles ou l'application. Toute action d'écriture devra passer par une étape d'autorisation et de validation. Le mode équipe consomme davantage de quota IA que le chat simple.
-
-
-## Mémoire de conversation
-
-Le Worker utilise le binding KV `JARVIS_MEMORY` pour conserver jusqu'à 12 messages récents par session, avec expiration après 30 jours. Le client doit envoyer un identifiant `sessionId` opaque (8 à 80 caractères alphanumériques, tirets ou underscores) avec chaque requête `/chat` ou `/team`. Sans identifiant de session, aucune mémoire de conversation n'est chargée ni enregistrée. Ne pas mettre de nom, e-mail ou donnée sensible dans cet identifiant.
+## Action safety
+The Worker only returns a small allowlist of validated actions. The PWA applies those actions to its own local state. Deletions, retroactive edits, fabricated measurements and XP manipulation are not supported.
