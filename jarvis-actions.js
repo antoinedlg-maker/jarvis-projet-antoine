@@ -9,14 +9,14 @@
   launch.id="jarvis-action-launch";launch.textContent="✦ JARVIS";
   const panel=document.createElement("section");
   panel.id="jarvis-action-panel";
-  panel.innerHTML='<h3>J.A.R.V.I.S. — Centre de commande</h3><div id="jarvis-action-status">Assistant prêt · les actions autorisées seront enregistrées dans cette application.</div><input id="jarvis-action-token" type="password" autocomplete="off" placeholder="Clé d’accès JARVIS"><textarea id="jarvis-action-message" placeholder="Ex : Ajoute à mon journal un déjeuner : poulet, riz et légumes, 650 kcal et 45 g de protéines."></textarea><button id="jarvis-action-send">Exécuter la mission</button><button class="secondary" id="jarvis-action-close">Fermer</button><div id="jarvis-action-result" aria-live="polite"></div>
+  panel.innerHTML=`<h3>J.A.R.V.I.S. — Centre de commande</h3><div id="jarvis-action-status">Assistant prêt · les actions autorisées seront enregistrées dans cette application.</div><input id="jarvis-action-token" type="password" autocomplete="off" placeholder="Clé d’accès JARVIS"><textarea id="jarvis-action-message" placeholder="Ex : Ajoute à mon journal un déjeuner : poulet, riz et légumes, 650 kcal et 45 g de protéines."></textarea><button id="jarvis-action-send">Exécuter la mission</button><button class="secondary" id="jarvis-action-close">Fermer</button><div id="jarvis-action-result" aria-live="polite"></div>
   <div id="jarvis-agent-console"><div class="jarvis-agent-head"><b>ÉQUIPE JARVIS</b><span id="jarvis-agent-state">4 spécialistes disponibles</span></div>
   <div class="jarvis-agent-grid">
   <div class="jarvis-agent" data-agent="product"><i>◈</i><b>Architecte produit</b><small>Application & priorités</small><em>En attente</em></div>
   <div class="jarvis-agent" data-agent="sport"><i>⌁</i><b>Coach sportif</b><small>Entraînement & progression</small><em>En attente</em></div>
   <div class="jarvis-agent" data-agent="nutrition"><i>✦</i><b>Nutrition</b><small>Repas & équilibre</small><em>En attente</em></div>
   <div class="jarvis-agent" data-agent="quality"><i>⛭</i><b>Ingénieur qualité</b><small>Contrôle & fiabilité</small><em>En attente</em></div></div>
-  <button id="jarvis-team-run" class="secondary">Faire travailler les 4 agents</button><div id="jarvis-team-results"></div></div>';
+  <button id="jarvis-team-run" class="secondary">Faire travailler les 4 agents</button><div id="jarvis-team-results"></div></div>`;
   document.body.append(launch,panel);
   const $=id=>document.getElementById(id);
   $("jarvis-action-token").value=sessionStorage.getItem(TOKEN_KEY)||"";
