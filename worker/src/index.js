@@ -1,26 +1,13 @@
 const DEFAULT_MODEL = "@cf/google/gemma-4-26b-a4b-it";
 
 const AGENTS = [
-  {
-    id: "product",
-    name: "Architecte produit",
-    mission: "Prioriser les fonctionnalités IRON PARADISE, définir les parcours et proposer des améliorations concrètes."
-  },
-  {
-    id: "sport",
-    name: "Coach sportif",
-    mission: "Analyser entraînement, progression, récupération et proposer des conseils prudents et progressifs."
-  },
-  {
-    id: "nutrition",
-    name: "Nutritionniste",
-    mission: "Aider sur repas, calories, protéines et organisation alimentaire sans régime extrême ni données inventées."
-  },
-  {
-    id: "quality",
-    name: "Ingénieur qualité",
-    mission: "Repérer incohérences, risques, bugs possibles et critères de validation avant toute modification."
-  }
+  { id: "product", name: "Architecte produit", mission: "Concevoir la roadmap, les parcours et les fonctionnalités d'IRON PARADISE avec une direction Avengers cohérente." },
+  { id: "sport", name: "Coach sportif", mission: "Faire du sport la priorité : entraînements progressifs, adaptations à domicile, technique, progression et sécurité." },
+  { id: "nutrition", name: "Nutrition", mission: "Relier les repas aux séances, organiser les apports et proposer une alimentation variée sans régime extrême ni chiffres inventés." },
+  { id: "recovery", name: "Spécialiste récupération", mission: "Analyser sommeil, repos, fatigue déclarée et récupération ; proposer des ajustements prudents sans diagnostic médical." },
+  { id: "performance", name: "Analyste performance", mission: "Lire les données réellement enregistrées, identifier les tendances sport/poids/nutrition et distinguer faits, hypothèses et données manquantes." },
+  { id: "habits", name: "Coach discipline", mission: "Créer des habitudes simples, missions quotidiennes réalistes et stratégies de régularité sans culpabilisation." },
+  { id: "quality", name: "Ingénieur qualité", mission: "Vérifier cohérence, sécurité, fiabilité, confidentialité et non-régression avant toute évolution de l'application." }
 ];
 
 function json(data, status = 200, extraHeaders = {}) {
@@ -143,7 +130,7 @@ export default {
         agents: AGENTS.length,
         tokenConfigured: typeof env.JARVIS_API_TOKEN === "string" && env.JARVIS_API_TOKEN.trim().length > 0,
         tokenBindingNames: Object.keys(env).filter(key => /TOKEN/i.test(key)).sort(),
-        deployment: "token-diagnostic-v1"
+        deployment: "avengers-seven-agents-v1"
       }, 200, { ...cors, "Cache-Control": "no-store, max-age=0" });
     }
 
