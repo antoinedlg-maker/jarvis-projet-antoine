@@ -27,15 +27,15 @@ jobs:
           console.log("DEPLOYMENT=" + health.deployment);
           console.log("AGENT_COUNT=" + health.agents);
           if (health.status !== "online") throw new Error("Worker is not online");
-          if (health.deployment !== "avengers-seven-agents-v1") throw new Error("Live Worker has not received the latest diagnostic deployment");
+          if (health.deployment !== "avengers-nine-agents-council-v2") throw new Error("Live Worker has not received the latest diagnostic deployment");
           if (!health.tokenConfigured) throw new Error("Live Worker cannot see JARVIS_API_TOKEN; token bindings detected: " + (health.tokenBindingNames || []).join(","));
-          if (health.agents !== 7) throw new Error("Expected 7 configured agents");
+          if (health.agents !== 9) throw new Error("Expected 9 configured agents");
 
           const agentsResponse = await fetch(base + "/agents", { cache: "no-store" });
           if (!agentsResponse.ok) throw new Error("Agents endpoint returned HTTP " + agentsResponse.status);
           const agents = await agentsResponse.json();
           console.log("AGENTS=" + (agents.agents || []).map(agent => agent.name).join(" | "));
-          if (!Array.isArray(agents.agents) || agents.agents.length !== 7) throw new Error("Agent directory mismatch");
+          if (!Array.isArray(agents.agents) || agents.agents.length !== 9) throw new Error("Agent directory mismatch");
 
           const protectedResponse = await fetch(base + "/team", {
             method: "POST",
