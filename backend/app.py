@@ -11,7 +11,7 @@ ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.getenv(
         "JARVIS_ALLOWED_ORIGINS",
-        "https://antoinedlg.github.io",
+        "https://antoinedlg-maker.github.io",
     ).split(",")
     if origin.strip()
 ]
