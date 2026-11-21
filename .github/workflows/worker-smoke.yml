@@ -1,0 +1,44 @@
+name: JARVIS Worker live smoke test
+
+on:
+  push:
+    branches:
+      - feature/cloudflare-worker
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check deployed Worker endpoints
+        run: |
+          node --input-type=module <<'NODE'
+          const base = "https://jarvis-iron-paradise.antoine-delage2001.workers.dev";
+          const healthResponse = await fetch(base + "/health", { cache: "no-store" });
+          if (!healthResponse.ok) throw new Error("Health endpoint returned HTTP " + healthResponse.status);
+          const health = await healthResponse.json();
+          console.log("WORKER_STATUS=" + health.status);
+          console.log("AI_BINDING=" + health.ai);
+          console.log("TOKEN_CONFIGURED=" + health.tokenConfigured);
+          console.log("AGENT_COUNT=" + health.agents);
+          if (health.status !== "online") throw new Error("Worker is not online");
+          if (health.agents !== 4) throw new Error("Expected 4 configured agents");
+
+          const agentsResponse = await fetch(base + "/agents", { cache: "no-store" });
+          if (!agentsResponse.ok) throw new Error("Agents endpoint returned HTTP " + agentsResponse.status);
+          const agents = await agentsResponse.json();
+          console.log("AGENTS=" + (agents.agents || []).map(agent => agent.name).join(" | "));
+          if (!Array.isArray(agents.agents) || agents.agents.length !== 4) throw new Error("Agent directory mismatch");
+
+          const protectedResponse = await fetch(base + "/team", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: "smoke test" })
+          });
+          console.log("UNAUTHENTICATED_TEAM_STATUS=" + protectedResponse.status);
+          if (protectedResponse.status !== 401) throw new Error("Protected /team endpoint did not reject unauthenticated access");
+          console.log("LIVE_SMOKE_TEST=PASS");
+          NODE
