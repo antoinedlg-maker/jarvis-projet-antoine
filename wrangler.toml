@@ -1,0 +1,6 @@
+name = "jarvis-iron-paradise"
+main = "worker/src/index.js"
+compatibility_date = "2026-11-21"
+
+[ai]
+binding = "AI"
