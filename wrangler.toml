@@ -1,6 +1,7 @@
 name = "jarvis-iron-paradise"
 main = "worker/src/index.js"
 compatibility_date = "2026-11-21"
+secrets = ["JARVIS_API_TOKEN"]
 
 [ai]
 binding = "AI"
