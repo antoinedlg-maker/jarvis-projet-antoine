@@ -132,7 +132,7 @@ export default {
         agents: AGENTS.length,
         tokenConfigured: typeof env.JARVIS_API_TOKEN === "string" && env.JARVIS_API_TOKEN.trim().length > 0,
         tokenBindingNames: Object.keys(env).filter(key => /TOKEN/i.test(key)).sort(),
-        deployment: "avengers-nine-agents-council-v2"
+        deployment: "avengers-nine-agents-one-request-v3"
       }, 200, { ...cors, "Cache-Control": "no-store, max-age=0" });
     }
 
