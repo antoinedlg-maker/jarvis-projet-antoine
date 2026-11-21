@@ -114,7 +114,7 @@ export default {
         ai: Boolean(env.AI) ? "connected" : "not_configured",
         agents: AGENTS.length,
         tokenConfigured: Boolean(env.JARVIS_API_TOKEN)
-      }, 200, cors);
+      }, 200, { ...cors, "Cache-Control": "no-store, max-age=0" });
     }
 
     if (url.pathname === "/agents" && request.method === "GET") {
@@ -207,7 +207,8 @@ export default {
         return json({
           reply: synthesis,
           mode: "multi_agent",
-          agents: specialistResults.map(({ agent, name }) => ({ agent, name, status: "completed" }))
+          agents: specialistResults.map(({ agent, name }) => ({ agent, name, status: "completed" })),
+          agentResults: specialistResults
         }, 200, cors);
       } catch {
         return json({ error: "AI request failed. Check the Workers AI binding, model and daily quota." }, 502, cors);
