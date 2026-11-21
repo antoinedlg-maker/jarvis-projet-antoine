@@ -136,12 +136,41 @@ function saveAgentReport(report){
  try{localStorage.setItem("jarvis_avengers_last_report_v2",JSON.stringify(report));const history=JSON.parse(localStorage.getItem("jarvis_avengers_report_history_v1")||"[]");history.unshift(report);localStorage.setItem("jarvis_avengers_report_history_v1",JSON.stringify(history.slice(0,20)));}catch(e){console.warn("Historique JARVIS indisponible",e);}
  renderSavedReport();renderReportHistory();
 }
+function reportToText(report){
+ const lines=[(report.generatedAt?new Date(report.generatedAt).toLocaleString("fr-FR"):"Rapport")+" · "+(report.reply||"Conseil Avengers")];
+ if(report.executiveSummary)lines.push("\\nSYNTHÈSE JARVIS\\n"+report.executiveSummary);
+ (Array.isArray(report.agentResults)?report.agentResults:[]).forEach(item=>lines.push("\\n"+(item.name||item.agent||"Agent")+" — "+(item.status==="completed"?"TERMINÉ":"ÉCHEC")+"\\n"+(item.analysis||"Aucune analyse conservée.")));
+ return lines.join("\\n");
+}
+async function copyReportText(value,button){
+ try{
+  if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(value);
+  else{const area=document.createElement("textarea");area.value=value;area.style.position="fixed";area.style.opacity="0";document.body.appendChild(area);area.select();document.execCommand("copy");area.remove();}
+  const old=button.textContent;button.textContent="COPIÉ !";setTimeout(()=>button.textContent=old,1600);
+ }catch(e){button.textContent="COPIE IMPOSSIBLE";}
+}
 function renderReportHistory(){
  const host=$("jarvis-report-history");if(!host)return;let history=[];
  try{history=JSON.parse(localStorage.getItem("jarvis_avengers_report_history_v1")||"[]");if(!history.length){const last=JSON.parse(localStorage.getItem("jarvis_avengers_last_report_v2")||"null");if(last)history=[last];}}catch(e){}
  host.textContent="";
  if(!history.length){const empty=document.createElement("p");empty.textContent="Aucun rapport enregistré sur cet iPhone.";host.appendChild(empty);return;}
- history.forEach(report=>{const section=document.createElement("section");section.className="agent-result";const heading=document.createElement("strong");heading.textContent=(report.generatedAt?new Date(report.generatedAt).toLocaleString("fr-FR"):"Rapport")+" · "+(report.reply||"Conseil Avengers");section.appendChild(heading);(Array.isArray(report.agentResults)?report.agentResults:[]).forEach(item=>{const entry=document.createElement("div");entry.style.marginTop="9px";const name=document.createElement("b");name.textContent=(item.name||item.agent||"Agent")+" · "+(item.status==="completed"?"TERMINÉ":"ÉCHEC");const body=document.createElement("p");body.style.whiteSpace="pre-wrap";body.textContent=item.analysis||"Aucune analyse conservée.";entry.append(name,body);section.appendChild(entry);});host.appendChild(section);});
+ const toolbar=document.createElement("div");toolbar.style.display="flex";toolbar.style.flexWrap="wrap";toolbar.style.gap="6px";toolbar.style.margin="8px 0";
+ const copyAll=document.createElement("button");copyAll.type="button";copyAll.className="secondary";copyAll.textContent="COPIER TOUT L’HISTORIQUE";copyAll.addEventListener("click",()=>copyReportText(history.map(reportToText).join("\\n\\n====================\\n\\n"),copyAll));
+ const latest=document.createElement("button");latest.type="button";latest.className="secondary";latest.textContent="COPIER LA DERNIÈRE SESSION";latest.addEventListener("click",()=>copyReportText(reportToText(history[0]),latest));
+ toolbar.append(copyAll,latest);host.appendChild(toolbar);
+ history.forEach((report,index)=>{
+  const details=document.createElement("details");details.className="agent-result";details.style.marginTop="8px";details.open=index===0;
+  const summary=document.createElement("summary");summary.style.cursor="pointer";summary.style.fontWeight="800";
+  const count=Array.isArray(report.agentResults)?report.agentResults.filter(item=>item.status==="completed").length:0;
+  summary.textContent=(report.generatedAt?new Date(report.generatedAt).toLocaleString("fr-FR"):"Session")+" · "+count+"/"+(report.agentResults||[]).length+" agents · "+(report.reply||"Conseil Avengers");
+  const copy=document.createElement("button");copy.type="button";copy.className="secondary";copy.textContent="COPIER CETTE SESSION";copy.style.marginTop="8px";copy.addEventListener("click",()=>copyReportText(reportToText(report),copy));
+  details.append(summary,copy);
+  (Array.isArray(report.agentResults)?report.agentResults:[]).forEach(item=>{
+   const entry=document.createElement("div");entry.style.marginTop="9px";const name=document.createElement("b");name.textContent=(item.name||item.agent||"Agent")+" · "+(item.status==="completed"?"TERMINÉ":"ÉCHEC");
+   const body=document.createElement("p");body.style.whiteSpace="pre-wrap";body.textContent=item.analysis||"Aucune analyse conservée.";entry.append(name,body);details.appendChild(entry);
+  });
+  host.appendChild(details);
+ });
 }
 $("jarvis-history-toggle").addEventListener("click",()=>{const host=$("jarvis-report-history");host.hidden=!host.hidden;$("jarvis-history-toggle").textContent=host.hidden?"CONSULTER L’HISTORIQUE":"MASQUER L’HISTORIQUE";if(!host.hidden)renderReportHistory();});
 function renderSavedReport(){const host=$("jarvis-saved-report");if(!host)return;try{const saved=JSON.parse(localStorage.getItem("jarvis_avengers_last_report_v2")||"null");if(!saved){host.textContent="Aucun rapport des agents pour le moment.";return;}host.textContent=(saved.generatedAt?new Date(saved.generatedAt).toLocaleString("fr-FR")+" · ":"")+(saved.reply||"Dernier rapport disponible")+(saved.executiveSummary?"\n\n"+saved.executiveSummary:"");}catch(e){host.textContent="Rapport précédent illisible.";}}
