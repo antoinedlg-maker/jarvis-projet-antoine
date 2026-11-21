@@ -31,20 +31,47 @@ function json(data, status = 200, extraHeaders = {}) {
 }
 
 function getReply(result) {
-  return result?.response || result?.result?.response || result?.output || "";
+  const candidates = [
+    result?.response,
+    result?.result?.response,
+    result?.output,
+    result?.output_text,
+    result?.choices?.[0]?.message?.content,
+    result?.result?.choices?.[0]?.message?.content,
+    result?.content
+  ];
+  for (const candidate of candidates) {
+    if (typeof candidate === "string" && candidate.trim()) return candidate.trim();
+    if (Array.isArray(candidate)) {
+      const text = candidate.map(part => typeof part === "string" ? part : part?.text || part?.content || "").filter(Boolean).join("\\n").trim();
+      if (text) return text;
+    }
+    if (candidate && typeof candidate === "object") {
+      const nested = candidate.text || candidate.content || candidate.response;
+      if (typeof nested === "string" && nested.trim()) return nested.trim();
+    }
+  }
+  return "";
 }
 
 async function askAgent(env, agent, message, context = "") {
-  const result = await env.AI.run(env.AI_MODEL || DEFAULT_MODEL, {
+  const model = env.AI_MODEL || DEFAULT_MODEL;
+  const result = await env.AI.run(model, {
     messages: [
       {
         role: "system",
         content: `Tu es ${agent.name}, agent spécialisé de JARVIS IRON PARADISE. Mission : ${agent.mission} Réponds en français, de façon concise, précise et actionnable. N'invente aucune donnée. Si une information manque, signale-le. Tu analyses et proposes : tu ne prétends jamais avoir modifié l'application ou ses données.`
       },
       { role: "user", content: context ? `Mission : ${message}\n\nContexte :\n${context}` : message }
-    ]
+    ],
+    max_tokens: 700
   });
-  return getReply(result) || "Aucune analyse retournée.";
+  const reply = getReply(result);
+  if (!reply) {
+    const keys = result && typeof result === "object" ? Object.keys(result).join(", ") : typeof result;
+    throw new Error(`Réponse vide du modèle ${model} (champs reçus : ${keys || "aucun"}).`);
+  }
+  return reply;
 }
 
 
@@ -212,8 +239,9 @@ export default {
           agents: specialistResults.map(({ agent, name }) => ({ agent, name, status: "completed" })),
           agentResults: specialistResults
         }, 200, cors);
-      } catch {
-        return json({ error: "AI request failed. Check the Workers AI binding, model and daily quota." }, 502, cors);
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : "Erreur inconnue";
+        return json({ error: `AI request failed: ${detail}` }, 502, cors);
       }
     }
 
