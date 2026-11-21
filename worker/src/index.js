@@ -170,7 +170,7 @@ export default {
         try { history = await env.JARVIS_MEMORY.get(memoryKey, "json") || []; } catch { history = []; }
       }
       const memoryContext = history.slice(-10).map(item => `${item.role}: ${item.content}`).join("\n");
-      const combinedContext = [context, memoryContext].filter(Boolean).join("\\n\\n");
+      const combinedContext = [context, memoryContext].filter(Boolean).join("\n\n");
 
       try {
         if (url.pathname === "/chat") {
