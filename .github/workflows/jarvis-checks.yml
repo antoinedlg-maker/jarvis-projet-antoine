@@ -1,0 +1,28 @@
+name: JARVIS quality checks
+
+on:
+  push:
+    branches: [main, feature/cloudflare-worker]
+  pull_request:
+    branches: [main]
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check app action console
+        if: hashFiles('jarvis-actions.js') != ''
+        run: node --check jarvis-actions.js
+      - name: Check Cloudflare Worker syntax
+        if: hashFiles('worker/src/index.js') != ''
+        run: node --input-type=module --check < worker/src/index.js
+      - name: Verify integration points
+        run: |
+          if [ -f worker/src/index.js ]; then grep -q 'url.pathname === "/act"' worker/src/index.js; fi
+          if [ -f jarvis-actions.js ]; then grep -q './jarvis-actions.js' index.html; fi
