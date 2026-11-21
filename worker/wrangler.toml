@@ -4,3 +4,6 @@ compatibility_date = "2026-11-21"
 
 [ai]
 binding = "AI"
+
+[[kv_namespaces]]
+binding = "JARVIS_MEMORY"
