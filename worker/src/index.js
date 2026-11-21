@@ -112,7 +112,8 @@ export default {
         name: "JARVIS IRON PARADISE",
         status: "online",
         ai: Boolean(env.AI) ? "connected" : "not_configured",
-        agents: AGENTS.length
+        agents: AGENTS.length,
+        tokenConfigured: Boolean(env.JARVIS_API_TOKEN)
       }, 200, cors);
     }
 
@@ -123,7 +124,7 @@ export default {
 
     if (url.pathname === "/act" && request.method === "POST") {
       if (!env.AI) return json({ error: "AI binding is not configured yet." }, 503, cors);
-      if (!env.JARVIS_API_TOKEN || request.headers.get("Authorization") !== `Bearer ${env.JARVIS_API_TOKEN}`) {
+      if (!env.JARVIS_API_TOKEN || request.headers.get("Authorization")?.trim() !== `Bearer ${String(env.JARVIS_API_TOKEN).trim()}`) {
         return json({ error: "Unauthorized" }, 401, cors);
       }
       let body;
@@ -144,7 +145,7 @@ export default {
       if (!env.AI) return json({ error: "AI binding is not configured yet." }, 503, cors);
 
       if (!env.JARVIS_API_TOKEN ||
-          request.headers.get("Authorization") !== `Bearer ${env.JARVIS_API_TOKEN}`) {
+          request.headers.get("Authorization")?.trim() !== `Bearer ${String(env.JARVIS_API_TOKEN).trim()}`) {
         return json({ error: "Unauthorized" }, 401, cors);
       }
 
