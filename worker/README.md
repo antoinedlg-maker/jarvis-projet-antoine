@@ -20,3 +20,5 @@ The PWA stores the token in session storage and sends it only in the Authorizati
 
 ## Action safety
 The Worker only returns a small allowlist of validated actions. The PWA applies those actions to its own local state. Deletions, retroactive edits, fabricated measurements and XP manipulation are not supported.
+
+<!-- deployment refresh: 2026-11-21 -->
