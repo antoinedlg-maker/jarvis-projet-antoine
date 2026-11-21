@@ -44,3 +44,8 @@ Cloudflare Git deployment trigger: this commit is intended to trigger Workers Bu
 Spécialistes : architecte produit, coach sportif, nutrition, ingénieur qualité.
 
 Les agents produisent des analyses et des propositions. Ils ne modifient pas seuls le dépôt GitHub, les données personnelles ou l'application. Toute action d'écriture devra passer par une étape d'autorisation et de validation. Le mode équipe consomme davantage de quota IA que le chat simple.
+
+
+## Mémoire de conversation
+
+Le Worker utilise le binding KV `JARVIS_MEMORY` pour conserver jusqu'à 12 messages récents par session, avec expiration après 30 jours. Le client doit envoyer un identifiant `sessionId` opaque (8 à 80 caractères alphanumériques, tirets ou underscores) avec chaque requête `/chat` ou `/team`. Sans identifiant de session, aucune mémoire de conversation n'est chargée ni enregistrée. Ne pas mettre de nom, e-mail ou donnée sensible dans cet identifiant.
