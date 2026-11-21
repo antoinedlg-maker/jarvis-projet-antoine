@@ -64,7 +64,8 @@ async function askAgent(env, agent, message, context = "") {
       },
       { role: "user", content: context ? `Mission : ${message}\n\nContexte :\n${context}` : message }
     ],
-    max_tokens: 700
+    max_completion_tokens: 700,
+    chat_template_kwargs: { enable_thinking: false }
   });
   const reply = getReply(result);
   if (!reply) {
