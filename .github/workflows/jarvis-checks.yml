@@ -58,7 +58,7 @@ jobs:
           const health = await response.json();
           console.log("DEPLOYMENT=" + health.deployment);
           console.log("TOKEN_BINDINGS=" + (health.tokenBindingNames || []).join(","));
-          if (health.deployment !== "avengers-nine-agents-council-v2") throw new Error("Cloudflare is serving an older deployment; the configured Git integration is not publishing this branch.");
+          if (health.deployment !== "avengers-nine-agents-one-request-v3") throw new Error("Cloudflare is serving an older deployment; the configured Git integration is not publishing this branch.");
           NODE
       - name: Verify token is visible in runtime
         run: |
