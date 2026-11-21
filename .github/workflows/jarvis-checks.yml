@@ -19,6 +19,16 @@ jobs:
       - name: Check app action console
         if: hashFiles('jarvis-actions.js') != ''
         run: node --check jarvis-actions.js
+      - name: Check inline application JavaScript
+        run: |
+          node <<'NODE'
+          const fs = require("node:fs");
+          const html = fs.readFileSync("index.html", "utf8");
+          const scripts = [...html.matchAll(/<script(?![^>]*\\bsrc=)(?![^>]*\\btype=["']module["'])[^>]*>([\\s\\S]*?)<\\/script>/gi)];
+          if (!scripts.length) throw new Error("No inline application script found");
+          scripts.forEach((match, index) => fs.writeFileSync("/tmp/jarvis-inline-" + index + ".js", match[1]));
+          NODE
+          for file in /tmp/jarvis-inline-*.js; do node --check "$file"; done
       - name: Check Cloudflare Worker syntax
         if: hashFiles('worker/src/index.js') != ''
         run: node --input-type=module --check < worker/src/index.js
