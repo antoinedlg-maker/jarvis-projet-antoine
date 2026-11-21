@@ -104,14 +104,27 @@ export default {
       }
 
       const context = typeof body.context === "string" ? body.context.slice(0, 6000) : "";
+      const sessionId = typeof body.sessionId === "string" && /^[a-zA-Z0-9_-]{8,80}$/.test(body.sessionId)
+        ? body.sessionId : null;
+      const memoryKey = sessionId ? `session:${sessionId}` : null;
+      let history = [];
+      if (memoryKey && env.JARVIS_MEMORY) {
+        try { history = await env.JARVIS_MEMORY.get(memoryKey, "json") || []; } catch { history = []; }
+      }
+      const memoryContext = history.slice(-10).map(item => `${item.role}: ${item.content}`).join("\\n");
+      const combinedContext = [context, memoryContext].filter(Boolean).join("\\n\\n");
 
       try {
         if (url.pathname === "/chat") {
           const reply = await askAgent(env, {
             name: "JARVIS",
             mission: "Assistant principal d'IRON PARADISE. Réponds directement et route mentalement vers le bon domaine."
-          }, message, context);
-          return json({ reply, mode: "single_agent" }, 200, cors);
+          }, message, combinedContext);
+          if (memoryKey && env.JARVIS_MEMORY) {
+            history.push({ role: "user", content: message, at: Date.now() }, { role: "assistant", content: reply, at: Date.now() });
+            await env.JARVIS_MEMORY.put(memoryKey, JSON.stringify(history.slice(-12)), { expirationTtl: 60 * 60 * 24 * 30 });
+          }
+          return json({ reply, mode: "single_agent", memory: Boolean(memoryKey && env.JARVIS_MEMORY) }, 200, cors);
         }
 
         // Les spécialistes travaillent en parallèle ; JARVIS arbitre et synthétise.
