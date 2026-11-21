@@ -7,5 +7,9 @@ required = ["JARVIS_API_TOKEN"]
 [ai]
 binding = "AI"
 
+[[kv_namespaces]]
+binding = "JARVIS_MEMORY"
+id = "ee87172990ba4b67a2e2cc064cf49bd8"
+
 [triggers]
 crons = ["0 * * * *"]
