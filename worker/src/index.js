@@ -21,6 +21,41 @@ const DESIGN_AGENTS = [
   { id: "design-quality", name: "QA design & accessibilité", mission: "Garantir la qualité visuelle, l'accessibilité et la non-régression.", task: "Détecte surcharge, contrastes faibles, textes trop petits, animations inutiles, problèmes iPhone et risques de casser les fonctions. Termine par une checklist de validation." }
 ];
 
+
+const AUTONOMOUS_AGENTS = [...AGENTS, ...DESIGN_AGENTS];
+async function runAutonomousCycle(env, scheduledTime = Date.now()) {
+  if (!env.AI) throw new Error("AI binding unavailable");
+  if (!env.JARVIS_MEMORY) throw new Error("JARVIS_MEMORY KV binding missing; autonomous work cannot be archived safely");
+  const stateKey = "autonomy:state";
+  let state = {};
+  try { state = await env.JARVIS_MEMORY.get(stateKey, "json") || {}; } catch {}
+  const index = Number.isInteger(state.nextAgentIndex) ? state.nextAgentIndex % AUTONOMOUS_AGENTS.length : 0;
+  const agent = AUTONOMOUS_AGENTS[index];
+  const mission = agent.id.startsWith("art-") || agent.id === "ux-mobile" || agent.id === "ui-system" || agent.id === "dashboard" || agent.id === "design-quality"
+    ? "Travaille de façon autonome sur la qualité et la conception de JARVIS IRON PARADISE. Identifie une amélioration concrète, vérifiable et priorisée. N'affirme jamais avoir modifié le code. Conserve les fonctions existantes."
+    : "Travaille de façon autonome sur l'amélioration continue de JARVIS IRON PARADISE : sport, nutrition, récupération, suivi, fiabilité. Utilise uniquement les données réellement disponibles. N'invente aucune donnée personnelle, ne prescris rien de risqué et propose des améliorations concrètes.";
+  const analysis = await askAgent(env, agent, mission, "Cycle autonome planifié. Date UTC : " + new Date(scheduledTime).toISOString() + ". Tu es un agent de fond. Produis un livrable court : constat, proposition concrète, priorité, dépendances et prochaine étape. Si les données manquent, propose une amélioration du produit plutôt que d'inventer.");
+  const report = {
+    id: "cycle-" + scheduledTime + "-" + agent.id,
+    agent: agent.id,
+    name: agent.name,
+    status: "completed",
+    analysis,
+    scheduledAt: new Date(scheduledTime).toISOString()
+  };
+  const history = await env.JARVIS_MEMORY.get("autonomy:history", "json") || [];
+  history.unshift(report);
+  await env.JARVIS_MEMORY.put("autonomy:history", JSON.stringify(history.slice(0, 100)));
+  await env.JARVIS_MEMORY.put(stateKey, JSON.stringify({
+    nextAgentIndex: (index + 1) % AUTONOMOUS_AGENTS.length,
+    lastRunAt: report.scheduledAt,
+    lastAgent: agent.id,
+    completedCycles: (Number(state.completedCycles) || 0) + 1,
+    status: "active"
+  }));
+  return report;
+}
+
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
     status,
@@ -112,6 +147,16 @@ async function planActions(env, message, context = "") {
   return { reply: parsed.reply.slice(0, 2000), actions };
 }
 export default {
+  async scheduled(controller, env, ctx) {
+    ctx.waitUntil((async () => {
+      try {
+        const report = await runAutonomousCycle(env, controller.scheduledTime || Date.now());
+        console.log("JARVIS_AUTONOMY_OK", JSON.stringify({ agent: report.agent, scheduledAt: report.scheduledAt }));
+      } catch (error) {
+        console.error("JARVIS_AUTONOMY_FAILED", error instanceof Error ? error.message : String(error));
+      }
+    })());
+  },
   async fetch(request, env) {
     const origin = request.headers.get("Origin");
     const allowedOrigin = env.ALLOWED_ORIGIN || "https://antoinedlg-maker.github.io";
@@ -140,6 +185,7 @@ export default {
         ai: Boolean(env.AI) ? "connected" : "not_configured",
         agents: AGENTS.length,
         designAgents: DESIGN_AGENTS.length,
+        autonomyConfigured: Boolean(env.JARVIS_MEMORY),
         tokenConfigured: typeof env.JARVIS_API_TOKEN === "string" && env.JARVIS_API_TOKEN.trim().length > 0,
         tokenBindingNames: Object.keys(env).filter(key => /TOKEN/i.test(key)).sort(),
         deployment: "avengers-nine-agents-one-request-v3"
@@ -172,6 +218,15 @@ export default {
         const detail = error instanceof Error ? error.message : "Erreur inconnue";
         return json({ mode: "single_design_specialist", agentResults: [{ agent: agent.id, name: agent.name, status: "failed", analysis: "Agent indisponible : " + detail }], completedAgents: 0, totalAgents: DESIGN_AGENTS.length, generatedAt: new Date().toISOString() }, 200, cors);
       }
+    }
+
+
+    if (url.pathname === "/autonomy/status" && request.method === "GET") {
+      if (!env.JARVIS_API_TOKEN || request.headers.get("Authorization")?.trim() !== `Bearer ${String(env.JARVIS_API_TOKEN).trim()}`) return json({ error: "Unauthorized" }, 401, cors);
+      if (!env.JARVIS_MEMORY) return json({ status: "needs_storage", message: "KV JARVIS_MEMORY binding is required for persistent autonomous work." }, 200, cors);
+      const state = await env.JARVIS_MEMORY.get("autonomy:state", "json") || {};
+      const history = await env.JARVIS_MEMORY.get("autonomy:history", "json") || [];
+      return json({ status: state.status || "scheduled_not_started", lastRunAt: state.lastRunAt || null, lastAgent: state.lastAgent || null, completedCycles: state.completedCycles || 0, savedReports: history.length, agentCount: AUTONOMOUS_AGENTS.length }, 200, cors);
     }
 
     if (url.pathname === "/act" && request.method === "POST") {
