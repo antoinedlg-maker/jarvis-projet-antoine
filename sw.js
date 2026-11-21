@@ -1,10 +1,9 @@
-const CACHE = "jarvis-antoine-avengers-v20";
+const CACHE = "jarvis-antoine-avengers-v21";
 
 const FILES = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./jarvis-actions.js"
 ];
 
 self.addEventListener("install", event => {
