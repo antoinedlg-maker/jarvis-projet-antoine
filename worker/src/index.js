@@ -77,8 +77,8 @@ async function planActions(env, message, context = "") {
   if (!parsed || typeof parsed.reply !== "string" || !Array.isArray(parsed.actions)) throw new Error("Invalid action schema");
   const actions = parsed.actions.slice(0, 5).filter(a => {
     if (!a || typeof a !== "object") return false;
-    if (a.type === "add_meal") return typeof a.name === "string" && a.name.trim() && Number.isFinite(a.calories) && a.calories >= 0 && a.calories <= 5000 && Number.isFinite(a.protein) && a.protein >= 0 && a.protein <= 400 && ["petit-déjeuner","déjeuner","dîner","collation"].includes(a.mealType);
-    if (a.type === "add_workout") return typeof a.name === "string" && a.name.trim() && Number.isInteger(a.duration) && a.duration >= 1 && a.duration <= 600 && typeof a.workoutType === "string" && ["faible","modérée","élevée"].includes(a.intensity);
+    if (a.type === "add_meal") return typeof a.name === "string" && a.name.trim() && Number.isFinite(a.calories) && a.calories >= 0 && a.calories <= 5000 && Number.isFinite(a.protein) && a.protein >= 0 && a.protein <= 400 && ["Petit-déjeuner","Déjeuner","Dîner","Collation"].includes(a.mealType);
+    if (a.type === "add_workout") return typeof a.name === "string" && a.name.trim() && Number.isInteger(a.duration) && a.duration >= 1 && a.duration <= 600 && typeof a.workoutType === "string" && ["Douce","Modérée","Intense"].includes(a.intensity);
     if (a.type === "set_goal") return Number.isFinite(a.weight) && a.weight >= 1 && a.weight <= 500;
     if (a.type === "add_shopping") return typeof a.name === "string" && a.name.trim() && typeof a.qty === "string" && Number.isFinite(a.price) && a.price >= 0 && a.price <= 100000;
     return false;
