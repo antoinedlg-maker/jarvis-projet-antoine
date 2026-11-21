@@ -11,7 +11,7 @@ panel.innerHTML='<div class="jarvis-kicker">STARK INDUSTRIES • IRON PARADISE</
 document.body.append(launch,panel);
 const $=id=>document.getElementById(id);
 $("jarvis-agent-grid").innerHTML=AGENTS.map(a=>'<div class="jarvis-agent" data-agent="'+a[0]+'"><i>'+a[1]+'</i><b>'+a[2]+'</b><small>'+a[3]+'</small><em>En attente</em></div>').join("");
-$("jarvis-action-token").value=sessionStorage.getItem(TOKEN_KEY)||"";
+$("jarvis-action-token").value=localStorage.getItem(TOKEN_KEY)||"";
 launch.addEventListener("click",()=>panel.classList.toggle("open"));
 $("jarvis-action-close").addEventListener("click",()=>panel.classList.remove("open"));
 function dailyContext(){
@@ -39,7 +39,7 @@ async function runTeam(automatic){
  const message=$("jarvis-action-message").value.trim()||"Audit stratégique de JARVIS IRON PARADISE : sport prioritaire, nutrition synchronisée, récupération, suivi des progrès, expérience Avengers et fonctionnalités gratuites concrètes.";
  const token=$("jarvis-action-token").value.trim();
  if(!token){$("jarvis-team-results").textContent="Clé d’accès absente de cette session. Elle n’est pas enregistrée dans le code. Renseigne-la pour lancer les agents.";setAgentState("idle","Connexion requise");return;}
- sessionStorage.setItem(TOKEN_KEY,token);
+ localStorage.setItem(TOKEN_KEY,token);
  const button=$("jarvis-team-run");button.disabled=true;
  const host=$("jarvis-team-results");host.textContent="";
  const context=buildContext(),results=[];
@@ -104,7 +104,7 @@ function applyAction(a){
 $("jarvis-action-send").addEventListener("click",async()=>{
  const message=$("jarvis-action-message").value.trim(),token=$("jarvis-action-token").value.trim();
  if(!token){$("jarvis-action-result").textContent="Clé d’accès absente. Aucune action n’a été exécutée.";return;}if(!message){$("jarvis-action-result").textContent="Décris la mission à exécuter.";return;}
- sessionStorage.setItem(TOKEN_KEY,token);$("jarvis-action-send").disabled=true;$("jarvis-action-status").textContent="JARVIS analyse la mission et les données du jour…";$("jarvis-action-result").textContent="";
+ localStorage.setItem(TOKEN_KEY,token);$("jarvis-action-send").disabled=true;$("jarvis-action-status").textContent="JARVIS analyse la mission et les données du jour…";$("jarvis-action-result").textContent="";
  try{
   const response=await fetch(API+"/act",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({message,context:buildContext()})}),data=await response.json();
   if(!response.ok)throw new Error(data.error||"Erreur API "+response.status);
@@ -125,7 +125,7 @@ function mountFieldOps(){
 }
 const originalRender=render;render=function(){originalRender();renderFieldOps();};mountFieldOps();renderFieldOps();
 function renderSavedReport(){const host=$("jarvis-saved-report");if(!host)return;try{const saved=JSON.parse(localStorage.getItem("jarvis_avengers_last_report_v2")||"null");if(!saved){host.textContent="Aucun rapport des agents pour le moment.";return;}host.textContent=(saved.generatedAt?new Date(saved.generatedAt).toLocaleString("fr-FR")+" · ":"")+(saved.reply||"Dernier rapport disponible")+(saved.executiveSummary?"\n\n"+saved.executiveSummary:"");}catch(e){host.textContent="Rapport précédent illisible.";}}renderSavedReport();
-if(sessionStorage.getItem(TOKEN_KEY)&&localStorage.getItem("jarvis_avengers_audit_date_v2")!==new Date().toLocaleDateString("en-CA")){
+if(localStorage.getItem(TOKEN_KEY)&&localStorage.getItem("jarvis_avengers_audit_date_v2")!==new Date().toLocaleDateString("en-CA")){
  panel.classList.add("open");
  $("jarvis-action-message").value="Lance le premier conseil Avengers : audite JARVIS IRON PARADISE, propose les nouvelles fonctionnalités et définis un plan priorisé. Le sport est la priorité absolue ; relie entraînement, nutrition et récupération. Préserve toutes les données et fonctions existantes.";
  setTimeout(()=>runTeam(true),500);
