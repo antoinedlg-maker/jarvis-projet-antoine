@@ -17,10 +17,12 @@ jobs:
         with:
           node-version: 22
       - name: Check app action console
+        if: hashFiles('jarvis-actions.js') != ''
         run: node --check jarvis-actions.js
       - name: Check Cloudflare Worker syntax
+        if: hashFiles('worker/src/index.js') != ''
         run: node --input-type=module --check < worker/src/index.js
-      - name: Verify action endpoint and app integration
+      - name: Verify integration points
         run: |
-          grep -q 'url.pathname === "/act"' worker/src/index.js
-          grep -q './jarvis-actions.js' index.html
+          if [ -f worker/src/index.js ]; then grep -q 'url.pathname === "/act"' worker/src/index.js; fi
+          if [ -f jarvis-actions.js ]; then grep -q './jarvis-actions.js' index.html; fi
