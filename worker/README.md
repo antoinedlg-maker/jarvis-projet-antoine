@@ -33,3 +33,14 @@ This is a backend scaffold. It does not yet connect the PWA UI or read/write per
 
 
 Cloudflare Git deployment trigger: this commit is intended to trigger Workers Builds from the `feature/cloudflare-worker` branch. Wrangler configuration is at the repository root (`/wrangler.toml`) and points to `worker/src/index.js`.
+
+
+## Équipe d'agents JARVIS
+
+- `GET /agents` : liste les quatre spécialistes et leurs missions.
+- `POST /team` : fait travailler les spécialistes en parallèle, puis JARVIS synthétise leurs analyses.
+- `POST /chat` : réponse rapide par l'assistant principal, en un seul appel IA.
+
+Spécialistes : architecte produit, coach sportif, nutrition, ingénieur qualité.
+
+Les agents produisent des analyses et des propositions. Ils ne modifient pas seuls le dépôt GitHub, les données personnelles ou l'application. Toute action d'écriture devra passer par une étape d'autorisation et de validation. Le mode équipe consomme davantage de quota IA que le chat simple.
