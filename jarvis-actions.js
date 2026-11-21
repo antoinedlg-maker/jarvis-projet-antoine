@@ -43,6 +43,11 @@ async function runTeam(automatic){
  const button=$("jarvis-team-run");button.disabled=true;
  const host=$("jarvis-team-results");host.textContent="";
  const context=buildContext(),results=[];
+ const healthResponse=await fetch(API+"/health",{cache:"no-store"}),health=await healthResponse.json();
+ if(!healthResponse.ok||health.deployment!=="avengers-nine-agents-one-request-v3"){
+  $("jarvis-team-results").textContent="Le Worker Cloudflare n’a pas encore reçu la nouvelle version agent par agent. Version détectée : "+String(health.deployment||"inconnue")+". Aucun appel aux agents n’a été lancé pour éviter de relancer l’ancien conseil complet.";
+  $("jarvis-agent-state").textContent="Mise à jour Worker requise";button.disabled=false;return;
+ }
  const intro=document.createElement("p");intro.textContent=automatic?"JARVIS lance les 9 analyses séparément…":"JARVIS lance les spécialistes un par un…";host.appendChild(intro);
  $("jarvis-agent-state").textContent="0/9 agents terminés";
  panel.querySelectorAll(".jarvis-agent").forEach(card=>{card.classList.remove("running","done","failed");card.querySelector("em").textContent="En attente";});
