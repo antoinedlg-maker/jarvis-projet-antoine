@@ -805,6 +805,171 @@ body:before{opacity:.16;background-image:linear-gradient(rgba(86,166,255,.13) 1p
 .workout-hero-card{border-color:#65c8ff44!important;background:#0b1727!important}.workout-hero-image{background-image:linear-gradient(110deg,#17436a,#101b2b)!important}.workout-hero-tag,.workout-hero-role{color:#e8b95f!important}
 .hero-roster,.cinema-banner,.banner-training,.banner-missions{display:block!important}.hero-grid{display:grid!important}.hero-tile{display:flex!important;min-height:165px!important}img[src*="lumiere-a.akamaihd.net"]{display:block!important;filter:contrast(1.08) saturate(.9)!important}.IRON\ PARADISE-wall{display:block!important}.hero-tile .character-art{display:block!important}.delete-btn{color:#ff7b82!important}
 @media(max-width:390px){.topbar:after{font-size:6px;right:9px}.page{padding-left:14px;padding-right:14px}}</style>
+
+<style id="jarvis-iron-paradise-redesign-2026">
+/* IRON PARADISE — STARK / AVENGERS EXPERIENCE SYSTEM */
+:root{
+ --bg:#080c12;--panel:#111923;--panel2:#182431;--cyan:#79dcf2;--blue:#287ca8;
+ --gold:#e8bb72;--green:#78d6ad;--red:#ed7a78;--text:#f2f5f7;--muted:#9baab5;
+ --border:rgba(121,220,242,.16);--surface:rgba(16,25,35,.92);
+ --shadow:0 18px 48px rgba(0,0,0,.34);
+}
+html{background:#080c12;scroll-behavior:smooth}
+body{
+ background:
+  radial-gradient(ellipse at 82% 0%,rgba(38,105,137,.20),transparent 34%),
+  radial-gradient(ellipse at 0% 35%,rgba(151,105,48,.10),transparent 32%),
+  linear-gradient(180deg,#0a1018 0%,#080c12 55%,#090d13 100%);
+ color:var(--text);padding-bottom:calc(92px + env(safe-area-inset-bottom));
+ -webkit-font-smoothing:antialiased;
+}
+body:before{opacity:.045;background-size:48px 48px;mask-image:linear-gradient(#000,transparent 72%)}
+.app{max-width:760px;overflow:visible;padding-bottom:14px}
+.topbar{
+ min-height:72px;padding:14px 20px 12px;gap:12px;
+ background:rgba(7,12,18,.88)!important;border-bottom:1px solid rgba(121,220,242,.18)!important;
+ backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+ box-shadow:0 8px 30px #0005;
+}
+.brand{font-size:17px;letter-spacing:3.2px;color:#eaf7fb!important;text-shadow:none!important;animation:none}
+.brand small{font:600 8px Inter,sans-serif;letter-spacing:2.4px;color:var(--gold)!important;margin-top:5px}
+.topbar:after{content:"STARK-LEVEL PERSONAL PERFORMANCE";position:absolute;right:19px;top:50px;color:#8ba4b1;font:600 7px Inter,sans-serif;letter-spacing:1.4px;opacity:.8}
+.status{font:700 8px Inter,sans-serif;letter-spacing:1.2px;color:#a9d9c2!important;white-space:nowrap}
+.status-dot{width:6px;height:6px;background:#83d9b1!important;box-shadow:0 0 10px #83d9b1!important;animation:none}
+.page{padding:24px 19px 30px;animation:pageEnter .28s ease}
+@keyframes pageEnter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page h1{font:800 clamp(25px,6vw,34px)/1.16 Inter,sans-serif!important;letter-spacing:-1.1px!important;color:#f4f7f8!important;text-shadow:none!important}
+.eyebrow{font:700 8px Orbitron,sans-serif;color:var(--gold)!important;letter-spacing:2.2px;margin-bottom:10px}
+.subtitle{font:400 12px/1.65 Inter,sans-serif;color:#aebbc4!important;margin-top:9px}
+.section-title{margin:27px 2px 12px;align-items:baseline}
+.section-title h2{font:700 10px Orbitron,sans-serif;color:#d9e8ed!important;letter-spacing:1.4px}
+.section-title span{font-size:9px;color:#8295a1!important;letter-spacing:.5px}
+.card,.hero-card,.stat,.hud-panel,.hero-tile{
+ background:linear-gradient(150deg,rgba(23,35,47,.97),rgba(12,19,27,.98))!important;
+ border:1px solid rgba(121,220,242,.14)!important;border-radius:17px!important;
+ box-shadow:0 12px 34px rgba(0,0,0,.23),inset 0 1px rgba(255,255,255,.035)!important;
+ backdrop-filter:blur(16px);
+}
+.card{padding:17px;margin-top:13px}
+.card:before{background:linear-gradient(90deg,transparent,rgba(121,220,242,.6),transparent)!important;opacity:.28;height:1px}
+.card h2{font:700 11px Orbitron,sans-serif;letter-spacing:1.1px;color:#e4edf0}
+.hero-card{padding:20px!important;background:radial-gradient(circle at 95% 5%,rgba(51,134,165,.19),transparent 42%),linear-gradient(145deg,#172b39,#0c151e)!important;border-color:rgba(232,187,114,.24)!important}
+.hero-card:after{font:800 112px Orbitron,sans-serif;color:rgba(121,220,242,.035);right:5px;bottom:-32px}
+.hero-card.home-hero{min-height:unset!important;padding:23px 21px 22px!important;margin-top:14px;border-radius:20px!important;background:radial-gradient(ellipse at 100% 0%,rgba(67,149,173,.25),transparent 42%),linear-gradient(135deg,#1a3444,#101923 72%)!important}
+.home-hero .hero-label{font:700 8px Orbitron,sans-serif;color:var(--gold)!important;letter-spacing:2px}
+.home-hero .hero-name{font:800 clamp(19px,5vw,24px) Orbitron,sans-serif;color:#f1f7f8!important;letter-spacing:.5px;margin:10px 0}
+.home-hero .hero-message{font-size:12px;line-height:1.7;color:#c1d0d6!important;max-width:90%}
+.home-hero > div[class~="IRON"]{display:none!important}
+.hero-label{font:700 8px Orbitron,sans-serif;letter-spacing:1.8px;color:var(--gold)!important}
+.hero-name{font:800 19px Inter,sans-serif;letter-spacing:-.3px;color:#f1f5f5}
+.hero-message{font-size:12px;line-height:1.65;color:#c1cbd0}
+.hud-panel{margin:17px 0 18px;padding:16px!important;border-color:rgba(121,220,242,.22)!important;background:linear-gradient(145deg,rgba(20,39,51,.96),rgba(10,18,26,.98))!important;border-radius:18px!important}
+.hud-panel:before{opacity:.07;background-size:30px 30px}
+.hud-head{font:700 8px Orbitron,sans-serif;letter-spacing:1.25px;color:#9ddbe7!important;margin-bottom:14px}
+.hud-live{font:700 8px Inter,sans-serif;color:#91d8b8!important}
+.reactor-layout{grid-template-columns:128px 1fr;gap:16px}
+.reactor-core{width:122px;height:122px;filter:drop-shadow(0 0 15px rgba(77,193,222,.35))}
+.reactor-core:before,.reactor-core:after{border-color:rgba(121,220,242,.8);box-shadow:0 0 12px rgba(64,177,206,.35),inset 0 0 12px rgba(64,177,206,.22)}
+.reactor-core span{font:800 10px Orbitron;color:#eafaff;text-shadow:0 0 12px #53c9e8}
+.readout{border-left:2px solid var(--gold);padding:3px 0 3px 10px}
+.readout small,.scan-metric small{font:700 7px Orbitron,sans-serif;letter-spacing:1.1px;color:#92a7b1}
+.readout strong,.scan-metric strong{font:700 16px Orbitron,sans-serif;color:#eff6f7;margin-top:4px}
+.readout em,.scan-metric span{font:9px Inter,sans-serif;color:#83cfe0}
+.stat-grid{gap:9px;margin-top:13px}
+.stat{padding:14px 13px!important;border-radius:14px!important;min-height:92px}
+.stat-label{font:700 8px Inter,sans-serif;letter-spacing:1px;color:#92a4ae}
+.stat-value{font:800 21px Inter,sans-serif;color:#a9e5f1!important;text-shadow:none!important;margin-top:8px}
+.stat-unit{font:9px Inter,sans-serif;color:#83949f}
+.progress-track{height:7px;background:#243440;border-radius:20px;margin-top:14px}
+.progress-fill{background:linear-gradient(90deg,#398eae,#8fe3ed)!important;box-shadow:0 0 12px #59c4dc55!important}
+.btn{
+ min-height:44px;margin-top:13px;padding:12px 15px;border-radius:12px!important;
+ background:linear-gradient(110deg,#b9874e,#e8c58a)!important;color:#17130d!important;
+ border:1px solid rgba(255,218,160,.5)!important;box-shadow:0 7px 20px rgba(177,127,62,.15)!important;
+ font:800 10px Inter,sans-serif;letter-spacing:1px;
+}
+.btn-secondary{background:rgba(121,220,242,.08)!important;color:#b9eaf2!important;border:1px solid rgba(121,220,242,.28)!important;box-shadow:none!important}
+.btn:active{transform:scale(.985)}
+.field,input,select,textarea{
+ min-height:44px;border-radius:11px!important;background:#0b141d!important;color:#eef4f5!important;
+ border:1px solid rgba(137,177,192,.24)!important;padding:12px 13px!important;font:12px Inter,sans-serif;
+}
+.field:focus,input:focus,select:focus,textarea:focus{outline:none;border-color:#75ccdf!important;box-shadow:0 0 0 3px rgba(92,190,211,.11)!important}
+.field-label{font:600 10px Inter,sans-serif;color:#9aabb4;margin-top:13px}
+.two-col{gap:9px}
+.list-item{padding:12px 13px;border-radius:12px;background:rgba(6,13,20,.56);border:1px solid rgba(121,220,242,.11);font-size:11px}
+.notice{font-size:10px;line-height:1.55;color:#91a1aa}
+.empty{font-size:11px;color:#91a1aa;padding:20px 8px}
+.delete-btn{color:#e48b84}
+.bottom-nav{
+ left:50%;width:min(100%,760px);padding:9px 8px calc(9px + env(safe-area-inset-bottom));
+ background:rgba(7,12,18,.94)!important;border-top:1px solid rgba(121,220,242,.16)!important;
+ backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 -10px 35px #0007!important;
+}
+.nav-btn{font:700 8px Inter,sans-serif;letter-spacing:.5px;color:#7f929d!important;gap:5px;padding:5px 0}
+.nav-btn .nav-icon{font-size:18px}
+.nav-btn.active{color:#e8c58a!important}
+.nav-btn.active:after{top:-9px;width:22px;height:2px;background:var(--gold)!important;box-shadow:0 0 10px rgba(232,187,114,.5)!important}
+.nav-btn.active .nav-icon{text-shadow:0 0 12px rgba(232,187,114,.4)}
+/* Replace broken/placeholder movie artwork with intentional graphic surfaces. */
+.cinema-banner{display:none!important}
+.workout-hero-image{background:radial-gradient(circle at 80% 10%,rgba(88,169,190,.24),transparent 35%),linear-gradient(125deg,#1b3543,#0c151e)!important;border-bottom:1px solid rgba(121,220,242,.14)}
+.workout-hero-tag{font:700 8px Orbitron,sans-serif;letter-spacing:1.5px;color:var(--gold)}
+.workout-hero-name{font:800 18px Orbitron,sans-serif;color:#e8f3f5}
+.workout-hero-role{font:700 8px Inter,sans-serif;letter-spacing:1px;color:#91cbd8}
+.workout-hero-card{border-radius:16px;overflow:hidden;background:#101a24;border:1px solid rgba(121,220,242,.16);box-shadow:0 12px 28px #0004;margin-top:12px}
+.workout-hero-details{padding:14px 15px;background:linear-gradient(145deg,#15222d,#0d151d)}
+.training-mission{border-radius:18px!important;border:1px solid rgba(232,187,114,.22)!important;background:linear-gradient(145deg,#172a36,#0c151e)!important;box-shadow:var(--shadow)}
+.training-mission-image{height:105px;background:radial-gradient(circle at 78% 20%,rgba(94,181,204,.3),transparent 40%),linear-gradient(120deg,#1c3948,#101923)!important}
+.training-mission-content{padding:17px}
+.training-mission-content h2{font:800 15px Orbitron,sans-serif;color:#eaf4f5}
+.training-mission-content p{font-size:11px;color:#aebdc4}
+.mission-chip{font:700 8px Orbitron,sans-serif;color:var(--gold);letter-spacing:1.4px}
+.mission-exercises>div{background:rgba(6,15,22,.62);border:1px solid rgba(121,220,242,.12);border-radius:11px}
+.mission-exercises b{font:700 12px Orbitron;color:#91dceb}
+.hero-tile{min-height:125px!important;border-radius:14px!important}
+.hero-tile strong{font:700 9px Orbitron;color:#e6c58d}
+.hero-tile p{font-size:9px;color:#a7b7be}
+.hero-roster{gap:8px}
+.roster-card{border-radius:12px;background:linear-gradient(130deg,#193242,#0d1720);border:1px solid rgba(121,220,242,.16)}
+.roster-card b{font:700 8px Orbitron;color:#e7eff1}
+.roster-card small{font-size:8px;color:#90a5ae}
+.body-scanner{border-radius:13px;border-color:rgba(121,220,242,.18);background:radial-gradient(ellipse at 50% 45%,rgba(64,159,183,.16),transparent 65%),#0b141c}
+.body-silhouette{display:none}
+.scanner-caption{position:absolute;z-index:3;bottom:7px;font:700 7px Orbitron;color:#8ec9d4;letter-spacing:.6px}
+.scanline{background:#80d9e9;box-shadow:0 0 12px 2px #43b8d2;opacity:.45}
+.chart-wrap{height:150px}
+.lab-ring{background:conic-gradient(#81d9e8 0 68%,#263743 68% 100%);box-shadow:0 0 20px rgba(86,185,206,.16)}
+.lab-ring:before{background:#101b24;border-color:rgba(121,220,242,.2)}
+.lab-ring div{font:700 17px Orbitron;color:#f0f7f8}
+.lab-ring small{font:700 7px Inter;color:#8fa7b1}
+.hero-card,.card,.stat,.hud-panel,.training-mission,.workout-hero-card{transition:border-color .2s ease,transform .2s ease}
+button:focus-visible{outline:2px solid #8ad9e8;outline-offset:3px}
+@media(min-width:600px){
+ .page{padding:30px 26px 38px}
+ .topbar{padding-left:26px;padding-right:26px}
+ .stat-grid{gap:12px}
+ .card{padding:20px}
+ .bottom-nav{border-left:1px solid rgba(121,220,242,.12);border-right:1px solid rgba(121,220,242,.12);border-radius:18px 18px 0 0}
+}
+@media(max-width:390px){
+ .page{padding:20px 14px 28px}
+ .topbar{padding:13px 15px 11px;min-height:66px}
+ .topbar:after{font-size:6px;right:14px;top:47px}
+ .brand{font-size:15px}
+ .status{font-size:7px}
+ .reactor-layout{grid-template-columns:106px 1fr;gap:11px}
+ .reactor-core{width:102px;height:102px}
+ .readout strong,.scan-metric strong{font-size:14px}
+ .hud-panel{padding:13px!important}
+ .stat{padding:12px 10px!important}
+ .stat-value{font-size:19px}
+ .nav-btn{font-size:7px}
+ .nav-btn .nav-icon{font-size:17px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.page{animation:none}}
+</style>
+
 </head>
 <body>
 <div class="app">
