@@ -88,7 +88,7 @@ async function planActions(env, message, context = "") {
 \nexport default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin");
-    const allowedOrigin = env.ALLOWED_ORIGIN;
+    const allowedOrigin = env.ALLOWED_ORIGIN || "https://antoinedlg-maker.github.io";
 
     if (origin && allowedOrigin && origin !== allowedOrigin) {
       return json({ error: "Origin not allowed" }, 403);
