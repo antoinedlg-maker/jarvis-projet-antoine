@@ -85,7 +85,7 @@ async function planActions(env, message, context = "") {
   });
   return { reply: parsed.reply.slice(0, 2000), actions };
 }
-\nexport default {
+export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin");
     const allowedOrigin = env.ALLOWED_ORIGIN || "https://antoinedlg-maker.github.io";
