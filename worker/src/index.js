@@ -12,6 +12,15 @@ const AGENTS = [
   { id: "quality", name: "Ingénieur qualité & sécurité", mission: "Garantir la fiabilité, la confidentialité et la non-régression.", task: "Audite les propositions des autres domaines : détecte contradictions, risques, données manquantes et fonctionnalités qui nécessitent validation humaine. Ne recommande aucune action destructive automatique." }
 ];
 
+
+const DESIGN_AGENTS = [
+  { id: "art-direction", name: "Directeur artistique", mission: "Définir l'identité visuelle premium JARVIS IRON PARADISE.", task: "Définis une direction artistique cohérente : palette, typographies, iconographie, ambiance Avengers technologique originale sans copier les logos/personnages protégés. Préserve lisibilité et sobriété." },
+  { id: "ux-mobile", name: "Architecte UX mobile", mission: "Optimiser les parcours sur iPhone.", task: "Audite navigation, hiérarchie, gestes, zones tactiles, formulaires et parcours fréquents. Propose des changements concrets adaptés à un écran mobile." },
+  { id: "ui-system", name: "Designer UI system", mission: "Créer un système de composants cohérent.", task: "Définis tokens, cartes, boutons, champs, navigation, états, espacements, rayons et règles responsive. Évite les styles contradictoires et la surcharge d'effets." },
+  { id: "dashboard", name: "Designer dashboard & data", mission: "Rendre les données sport/nutrition immédiatement compréhensibles.", task: "Recommande une refonte du tableau de bord : poids, objectifs, repas, entraînements, progression et missions. Priorise la compréhension et les graphiques utiles." },
+  { id: "design-quality", name: "QA design & accessibilité", mission: "Garantir la qualité visuelle, l'accessibilité et la non-régression.", task: "Détecte surcharge, contrastes faibles, textes trop petits, animations inutiles, problèmes iPhone et risques de casser les fonctions. Termine par une checklist de validation." }
+];
+
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
     status,
@@ -130,6 +139,7 @@ export default {
         status: "online",
         ai: Boolean(env.AI) ? "connected" : "not_configured",
         agents: AGENTS.length,
+        designAgents: DESIGN_AGENTS.length,
         tokenConfigured: typeof env.JARVIS_API_TOKEN === "string" && env.JARVIS_API_TOKEN.trim().length > 0,
         tokenBindingNames: Object.keys(env).filter(key => /TOKEN/i.test(key)).sort(),
         deployment: "avengers-nine-agents-one-request-v3"
@@ -140,6 +150,29 @@ export default {
       return json({ supervisor: "JARVIS", agents: AGENTS }, 200, cors);
     }
 
+
+
+    if (url.pathname === "/design-team" && request.method === "POST") {
+      if (!env.AI) return json({ error: "AI binding is not configured yet." }, 503, cors);
+      if (!env.JARVIS_API_TOKEN || request.headers.get("Authorization")?.trim() !== `Bearer ${String(env.JARVIS_API_TOKEN).trim()}`) {
+        return json({ error: "Unauthorized" }, 401, cors);
+      }
+      let body;
+      try { body = await request.json(); } catch { return json({ error: "Invalid JSON body." }, 400, cors); }
+      const agentId = typeof body.agentId === "string" ? body.agentId : "";
+      const agent = DESIGN_AGENTS.find(item => item.id === agentId);
+      const message = typeof body.message === "string" ? body.message.trim() : "";
+      const context = typeof body.context === "string" ? body.context.slice(0, 6000) : "";
+      if (!agent) return json({ error: "Unknown design agentId." }, 400, cors);
+      if (!message || message.length > 4000) return json({ error: "Message required (maximum 4000 characters)." }, 400, cors);
+      try {
+        const analysis = await askAgent(env, agent, message, context);
+        return json({ mode: "single_design_specialist", agentResults: [{ agent: agent.id, name: agent.name, status: "completed", analysis: analysis.slice(0, 5000) }], completedAgents: 1, totalAgents: DESIGN_AGENTS.length, generatedAt: new Date().toISOString() }, 200, cors);
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : "Erreur inconnue";
+        return json({ mode: "single_design_specialist", agentResults: [{ agent: agent.id, name: agent.name, status: "failed", analysis: "Agent indisponible : " + detail }], completedAgents: 0, totalAgents: DESIGN_AGENTS.length, generatedAt: new Date().toISOString() }, 200, cors);
+      }
+    }
 
     if (url.pathname === "/act" && request.method === "POST") {
       if (!env.AI) return json({ error: "AI binding is not configured yet." }, 503, cors);
