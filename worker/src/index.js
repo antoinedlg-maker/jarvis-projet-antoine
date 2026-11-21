@@ -1,13 +1,15 @@
 const DEFAULT_MODEL = "@cf/google/gemma-4-26b-a4b-it";
 
 const AGENTS = [
-  { id: "product", name: "Architecte produit", mission: "Concevoir la roadmap, les parcours et les fonctionnalités d'IRON PARADISE avec une direction Avengers cohérente." },
-  { id: "sport", name: "Coach sportif", mission: "Faire du sport la priorité : entraînements progressifs, adaptations à domicile, technique, progression et sécurité." },
-  { id: "nutrition", name: "Nutrition", mission: "Relier les repas aux séances, organiser les apports et proposer une alimentation variée sans régime extrême ni chiffres inventés." },
-  { id: "recovery", name: "Spécialiste récupération", mission: "Analyser sommeil, repos, fatigue déclarée et récupération ; proposer des ajustements prudents sans diagnostic médical." },
-  { id: "performance", name: "Analyste performance", mission: "Lire les données réellement enregistrées, identifier les tendances sport/poids/nutrition et distinguer faits, hypothèses et données manquantes." },
-  { id: "habits", name: "Coach discipline", mission: "Créer des habitudes simples, missions quotidiennes réalistes et stratégies de régularité sans culpabilisation." },
-  { id: "quality", name: "Ingénieur qualité", mission: "Vérifier cohérence, sécurité, fiabilité, confidentialité et non-régression avant toute évolution de l'application." }
+  { id: "product", name: "Architecte produit", mission: "Concevoir la roadmap, l'expérience Avengers et les fonctionnalités concrètes d'IRON PARADISE.", task: "Audite l'application et propose les 3 évolutions produit les plus utiles, classées par impact, difficulté et dépendances. N'invente pas de fonctions déjà présentes." },
+  { id: "sport", name: "Coach sportif", mission: "Construire une progression sportive durable, technique et adaptée.", task: "Priorité absolue au sport. Évalue la charge et la régularité à partir des séances réellement fournies. Propose une progression prudente, des options sans impact et des critères d'ajustement. Ne prescris pas de séance intense sans connaître les contraintes." },
+  { id: "programming", name: "Architecte entraînement", mission: "Transformer les objectifs en programmes d'entraînement structurés et progressifs.", task: "Conçois une trame de semaine d'entraînement réaliste : jours, objectifs, durée indicative, types de séances, récupération et progression. Signale les informations manquantes (matériel, douleurs, disponibilité) au lieu de les supposer." },
+  { id: "nutrition", name: "Nutrition sportive", mission: "Relier alimentation, apports et entraînement sans régime extrême.", task: "Analyse les repas saisis et leur lien avec les séances. Donne des conseils pratiques sur protéines, fibres, hydratation et timing alimentaire sans inventer de besoins caloriques individuels." },
+  { id: "mealprep", name: "Chef nutrition & menus", mission: "Créer des repas savoureux, simples, économiques et faciles à préparer.", task: "Propose des idées de repas concrètes et gourmandes qui soutiennent l'entraînement, ainsi qu'une logique de préparation et de courses. Ne donne pas de calories précises sans quantités fiables." },
+  { id: "recovery", name: "Spécialiste récupération", mission: "Optimiser repos, sommeil, mobilité et gestion de fatigue.", task: "Évalue la récupération à partir des données réellement présentes. Ne prétends pas connaître le sommeil ou la fatigue s'ils ne sont pas renseignés. Propose un système simple pour les suivre et des ajustements prudents." },
+  { id: "performance", name: "Analyste performance", mission: "Mesurer la progression avec des indicateurs fiables.", task: "Distingue faits, tendances et hypothèses. Analyse poids, fréquence des séances, XP et repas disponibles. Propose des indicateurs utiles et évite de juger la progression sur une seule journée." },
+  { id: "habits", name: "Coach discipline", mission: "Créer de la régularité avec des missions simples et motivantes.", task: "Propose un système de missions quotidiennes/hebdomadaires qui renforce la constance sans culpabiliser. Donne des objectifs mesurables et faciles à cocher." },
+  { id: "quality", name: "Ingénieur qualité & sécurité", mission: "Garantir la fiabilité, la confidentialité et la non-régression.", task: "Audite les propositions des autres domaines : détecte contradictions, risques, données manquantes et fonctionnalités qui nécessitent validation humaine. Ne recommande aucune action destructive automatique." }
 ];
 
 function json(data, status = 200, extraHeaders = {}) {
@@ -47,7 +49,7 @@ async function askAgent(env, agent, message, context = "") {
     messages: [
       {
         role: "system",
-        content: `Tu es ${agent.name}, agent spécialisé de JARVIS IRON PARADISE. Mission : ${agent.mission} Réponds en français, de façon concise, précise et actionnable. N'invente aucune donnée. Si une information manque, signale-le. Tu analyses et proposes : tu ne prétends jamais avoir modifié l'application ou ses données.`
+        content: `Tu es ${agent.name}, agent spécialisé de JARVIS IRON PARADISE. Mission : ${agent.mission} Mandat spécialisé : ${agent.task || agent.mission} Réponds en français, de façon concise, précise et actionnable. N'invente aucune donnée. Si une information manque, signale-le. Tu analyses et proposes : tu ne prétends jamais avoir modifié l'application ou ses données.`
       },
       { role: "user", content: context ? `Mission : ${message}\n\nContexte :\n${context}` : message }
     ],
@@ -130,7 +132,7 @@ export default {
         agents: AGENTS.length,
         tokenConfigured: typeof env.JARVIS_API_TOKEN === "string" && env.JARVIS_API_TOKEN.trim().length > 0,
         tokenBindingNames: Object.keys(env).filter(key => /TOKEN/i.test(key)).sort(),
-        deployment: "avengers-seven-agents-v1"
+        deployment: "avengers-nine-agents-council-v2"
       }, 200, { ...cors, "Cache-Control": "no-store, max-age=0" });
     }
 
@@ -202,36 +204,48 @@ export default {
           return json({ reply, mode: "single_agent", memory: Boolean(memoryKey && env.JARVIS_MEMORY) }, 200, cors);
         }
 
-        // Appels séquentiels : éviter les limites de concurrence Workers AI.
-        // Chaque spécialiste conserve son résultat même si un autre échoue.
+        // Conseil multi-spécialiste séquentiel : stable sur Workers AI et tolérant aux pannes.
         const specialistResults = [];
         for (const agent of AGENTS) {
           try {
             const analysis = await askAgent(env, agent, message, context);
-            specialistResults.push({ agent: agent.id, name: agent.name, status: "completed", analysis });
+            specialistResults.push({ agent: agent.id, name: agent.name, status: "completed", analysis: analysis.slice(0, 5000) });
           } catch (agentError) {
             const detail = agentError instanceof Error ? agentError.message : "Erreur inconnue";
-            specialistResults.push({
-              agent: agent.id,
-              name: agent.name,
-              status: "failed",
-              analysis: `Échec de cet agent : ${detail}`
-            });
+            specialistResults.push({ agent: agent.id, name: agent.name, status: "failed", analysis: "Agent indisponible : " + detail });
           }
         }
 
         const successful = specialistResults.filter(item => item.status === "completed");
         if (!successful.length) {
-          const failures = specialistResults.map(item => `${item.name}: ${item.analysis}`).join(" | ");
-          throw new Error(`Aucun agent n'a obtenu de réponse. ${failures}`);
+          const failures = specialistResults.map(item => item.name + ": " + item.analysis).join(" | ");
+          throw new Error("Aucun agent n'a obtenu de réponse. " + failures);
         }
 
-        const summary = `Équipe JARVIS : ${successful.length}/${AGENTS.length} agents ont répondu. Les analyses individuelles suivent.`;
+        // JARVIS arbitre les avis et relie les domaines.
+        let executiveSummary = "";
+        try {
+          executiveSummary = await askAgent(env, {
+            name: "JARVIS — Directeur de mission",
+            mission: "Synthétiser les spécialistes, arbitrer les priorités et relier le sport, la nutrition, la récupération et l'expérience produit.",
+            task: "Fournis une synthèse exécutive avec : objectif prioritaire, 3 actions concrètes classées, coordination sport/nutrition/récupération, éléments à mesurer et questions indispensables. Écarte les contradictions et ne transforme pas les hypothèses en faits."
+          }, "Mission utilisateur : " + message, JSON.stringify({
+            analyses: successful.map(item => ({ agent: item.name, analysis: item.analysis })),
+            agentsEnEchec: specialistResults.filter(item => item.status === "failed").map(item => item.name)
+          }).slice(0, 12000));
+        } catch (synthesisError) {
+          executiveSummary = "Synthèse automatique indisponible. Les analyses individuelles restent disponibles. Priorité : progression sportive prudente, puis synchronisation nutrition et récupération.";
+        }
+
         return json({
-          reply: summary,
-          mode: "multi_agent",
+          reply: "Conseil Avengers : " + successful.length + "/" + AGENTS.length + " spécialistes ont répondu.",
+          executiveSummary,
+          mode: "multi_agent_council",
           agents: specialistResults.map(({ agent, name, status }) => ({ agent, name, status })),
-          agentResults: specialistResults
+          agentResults: specialistResults,
+          completedAgents: successful.length,
+          totalAgents: AGENTS.length,
+          generatedAt: new Date().toISOString()
         }, 200, cors);
       } catch (error) {
         const detail = error instanceof Error ? error.message : "Erreur inconnue";
