@@ -235,6 +235,15 @@ h3{color:#e8edf3}
 .weight-stage .scanline{z-index:5}
 @media(max-width:390px){.weight-stage-grid{grid-template-columns:minmax(0,1fr) 118px;gap:8px}.personal-scanner{height:360px;min-height:360px}.scan-side .scan-metric{padding:8px 0}.scan-side .scan-metric strong{font-size:12px}.compare-model{height:160px}.weight-action-grid .btn{font-size:7px}}
 
+
+/* Native Poids hologram: image supplied by the user, inside the existing tab */
+#weightHologramStage{perspective:1000px;touch-action:pan-y;cursor:grab;isolation:isolate}
+#weightHologramStage:active{cursor:grabbing}
+#weightHologram{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:2;pointer-events:none;user-select:none;-webkit-user-drag:none;transform:rotateX(var(--holo-rx,0deg)) rotateY(var(--holo-ry,0deg));transform-style:preserve-3d;transition:transform .14s ease-out;filter:drop-shadow(0 0 18px rgba(62,190,255,.24))}
+#weightHologramStage .scanner-3d,#weightHologramStage .scanner-placeholder{display:none!important}
+#weightHologramStage .scanline{z-index:4;height:3px;box-shadow:0 0 15px 4px #39cfff;opacity:.8}
+#weightHologramStage .scanner-caption{z-index:5;text-shadow:0 0 8px #000}
+@media(prefers-reduced-motion:reduce){#weightHologram{transition:none}#weightHologramStage .scanline{animation:none}}
 </style>
 </head>
 <body>
@@ -298,7 +307,8 @@ h3{color:#e8edf3}
   <div class="weight-stage hud-panel">
     <div class="hud-head"><span>HOLOGRAPHIC BODY SCAN // SUBJECT 001</span><span class="hud-live" id="avatarStatus">PERSONNALISATION REQUISE</span></div>
     <div class="weight-stage-grid">
-      <div class="body-scanner personal-scanner">
+      <div class="body-scanner personal-scanner" id="weightHologramStage" aria-label="Hologramme personnel à faire pivoter au doigt">
+        <img id="weightHologram" src="./assets/poids-3d.webp" alt="Hologramme de scan corporel sur plateforme lumineuse" draggable="false">
         <canvas id="avatar3D" class="scanner-3d" aria-label="Visualiseur du modèle 3D personnel"></canvas>
         <div class="scanner-placeholder" id="avatarPlaceholder">
           <div class="placeholder-orbit"></div><div class="placeholder-person">◉</div>
@@ -1018,7 +1028,7 @@ async function refreshPersonalViewers(){
  document.getElementById("afterWeight").textContent=(selected?.weight||148).toFixed(1)+" kg";
  document.getElementById("compareDelta").textContent=((first?.weight||148)-(selected?.weight||148)).toFixed(1)+" KG";
  const status=document.getElementById("avatarStatus"),placeholder=document.getElementById("avatarPlaceholder"),host=document.querySelector(".personal-scanner");
- if(!personalModelBuffer){if(status)status.textContent="PERSONNALISATION REQUISE";if(placeholder)placeholder.style.display="flex";if(host)host.classList.remove("model-loaded");return;}
+ if(!personalModelBuffer){if(status)status.textContent="HOLOGRAMME ACTIF";if(placeholder)placeholder.style.display="none";if(host)host.classList.remove("model-loaded");return;}
  if(status)status.textContent="MODÈLE PERSONNEL CHARGÉ";if(placeholder)placeholder.style.display="none";if(host)host.classList.add("model-loaded");
  const canvases=[["avatar3D",last?.weight||148],["avatarBefore",first?.weight||148],["avatarAfter",selected?.weight||148]];
  for(const [id,weight] of canvases){const el=document.getElementById(id);if(!el)continue;const old=avatarViewers.find(v=>v.canvasId===id);if(old){const valuesNow=window.jarvisWeightData?.()||[];const baseMuscle=valuesNow.find(v=>v.muscleMassKg!=null)?.muscleMassKg??null;const selectedNow=valuesNow.find(v=>v.weight===weight);const baseFat=valuesNow.find(v=>v.bodyFatPct!=null)?.bodyFatPct??null;if(old.group.userData.model)applyBodyMorphs(old.group.userData.model,weight,selectedNow?.muscleMassKg??null,baseMuscle,selectedNow?.bodyFatPct??null,baseFat);continue;}const viewer=await makePersonalViewer(id,weight);if(viewer)avatarViewers.push(viewer);}
@@ -1053,5 +1063,6 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
+<script src="./jarvis-poids.js?v=1" defer></script>
 </body>
 </html>
