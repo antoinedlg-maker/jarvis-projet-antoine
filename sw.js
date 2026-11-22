@@ -1,9 +1,11 @@
-const CACHE = "jarvis-antoine-avengers-v25";
+const CACHE = "jarvis-antoine-avengers-v26";
 
 const FILES = [
   "./",
   "./index.html",
   "./manifest.json",
+  "./jarvis-poids.js",
+  "./assets/poids-3d.webp",
 ];
 
 self.addEventListener("install", event => {
