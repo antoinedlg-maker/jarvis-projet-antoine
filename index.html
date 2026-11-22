@@ -190,6 +190,51 @@ h3{color:#e8edf3}
  .stat-value{font-size:17px}
 }
 
+
+/* ===== PERSONAL BODY SCAN / WEIGHT LAB ===== */
+.weight-hero-head h1{font:800 clamp(24px,6vw,32px) Orbitron,sans-serif;letter-spacing:.3px;color:#d9f4ff;text-shadow:0 0 18px #36bdf566}
+.weight-hero-head h1 span{color:#e6bd70}
+.weight-stage{padding:13px;margin:16px 0;border-color:#39c9f0a0;background:linear-gradient(145deg,#0b1b29f7,#080e17)}
+.weight-stage .hud-head{font-size:8px;color:#b9eaff}
+.weight-stage-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(118px,.95fr);gap:12px;align-items:stretch}
+.personal-scanner{height:390px;min-height:390px;border-color:#38c8ff75;background:radial-gradient(ellipse at 50% 48%,#0874a83d,transparent 57%),linear-gradient(180deg,#071522,#050a12)}
+.personal-scanner:before{inset:10px 12px;border-radius:48% 48% 12px 12px;border-color:#42caff66}
+.scanner-placeholder{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;text-align:center;background:radial-gradient(ellipse at center,#0b4c7040,transparent 60%)}
+.placeholder-orbit{position:absolute;width:72%;aspect-ratio:1;border:1px solid #37caff55;border-radius:50%;box-shadow:0 0 20px #24aaff25,inset 0 0 25px #24aaff16}
+.placeholder-person{position:relative;width:68px;height:125px;display:grid;place-items:center;color:#bdefff;font-size:42px;border:1px solid #50d8ff8a;border-radius:45% 45% 28% 28%;background:linear-gradient(180deg,#3bcfff30,#102b4533);box-shadow:0 0 26px #2cc8ff44}
+.scanner-placeholder strong{position:relative;color:#c6efff;font:700 9px Orbitron;letter-spacing:1px}
+.scanner-placeholder small{position:relative;max-width:190px;color:#90b8cd;font-size:9px;line-height:1.5}
+.personal-scanner.model-loaded .scanner-placeholder{display:none}
+.personal-scanner .scanner-3d{z-index:3}
+.scan-side{display:grid;grid-template-columns:1fr;align-content:center;gap:0;padding:4px 0}
+.scan-side .scan-metric{padding:9px 0;border-bottom:1px solid #40c8f02b}
+.scan-side .scan-metric strong{font-size:clamp(12px,3.3vw,17px);color:#e9f7ff}
+.scan-side .scan-metric small{color:#74c9ef;font-size:7px}
+.scan-side .scan-metric span{font-size:7px;color:#9babbc}
+.scanner-foot{display:flex;justify-content:space-between;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid #43c7f044;color:#8eafc5;font:700 7px Orbitron;letter-spacing:.7px}
+.weight-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.weight-action-grid .btn{margin-top:0;font-size:8px;padding:10px 6px}
+.scan-import-card{border-color:#d5a85a55}
+.import-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.import-title h2{font-size:10px}
+.import-status{padding:5px 7px;border:1px solid #45c9f055;border-radius:4px;color:#8edcff;font:700 7px Orbitron;white-space:nowrap}
+.photo-reference-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.photo-reference{height:76px;display:grid;place-items:center;overflow:hidden;border:1px dashed #58b9d455;border-radius:6px;color:#829eaf;font:700 7px Orbitron;background:#07121c}
+.photo-reference img{width:100%;height:100%;object-fit:cover}
+.weight-stat-grid .stat{border-radius:7px;border-color:#3bbce944;background:linear-gradient(145deg,#172938,#0a121b)}
+.weight-stat-grid .stat-value{color:#d6f1ff;font-family:Orbitron}
+.weight-stat-grid .stat-label{color:#8dc7e7}
+.compare-models{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.compare-model{position:relative;min-width:0;height:190px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;overflow:hidden;border:1px solid #39bde955;border-radius:7px;background:radial-gradient(ellipse at 50% 45%,#1d88b333,transparent 65%),#07111b}
+.compare-model canvas{position:absolute;inset:0;width:100%;height:100%}
+.compare-model b,.compare-model span{position:relative;z-index:2;padding:3px 8px;background:#06101bd9;color:#bdeaff;font:700 8px Orbitron}
+.compare-model span{color:#e7bd70}
+.compare-slider{width:100%;accent-color:#35caff;margin-top:10px}
+.compare-scale{display:flex;justify-content:space-between;color:#9ab6c8;font:700 7px Orbitron}
+.chart-wrap{height:150px}
+.weight-stage .scanline{z-index:5}
+@media(max-width:390px){.weight-stage-grid{grid-template-columns:minmax(0,1fr) 118px;gap:8px}.personal-scanner{height:360px;min-height:360px}.scan-side .scan-metric{padding:8px 0}.scan-side .scan-metric strong{font-size:12px}.compare-model{height:160px}.weight-action-grid .btn{font-size:7px}}
+
 </style>
 </head>
 <body>
@@ -242,45 +287,107 @@ h3{color:#e8edf3}
   </div>
 </section>
 
-<!-- PAGE 2 : SUIVI DU POIDS -->
+<!-- PAGE 2 : POIDS / SCAN 3D -->
 <section class="page" id="page-weight">
-  <div class="eyebrow">IRON PARADISE / BODY ANALYTICS</div>
-  <h1>Évolution physique</h1>
-  <p class="subtitle">Chaque kilo perdu est une victoire. On mesure les progrès, sans précipitation.</p>
-  <div class="hud-panel"><div class="hud-head"><span>BIOMETRIC SCAN / SUBJECT 001</span><span class="hud-live">SCANNER READY</span></div><div class="scanner-layout"><div class="body-scanner"><canvas id="avatar3D" class="scanner-3d" aria-label="Avatar corporel en 3D"></canvas><div class="scanner-caption" id="avatarStatus">3D HUMAN MODEL / GLB LOADING</div><div class="scanline"></div><svg class="body-silhouette" viewBox="0 0 100 220" role="img" aria-label="Silhouette humanoïde holographique"><defs><linearGradient id="bodyGlow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c9ffff"/><stop offset=".45" stop-color="#43dfff"/><stop offset="1" stop-color="#0878ba"/></linearGradient></defs><circle cx="50" cy="23" r="17" fill="url(#bodyGlow)" opacity=".88"/><path d="M31 47 Q50 39 69 47 L78 95 Q75 112 68 118 L72 166 L64 213 L50 213 L46 163 L42 213 L27 213 L32 164 L32 118 Q22 109 22 95Z" fill="url(#bodyGlow)" opacity=".58" stroke="#a8fbff" stroke-width="1.5"/><path d="M31 51 L14 110 L20 114 L39 73 M69 51 L86 110 L80 114 L61 73" fill="none" stroke="#7ceeff" stroke-width="10" stroke-linecap="round" opacity=".7"/><path d="M35 54 Q50 64 65 54 M34 88 Q50 96 66 88 M34 119 Q50 126 66 119" fill="none" stroke="#d5ffff" stroke-opacity=".65"/></svg></div><div class="scan-metrics"><div class="scan-metric"><small>DERNIÈRE MESURE</small><strong id="scannerWeight">-- kg</strong><span id="scannerDate">EN ATTENTE DE DONNÉES</span></div><div class="scan-metric"><small>OBJECTIF CIBLE</small><strong id="scannerGoal">-- kg</strong><span>PERSONAL TARGET</span></div><div class="scan-metric"><small>ÉVOLUTION TOTALE</small><strong id="scannerDelta">--</strong><span>DEPUIS LE PREMIER SCAN</span></div></div></div><div class="hud-head" style="margin:14px 0 0"><span>WEIGHT TRAJECTORY</span><span>HISTORIQUE RÉEL</span></div><div class="chart-wrap" id="weightChart"><div class="empty">Les relevés apparaîtront ici après tes pesées.</div></div></div>
-
-  <div class="cinema-banner banner-weight"><img src="https://lumiere-a.akamaihd.net/v1/images/" alt="Steve Rogers dans IRON PARADISE Endgame"><div class="banner-copy"><span class="banner-kicker">BODY ANALYTICS / PROTOCOLE 02</span><span class="banner-title">CHAQUE JOUR COMPTE</span><span class="banner-note">Mesure tes progrès. Construis ta transformation.</span></div></div>
-
-  <div class="hero-card">
-    <div class="hero-label">OBJECTIF PERSONNEL</div>
-    <div class="stat-value" id="weightDifference">-- kg</div>
-    <p class="hero-message">Évolution totale depuis ton premier relevé.</p>
+  <div class="weight-hero-head">
+    <div class="eyebrow">STARK TECH // BIOMETRIC LAB</div>
+    <h1>POIDS <span>/ SCAN 3D</span></h1>
+    <p class="subtitle">Ton corps réel. Tes mesures. Ton évolution, étape par étape.</p>
   </div>
 
-  <div class="stat-grid">
-    <div class="stat"><div class="stat-label">POIDS ACTUEL</div><div class="stat-value" id="currentWeight">--</div><div class="stat-unit">kg</div></div>
-    <div class="stat"><div class="stat-label">OBJECTIF</div><div class="stat-value" id="goalWeight">--</div><div class="stat-unit">kg</div></div>
+  <div class="weight-stage hud-panel">
+    <div class="hud-head"><span>HOLOGRAPHIC BODY SCAN // SUBJECT 001</span><span class="hud-live" id="avatarStatus">PERSONNALISATION REQUISE</span></div>
+    <div class="weight-stage-grid">
+      <div class="body-scanner personal-scanner">
+        <canvas id="avatar3D" class="scanner-3d" aria-label="Visualiseur du modèle 3D personnel"></canvas>
+        <div class="scanner-placeholder" id="avatarPlaceholder">
+          <div class="placeholder-orbit"></div><div class="placeholder-person">◉</div>
+          <strong>TON AVATAR PERSONNEL</strong>
+          <small>Importe ton modèle 3D pour afficher ta morphologie réelle.</small>
+        </div>
+        <div class="scanline"></div><div class="scanner-caption" id="scannerCaption">PERSONAL BODY MODEL / WAITING</div>
+      </div>
+      <div class="scan-side">
+        <div class="scan-metric"><small>TAILLE</small><strong id="scanHeight">185 cm</strong><span>PROFIL PERSONNEL</span></div>
+        <div class="scan-metric"><small>POIDS ACTUEL</small><strong id="scannerWeight">148.0 kg</strong><span id="scannerDate">POINT DE DÉPART</span></div>
+        <div class="scan-metric"><small>MASSE GRASSE</small><strong id="scanFat">--</strong><span>SAISIE FACULTATIVE</span></div>
+        <div class="scan-metric"><small>MASSE MUSCULAIRE</small><strong id="scanMuscle">--</strong><span>SAISIE FACULTATIVE</span></div>
+        <div class="scan-metric"><small>HYDRATATION</small><strong id="scanHydration">--</strong><span>SAISIE FACULTATIVE</span></div>
+        <div class="scan-metric"><small>IMC</small><strong id="scanBMI">43.2</strong><span>CALCULÉ AUTOMATIQUEMENT</span></div>
+      </div>
+    </div>
+    <div class="scanner-foot"><span>SCAN PERSONNEL • DONNÉES LOCALES</span><span id="scannerDelta">DÉPART : 148 KG</span></div>
+  </div>
+
+  <div class="weight-action-grid">
+    <button class="btn" onclick="document.getElementById('weightInput').focus()">＋ SE PESER</button>
+    <button class="btn btn-secondary" onclick="document.getElementById('modelFile').click()">⇧ IMPORTER MON MODÈLE 3D</button>
+  </div>
+
+  <div class="card scan-import-card">
+    <div class="import-title"><div><div class="eyebrow">PERSONAL IDENTITY</div><h2>CONFIGURER MON AVATAR</h2></div><span class="import-status" id="modelImportStatus">AUCUN MODÈLE</span></div>
+    <p class="notice">Pour obtenir un avatar qui te ressemble vraiment, importe un modèle personnel <b>.GLB / .GLTF</b> créé depuis ton scan. Les photos servent de références de scan ; elles ne sont pas transformées automatiquement en modèle 3D dans le navigateur.</p>
+    <input id="modelFile" type="file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" hidden>
+    <div class="two-col">
+      <button class="btn btn-secondary" onclick="document.getElementById('frontPhoto').click()">＋ PHOTO DE FACE</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('sidePhoto').click()">＋ PHOTO DE PROFIL</button>
+    </div>
+    <input id="frontPhoto" type="file" accept="image/*" capture="user" hidden>
+    <input id="sidePhoto" type="file" accept="image/*" capture="environment" hidden>
+    <div class="photo-reference-grid">
+      <div class="photo-reference" id="frontPhotoPreview">FACE · NON FOURNIE</div>
+      <div class="photo-reference" id="sidePhotoPreview">PROFIL · NON FOURNI</div>
+    </div>
+    <p class="notice" id="photoStatus">Les photos restent sur cet appareil. Pour un avatar 3D fidèle, un vrai modèle scanné avec morph targets est nécessaire.</p>
+  </div>
+
+  <div class="stat-grid weight-stat-grid">
+    <div class="stat"><div class="stat-label">POIDS ACTUEL</div><div class="stat-value" id="currentWeight">148.0</div><div class="stat-unit">KG</div></div>
+    <div class="stat"><div class="stat-label">OBJECTIF</div><div class="stat-value" id="goalWeight">115</div><div class="stat-unit">KG</div></div>
+    <div class="stat"><div class="stat-label">ÉVOLUTION</div><div class="stat-value" id="weightDifference">0.0</div><div class="stat-unit">KG DEPUIS LE DÉPART</div></div>
+    <div class="stat"><div class="stat-label">IMC</div><div class="stat-value" id="weightBMI">43.2</div><div class="stat-unit">INDICATEUR CALCULÉ</div></div>
   </div>
 
   <div class="card">
-    <h2>ENREGISTRER UN POIDS</h2>
-    <label class="field-label">Ton poids du jour (kg)</label>
-    <input class="field" type="number" id="weightInput" placeholder="Ex : 145.5" step="0.1" min="1">
-    <label class="field-label">Date de la pesée</label>
-    <input class="field" type="date" id="weightDate">
+    <div class="eyebrow">NEW BIOMETRIC RECORD</div><h2>ENREGISTRER UNE PESÉE</h2>
+    <label class="field-label" for="weightInput">Poids (kg) *</label>
+    <input class="field" type="number" id="weightInput" placeholder="Ex : 147.5" step="0.1" min="1" max="500">
+    <div class="two-col">
+      <div><label class="field-label" for="weightDate">Date *</label><input class="field" type="date" id="weightDate"></div>
+      <div><label class="field-label" for="weightFatInput">Masse grasse (%)</label><input class="field" type="number" id="weightFatInput" placeholder="Facultatif" min="1" max="75" step="0.1"></div>
+      <div><label class="field-label" for="weightMuscleInput">Masse musculaire (kg)</label><input class="field" type="number" id="weightMuscleInput" placeholder="Facultatif" min="1" max="200" step="0.1"></div>
+      <div><label class="field-label" for="weightHydrationInput">Hydratation (%)</label><input class="field" type="number" id="weightHydrationInput" placeholder="Facultatif" min="1" max="100" step="0.1"></div>
+    </div>
     <button class="btn" onclick="addWeight()">ENREGISTRER LA PESÉE</button>
+    <p class="notice">Seul le poids est obligatoire. Les autres mesures sont facultatives et ne sont jamais inventées.</p>
   </div>
 
   <div class="card">
-    <h2>MON OBJECTIF DE POIDS</h2>
-    <label class="field-label">Poids cible (kg)</label>
-    <input class="field" type="number" id="goalInput" placeholder="Ex : 120" step="0.1" min="1">
-    <button class="btn btn-secondary" onclick="saveGoal()">DÉFINIR MON OBJECTIF</button>
+    <div class="eyebrow">MISSION TARGET</div><h2>OBJECTIF PERSONNEL</h2>
+    <label class="field-label" for="goalInput">Poids cible (kg)</label>
+    <input class="field" type="number" id="goalInput" placeholder="115" step="0.1" min="1">
+    <button class="btn btn-secondary" onclick="saveGoal()">ACTUALISER MON OBJECTIF</button>
     <div class="progress-track"><div class="progress-fill" id="weightProgress"></div></div>
-    <p class="notice" id="weightProgressText">Ton parcours commencera avec ta première pesée.</p>
+    <p class="notice" id="weightProgressText">Ton parcours commence à 148 kg. Objectif : 115 kg.</p>
   </div>
 
-  <div class="section-title"><h2>HISTORIQUE</h2><span>TES RELEVÉS</span></div>
+  <div class="card">
+    <div class="import-title"><div><div class="eyebrow">BODY TRANSFORMATION</div><h2>COMPARAISON AVANT / APRÈS</h2></div><span class="import-status" id="compareDelta">0 KG</span></div>
+    <div class="compare-models">
+      <div class="compare-model"><canvas id="avatarBefore" aria-label="Avatar au poids de départ"></canvas><b>AVANT</b><span id="beforeWeight">148 kg</span></div>
+      <div class="compare-model"><canvas id="avatarAfter" aria-label="Avatar au poids sélectionné"></canvas><b>APRÈS</b><span id="afterWeight">148 kg</span></div>
+    </div>
+    <label class="field-label" for="compareSlider">Faire évoluer la comparaison</label>
+    <input id="compareSlider" class="compare-slider" type="range" min="0" max="100" value="100">
+    <div class="compare-scale"><span>DÉPART</span><span id="compareDate">DERNIÈRE PESÉE</span></div>
+    <p class="notice">Les morphs sont appliqués uniquement si ton modèle importé contient les cibles de déformation correspondantes. La progression reste proportionnelle aux mesures réelles.</p>
+  </div>
+
+  <div class="card">
+    <div class="eyebrow">LAST 30 DAYS</div><h2>COURBE D'ÉVOLUTION · 30 JOURS</h2>
+    <div class="chart-wrap" id="weightChart"><div class="empty">Les relevés des 30 derniers jours apparaîtront ici.</div></div>
+  </div>
+  <div class="section-title"><h2>HISTORIQUE DES PESÉES</h2><span>TES DONNÉES</span></div>
   <div class="card" id="weightHistory"><div class="empty">Aucune pesée enregistrée.</div></div>
 </section>
 
