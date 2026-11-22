@@ -778,7 +778,7 @@ function renderHUD(){
 function renderWeights(){
   const values=state.weights||[],latest=values[values.length-1],first=values[0];
   const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
-  set("homeWeight",latest?latest.weight.toFixed(1):"--");set("currentWeight",latest?latest.weight.toFixed(1):"--");set("goalWeight",state.goal?state.goal.toFixed(1):"--");set("goalInput",state.goal||"");
+  set("homeWeight",latest?latest.weight.toFixed(1):"--");set("currentWeight",latest?latest.weight.toFixed(1):"--");set("goalWeight",state.goal?state.goal.toFixed(1):"--");const goalField=document.getElementById("goalInput");if(goalField)goalField.value=state.goal||"";
   const delta=first&&latest?latest.weight-first.weight:0;
   set("weightDifference",first&&latest?(delta>0?"+":"")+delta.toFixed(1):"0.0");
   const height=(state.profile?.heightCm||185)/100,bmi=latest?(latest.weight/(height*height)).toFixed(1):"--";set("weightBMI",bmi);
@@ -792,7 +792,6 @@ function renderWeights(){
   set("compareDelta",((before.weight-after.weight)>0?"−":"+")+Math.abs(before.weight-after.weight).toFixed(1)+" KG");
   set("compareDate",after.date===before.date?"POINT DE DÉPART":formatDate(after.date).toUpperCase());
   if(slider){slider.max=Math.max(0,values.length-1);slider.value=slider.max;}
-  window.dispatchEvent(new CustomEvent("jarvis-weight-updated"));
 }
 
 function renderMeals(){
@@ -962,7 +961,7 @@ const MODEL_DB="jarvis-personal-scan",MODEL_STORE="assets";
 function openModelDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(MODEL_DB,1);req.onupgradeneeded=()=>req.result.createObjectStore(MODEL_STORE);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
 async function storeAsset(key,value){const db=await openModelDB();return new Promise((resolve,reject)=>{const tx=db.transaction(MODEL_STORE,"readwrite");tx.objectStore(MODEL_STORE).put(value,key);tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>reject(tx.error);});}
 async function readAsset(key){const db=await openModelDB();return new Promise((resolve,reject)=>{const req=db.transaction(MODEL_STORE).objectStore(MODEL_STORE).get(key);req.onsuccess=()=>{db.close();resolve(req.result||null);};req.onerror=()=>reject(req.error);});}
-function applyBodyMorphs(model,weight){
+function applyBodyMorphs(model,weight,muscleMass=null,baselineMuscle=null){
  const start=148,goal=115,loss=Math.max(0,Math.min(1,(start-weight)/(start-goal)));
  let applied=0,available=[];
  const aliases={
@@ -978,7 +977,7 @@ function applyBodyMorphs(model,weight){
   Object.entries(aliases).forEach(([key,names])=>{
    const target=names.find(name=>dict[name]!==undefined);
    if(!target)return;
-   const value=key==="belly_slim"?loss*.62:key==="face_slim"?loss*.25:key==="torso_slim"?loss*.22:key==="arms_muscle"?0:Math.max(0,(weight-start)/(start*.18))*.18;
+   const value=key==="belly_slim"?loss*.62:key==="face_slim"?loss*.25:key==="torso_slim"?loss*.22:key==="arms_muscle"?(muscleMass!=null&&baselineMuscle!=null?Math.max(0,muscleMass-baselineMuscle)*.08:0):Math.max(0,(weight-start)/(start*.18))*.18;
    inf[dict[target]]=Math.max(0,Math.min(1,value));available.push(target);applied++;
   });
  });
@@ -1002,7 +1001,7 @@ async function makePersonalViewer(canvasId,weight){
    const model=gltf.scene;model.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false;}});
    const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
    const scale=2.45/(size.y||1);model.scale.setScalar(scale);model.position.set(-center.x*scale,-box.min.y*scale,-center.z*scale);
-   applyBodyMorphs(model,weight);group.add(model);
+   const values=window.jarvisWeightData?.()||[];const baseMuscle=values.find(v=>v.muscleMassKg!=null)?.muscleMassKg??null;const selected=values.find(v=>v.weight===weight);applyBodyMorphs(model,weight,selected?.muscleMassKg??null,baseMuscle);group.userData.model=model;group.add(model);
   }catch(e){console.warn("Personal GLB could not be loaded",e);}
  }
  const clock=new THREE.Clock();
@@ -1020,7 +1019,7 @@ async function refreshPersonalViewers(){
  if(!personalModelBuffer){if(status)status.textContent="PERSONNALISATION REQUISE";if(placeholder)placeholder.style.display="flex";if(host)host.classList.remove("model-loaded");return;}
  if(status)status.textContent="MODÈLE PERSONNEL CHARGÉ";if(placeholder)placeholder.style.display="none";if(host)host.classList.add("model-loaded");
  const canvases=[["avatar3D",last?.weight||148],["avatarBefore",first?.weight||148],["avatarAfter",selected?.weight||148]];
- for(const [id,weight] of canvases){const el=document.getElementById(id);if(!el)continue;const old=avatarViewers.find(v=>v.canvasId===id);if(old){old.renderer.dispose();const idx=avatarViewers.indexOf(old);avatarViewers.splice(idx,1);}const viewer=await makePersonalViewer(id,weight);if(viewer)avatarViewers.push(viewer);}
+ for(const [id,weight] of canvases){const el=document.getElementById(id);if(!el)continue;const old=avatarViewers.find(v=>v.canvasId===id);if(old){const valuesNow=window.jarvisWeightData?.()||[];const baseMuscle=valuesNow.find(v=>v.muscleMassKg!=null)?.muscleMassKg??null;const selectedNow=valuesNow.find(v=>v.weight===weight);if(old.group.userData.model)applyBodyMorphs(old.group.userData.model,weight,selectedNow?.muscleMassKg??null,baseMuscle);continue;}const viewer=await makePersonalViewer(id,weight);if(viewer)avatarViewers.push(viewer);}
 }
 window.jarvisWeightData=()=>{try{return JSON.parse(localStorage.getItem("jarvis_IRON PARADISE_final")||"{}").weights||[{weight:148,date:"2026-11-22"}];}catch{return [{weight:148,date:"2026-11-22"}];}};
 document.getElementById("modelFile")?.addEventListener("change",async e=>{
@@ -1046,7 +1045,7 @@ buildReactor();
 </script><script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=22", { updateViaCache: "none" })
+    navigator.serviceWorker.register("./sw.js?v=23", { updateViaCache: "none" })
       .then(reg => reg.update())
       .catch(err => console.warn("JARVIS offline cache update failed", err));
   });
