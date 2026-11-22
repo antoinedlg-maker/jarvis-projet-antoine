@@ -239,7 +239,7 @@ h3{color:#e8edf3}
 /* Native Poids hologram: image supplied by the user, inside the existing tab */
 #weightHologramStage{perspective:1000px;touch-action:pan-y;cursor:grab;isolation:isolate}
 #weightHologramStage:active{cursor:grabbing}
-#weightHologram{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:2;pointer-events:none;user-select:none;-webkit-user-drag:none;transform:rotateX(var(--holo-rx,0deg)) rotateY(var(--holo-ry,0deg));transform-style:preserve-3d;transition:transform .14s ease-out;filter:drop-shadow(0 0 18px rgba(62,190,255,.24))}
+#weightHologram{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;z-index:2;pointer-events:none;user-select:none;-webkit-user-drag:none;transform:rotateX(var(--holo-rx,0deg)) rotateY(var(--holo-ry,0deg));transform-style:preserve-3d;transition:transform .14s ease-out;filter:drop-shadow(0 0 18px rgba(62,190,255,.24))}
 #weightHologramStage .scanner-3d,#weightHologramStage .scanner-placeholder{display:none!important}
 #weightHologramStage .scanline{z-index:4;height:3px;box-shadow:0 0 15px 4px #39cfff;opacity:.8}
 #weightHologramStage .scanner-caption{z-index:5;text-shadow:0 0 8px #000}
@@ -315,7 +315,7 @@ h3{color:#e8edf3}
           <strong>TON AVATAR PERSONNEL</strong>
           <small>Importe ton modèle 3D pour afficher ta morphologie réelle.</small>
         </div>
-        <div class="scanline"></div><div class="scanner-caption" id="scannerCaption">PERSONAL BODY MODEL / WAITING</div>
+        <div class="scanline"></div><div class="scanner-caption" id="scannerCaption">HOLOGRAMME ACTIF</div>
       </div>
       <div class="scan-side">
         <div class="scan-metric"><small>TAILLE</small><strong id="scanHeight">185 cm</strong><span>PROFIL PERSONNEL</span></div>
@@ -767,7 +767,7 @@ function renderHUD(){
   set("hudLevel",String(Math.floor(state.xp/100)+1).padStart(2,"0"));set("hudXP",state.xp+" XP");set("hudWeight",latest?latest.weight.toFixed(1)+" kg":"-- kg");
   const height=state.profile?.heightCm||185,bmi=latest?(latest.weight/Math.pow(height/100,2)).toFixed(1):"--";
   set("scannerWeight",latest?latest.weight.toFixed(1)+" kg":"-- kg");set("scannerDate",latest?(latest.source==="baseline"?"POINT DE DÉPART":formatDate(latest.date).toUpperCase()):"EN ATTENTE");
-  set("scannerDelta",first&&latest?((latest.weight-first.weight)>0?"+":"")+(latest.weight-first.weight).toFixed(1)+" KG":"--");
+  set("scannerDelta",latest?latest.weight.toFixed(1)+" KG":"--");
   set("scanHeight",height+" cm");set("scanFat",latest?.bodyFatPct!=null?latest.bodyFatPct.toFixed(1)+" %":"--");set("scanMuscle",latest?.muscleMassKg!=null?latest.muscleMassKg.toFixed(1)+" kg":"--");set("scanHydration",latest?.hydrationPct!=null?latest.hydrationPct.toFixed(1)+" %":"--");set("scanBMI",bmi);set("weightBMI",bmi);
   const chart=document.getElementById("weightChart");
   if(chart){
@@ -1057,7 +1057,7 @@ buildReactor();
 </script><script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js?v=25", { updateViaCache: "none" })
+    navigator.serviceWorker.register("./sw.js?v=27", { updateViaCache: "none" })
       .then(reg => reg.update())
       .catch(err => console.warn("JARVIS offline cache update failed", err));
   });
