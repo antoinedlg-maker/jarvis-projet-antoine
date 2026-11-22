@@ -961,8 +961,10 @@ const MODEL_DB="jarvis-personal-scan",MODEL_STORE="assets";
 function openModelDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(MODEL_DB,1);req.onupgradeneeded=()=>req.result.createObjectStore(MODEL_STORE);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
 async function storeAsset(key,value){const db=await openModelDB();return new Promise((resolve,reject)=>{const tx=db.transaction(MODEL_STORE,"readwrite");tx.objectStore(MODEL_STORE).put(value,key);tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>reject(tx.error);});}
 async function readAsset(key){const db=await openModelDB();return new Promise((resolve,reject)=>{const req=db.transaction(MODEL_STORE).objectStore(MODEL_STORE).get(key);req.onsuccess=()=>{db.close();resolve(req.result||null);};req.onerror=()=>reject(req.error);});}
-function applyBodyMorphs(model,weight,muscleMass=null,baselineMuscle=null){
- const start=148,goal=115,loss=Math.max(0,Math.min(1,(start-weight)/(start-goal)));
+function applyBodyMorphs(model,weight,muscleMass=null,baselineMuscle=null,bodyFat=null,baselineBodyFat=null){
+ const start=148,goal=115,weightLoss=Math.max(0,Math.min(1,(start-weight)/(start-goal)));
+ const fatLoss=bodyFat!=null&&baselineBodyFat!=null?Math.max(0,Math.min(1,(baselineBodyFat-bodyFat)/12)):weightLoss;
+ const loss=weightLoss*.55+fatLoss*.45;
  let applied=0,available=[];
  const aliases={
   belly_slim:["belly_slim","belly_reduce","abdomen_slim","waist_slim","body_slim"],
@@ -1001,7 +1003,7 @@ async function makePersonalViewer(canvasId,weight){
    const model=gltf.scene;model.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false;}});
    const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
    const scale=2.45/(size.y||1);model.scale.setScalar(scale);model.position.set(-center.x*scale,-box.min.y*scale,-center.z*scale);
-   const values=window.jarvisWeightData?.()||[];const baseMuscle=values.find(v=>v.muscleMassKg!=null)?.muscleMassKg??null;const selected=values.find(v=>v.weight===weight);applyBodyMorphs(model,weight,selected?.muscleMassKg??null,baseMuscle);group.userData.model=model;group.add(model);
+   const values=window.jarvisWeightData?.()||[];const baseMuscle=values.find(v=>v.muscleMassKg!=null)?.muscleMassKg??null;const selected=values.find(v=>v.weight===weight);const baseFat=values.find(v=>v.bodyFatPct!=null)?.bodyFatPct??null;applyBodyMorphs(model,weight,selected?.muscleMassKg??null,baseMuscle,selected?.bodyFatPct??null,baseFat);group.userData.model=model;group.add(model);
   }catch(e){console.warn("Personal GLB could not be loaded",e);}
  }
  const clock=new THREE.Clock();
@@ -1019,7 +1021,7 @@ async function refreshPersonalViewers(){
  if(!personalModelBuffer){if(status)status.textContent="PERSONNALISATION REQUISE";if(placeholder)placeholder.style.display="flex";if(host)host.classList.remove("model-loaded");return;}
  if(status)status.textContent="MODÈLE PERSONNEL CHARGÉ";if(placeholder)placeholder.style.display="none";if(host)host.classList.add("model-loaded");
  const canvases=[["avatar3D",last?.weight||148],["avatarBefore",first?.weight||148],["avatarAfter",selected?.weight||148]];
- for(const [id,weight] of canvases){const el=document.getElementById(id);if(!el)continue;const old=avatarViewers.find(v=>v.canvasId===id);if(old){const valuesNow=window.jarvisWeightData?.()||[];const baseMuscle=valuesNow.find(v=>v.muscleMassKg!=null)?.muscleMassKg??null;const selectedNow=valuesNow.find(v=>v.weight===weight);if(old.group.userData.model)applyBodyMorphs(old.group.userData.model,weight,selectedNow?.muscleMassKg??null,baseMuscle);continue;}const viewer=await makePersonalViewer(id,weight);if(viewer)avatarViewers.push(viewer);}
+ for(const [id,weight] of canvases){const el=document.getElementById(id);if(!el)continue;const old=avatarViewers.find(v=>v.canvasId===id);if(old){const valuesNow=window.jarvisWeightData?.()||[];const baseMuscle=valuesNow.find(v=>v.muscleMassKg!=null)?.muscleMassKg??null;const selectedNow=valuesNow.find(v=>v.weight===weight);const baseFat=valuesNow.find(v=>v.bodyFatPct!=null)?.bodyFatPct??null;if(old.group.userData.model)applyBodyMorphs(old.group.userData.model,weight,selectedNow?.muscleMassKg??null,baseMuscle,selectedNow?.bodyFatPct??null,baseFat);continue;}const viewer=await makePersonalViewer(id,weight);if(viewer)avatarViewers.push(viewer);}
 }
 window.jarvisWeightData=()=>{try{return JSON.parse(localStorage.getItem("jarvis_IRON PARADISE_final")||"{}").weights||[{weight:148,date:"2026-11-22"}];}catch{return [{weight:148,date:"2026-11-22"}];}};
 document.getElementById("modelFile")?.addEventListener("change",async e=>{
