@@ -52,6 +52,144 @@ button:focus-visible{outline:2px solid #8ad9e8;outline-offset:3px}input[type=che
 @media(max-width:390px){.page{padding:20px 14px 28px}.topbar{height:68px;padding:12px 14px}.brand{font-size:15px}.brand small{font-size:7px}.status{font-size:7px}.reactor-layout{grid-template-columns:105px 1fr;gap:10px}.reactor-core{width:100px;height:100px}.readout strong,.scan-metric strong{font-size:13px}.hud-panel{padding:13px}.scanner-layout{grid-template-columns:116px minmax(0,1fr);gap:9px}.body-scanner{height:190px}.stat{padding:12px 10px}.stat-value{font-size:19px}.nav-btn{font-size:7px}.nav-btn .nav-icon{font-size:17px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
+
+/* ===== JARVIS AVENGERS COMMAND DECK — VISUAL REDESIGN ===== */
+:root{
+ --cyan:#8fc7e8;--gold:#e6bd70;--green:#9cc77c;--red:#d96c60;
+ --text:#f3eee3;--muted:#9da5ad;--line:rgba(210,174,104,.27);
+ --steel:#8eacc5;--panel:#11161d;--panel2:#1a222c;
+}
+html{background:#07090d}
+body{
+ background:
+  radial-gradient(ellipse at 50% -15%,rgba(189,143,65,.16),transparent 38%),
+  radial-gradient(ellipse at 100% 30%,rgba(55,100,145,.12),transparent 35%),
+  linear-gradient(180deg,#090b10 0%,#10141a 48%,#080a0e 100%);
+ color:var(--text);
+}
+body:before{
+ opacity:.075;
+ background-image:repeating-linear-gradient(135deg,rgba(205,213,222,.2) 0 1px,transparent 1px 5px);
+ background-size:9px 9px;
+}
+.app{max-width:760px;background:linear-gradient(180deg,rgba(16,20,27,.92),rgba(7,10,14,.98));}
+.topbar{
+ height:78px;padding:12px 18px;
+ background:linear-gradient(100deg,rgba(8,10,14,.98),rgba(24,29,37,.96),rgba(8,10,14,.98));
+ border-bottom:1px solid rgba(225,185,107,.5);
+ box-shadow:0 5px 22px #0009;
+}
+.brand{display:flex;align-items:center;gap:11px;font:800 16px Orbitron,sans-serif;letter-spacing:2.1px;color:#f3d18d}
+.brand:before{
+ content:"A";width:39px;height:39px;display:grid;place-items:center;
+ border:1px solid #d5ad61;border-radius:50%;
+ color:#f2d18b;font:900 25px Georgia,serif;
+ text-shadow:0 0 12px #d8a94f;
+ box-shadow:inset 0 0 13px #d7ae5a35,0 0 14px #d7ae5a20;
+}
+.brand small{color:#a8bed2;letter-spacing:1.6px;font-size:7px}
+.status{color:#b8d3e4;font-size:8px;letter-spacing:1px}
+.status-dot{background:#8fc99c;box-shadow:0 0 10px #8fc99c}
+.page{padding:22px 15px 30px}
+.eyebrow{color:#e5bd71;font-size:8px;letter-spacing:1.7px}
+h1{font:800 clamp(24px,6vw,32px)/1.12 Orbitron,sans-serif;letter-spacing:-.6px;color:#f1d59b;text-transform:uppercase}
+h2{font:800 11px Orbitron,sans-serif;letter-spacing:1.2px;color:#e8c77f}
+h3{color:#e8edf3}
+.subtitle{color:#b0b7c0}
+.section-title{margin:24px 2px 11px;padding-left:10px;border-left:3px solid #c99d54}
+.section-title h2{color:#edcc89;font-size:9px}
+.section-title span{color:#9caebe}
+.card,.hero-card,.stat,.hud-panel,.hero-tile{
+ border:1px solid rgba(187,153,94,.33);border-radius:10px;
+ background:linear-gradient(145deg,rgba(29,34,42,.98),rgba(12,16,22,.99));
+ box-shadow:0 12px 28px #0008,inset 0 1px #ffffff0b;
+}
+.card{padding:16px;margin-top:12px}
+.card:before{left:10px;right:10px;background:linear-gradient(90deg,transparent,#d7b36f,transparent);opacity:.5}
+.hero-card{
+ border-color:#cda45d88;
+ background:radial-gradient(circle at 100% 0%,#c69a4b24,transparent 45%),linear-gradient(130deg,#242b34,#11161d);
+}
+.hero-card:after{border-color:#d7b36f28;box-shadow:0 0 0 18px #d7b36f09,0 0 0 38px #d7b36f06}
+.hero-label{color:#e9c77f;letter-spacing:1.6px}
+.hero-name{color:#f0d49a;font-size:19px}
+.hero-message{color:#c2c8cf}
+.stat{border-radius:8px;background:linear-gradient(145deg,#202832,#10151c);border-color:#8ea9c233}
+.stat-label{color:#a9b9c8}
+.stat-value{color:#e9c77f;font-family:Orbitron,sans-serif;font-size:19px}
+.stat-unit{color:#9caab8}
+.progress-track{background:#333b44;border:1px solid #ffffff12;border-radius:2px}
+.progress-fill{background:linear-gradient(90deg,#8eabbf,#e7c174)}
+.btn{
+ border:1px solid #f0d18f;border-radius:5px;
+ background:linear-gradient(110deg,#9d7136,#e8c77e 55%,#b78d4e);
+ color:#15120d;letter-spacing:1px;font-size:9px;
+ box-shadow:0 3px 12px #0007,inset 0 1px #fff6;
+}
+.btn-secondary{background:linear-gradient(110deg,#1c2d3d,#263f55);color:#c4d9e8;border:1px solid #789dbd}
+.field,.card input,.card select,.card textarea,input,select,textarea{
+ border:1px solid #71879b66;border-radius:5px;background:#0a1017;color:#f0eee8;
+}
+.field:focus,input:focus,select:focus,textarea:focus{border-color:#d8b36d;box-shadow:0 0 0 3px #d8b36d1c}
+.hud-panel{
+ border-color:#c59d5b80;border-radius:9px;
+ background:linear-gradient(145deg,#1c252f,#0b1017);
+}
+.hud-panel:before{
+ opacity:.08;background-image:repeating-linear-gradient(135deg,#c3d1dd 0 1px,transparent 1px 5px);
+ background-size:8px 8px;
+}
+.hud-head{color:#e3c17b}
+.hud-live{color:#a6c8a2}
+.reactor-core{filter:drop-shadow(0 0 17px #c99b4c55)}
+.reactor-core:before,.reactor-core:after{border-color:#d8b36d;box-shadow:0 0 13px #c99b4c55,inset 0 0 12px #c99b4c33}
+.readout{border-left-color:#d2a95f}
+.readout small,.scan-metric small{color:#a5b7c7}
+.readout strong,.scan-metric strong{color:#f0d69f}
+.readout em,.scan-metric span{color:#9fc2dc}
+.body-scanner{border-color:#c49d5a55;background:radial-gradient(ellipse at 50% 45%,#c49d5a20,transparent 65%),#0a1119}
+.body-scanner:before{border-color:#c49d5a55}
+.scanline{background:#e4c47c;box-shadow:0 0 12px 3px #c79b4d}
+.list-item{border:1px solid #b58e5238;border-radius:6px;background:#080d13;font-size:10px;color:#e5e8e9}
+.notice,.empty{color:#a6b1ba}
+.training-mission,.workout-hero-card{
+ border:1px solid #c59d5b66;border-radius:9px;
+ background:linear-gradient(145deg,#202a35,#0c1118);
+ box-shadow:0 14px 34px #0008;
+}
+.training-mission-image,.workout-hero-image{
+ background:radial-gradient(circle at 78% 20%,#c99b4b36,transparent 40%),linear-gradient(120deg,#263746,#10151d)!important;
+}
+.training-mission-content h2,.workout-hero-name{color:#f0d49a}
+.training-mission-content p,.workout-hero-role{color:#adc0d0}
+.mission-chip,.workout-hero-tag{color:#e6bd70}
+.mission-exercises>div{border:1px solid #8fa9bf35;border-radius:6px;background:#080e15}
+.mission-exercises b{color:#e7c27a}
+.training-module{border:1px solid #c49b5b55;border-radius:6px;background:linear-gradient(145deg,#202b36,#0c1219)}
+.training-module b{color:#e4c17e}
+.training-module small{color:#a4b4c2}
+.roster-card{border:1px solid #c49b5b55;border-radius:6px;background:linear-gradient(120deg,#263441,#0d141c)}
+.roster-card b{color:#ecd19a}
+.roster-card small{color:#a8b9c8}
+.bottom-nav{
+ background:linear-gradient(90deg,#080b10f7,#1a2029f7,#080b10f7);
+ border-top:1px solid #c39a5a80;
+ box-shadow:0 -10px 35px #000a;
+}
+.nav-btn{color:#9aaab8;font-size:7px;letter-spacing:.6px}
+.nav-btn.active{color:#f0ce87}
+.nav-btn.active:after{background:#e4bc70;box-shadow:0 0 10px #e4bc7080}
+.delete-btn{color:#e18c7e}
+@media(min-width:600px){
+ .app{border-left:1px solid #b18a4b44;border-right:1px solid #b18a4b44;box-shadow:0 0 55px #000b}
+ .page{padding:28px 25px 36px}
+}
+@media(max-width:390px){
+ .brand{font-size:14px}.brand:before{width:35px;height:35px;font-size:22px}
+ .page{padding:19px 12px 27px}
+ .stat-value{font-size:17px}
+}
+
 </style>
 </head>
 <body>
