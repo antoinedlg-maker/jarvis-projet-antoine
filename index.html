@@ -244,6 +244,55 @@ h3{color:#e8edf3}
 #weightHologramStage .scanline{z-index:4;height:3px;box-shadow:0 0 15px 4px #39cfff;opacity:.8}
 #weightHologramStage .scanner-caption{z-index:5;text-shadow:0 0 8px #000}
 @media(prefers-reduced-motion:reduce){#weightHologram{transition:none}#weightHologramStage .scanline{animation:none}}
+
+
+/* ===== INITIATIVE AVENGERS — REFONTE VISUELLE CIBLÉE DE L'ONGLET POIDS ===== */
+#page-weight{--av-gold:#e0b85f;--av-gold-soft:#a98242;--av-blue:#8fc8e8;--av-red:#8d252b;--av-red-dark:#260d13;--av-steel:#9fb7c6}
+#page-weight .weight-title-row{display:flex;align-items:center;gap:13px;padding:4px 2px 15px;border-bottom:1px solid #d5ad5a66}
+#page-weight .weight-title-emblem{width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;border:1px solid var(--av-gold);border-radius:50%;color:#f1ce7a;font-size:32px;text-shadow:0 0 15px #e0b85f99;background:radial-gradient(circle,#72532355,#130f0a 68%);box-shadow:0 0 0 4px #d5ad5a17,0 0 24px #d5ad5a25}
+#page-weight .weight-hero-head .eyebrow{color:#9bc8e2;font-size:8px;letter-spacing:1.6px}
+#page-weight .weight-hero-head h1{font:800 clamp(24px,6vw,31px)/1.1 Orbitron,sans-serif;letter-spacing:1px;color:#e7c16f;text-shadow:0 0 14px #d6ad5a35}
+#page-weight .weight-hero-head h1 span{color:#e7c16f}
+#page-weight .weight-hero-head .subtitle{margin-top:6px;color:#9fc3d7;font:700 8px Orbitron;letter-spacing:1px}
+#page-weight .card,#page-weight .weight-stage{border:1px solid #b9914d99;border-radius:13px;background-color:#101216;background-image:repeating-linear-gradient(135deg,#ffffff05 0 2px,transparent 2px 5px),repeating-linear-gradient(45deg,#00000022 0 1px,transparent 1px 4px),linear-gradient(145deg,#1b1b1d,#0b0d10 72%);box-shadow:0 12px 28px #0008,inset 0 1px #ffffff0b}
+#page-weight .card:before{background:linear-gradient(90deg,transparent,#e0b85f,transparent);opacity:.65}
+#page-weight .weight-stage{padding:13px;margin:15px 0;border-color:#d2aa5d;background-image:repeating-linear-gradient(135deg,#ffffff06 0 2px,transparent 2px 5px),linear-gradient(145deg,#351217,#180b10 72%);box-shadow:0 0 0 1px #d1a95722,0 14px 34px #0009}
+#page-weight .weight-stage .hud-head{color:#e6c678;font:700 8px Orbitron;letter-spacing:.7px}
+#page-weight .weight-stage .hud-live{color:#8fc8e8}
+#page-weight .personal-scanner{border:1px solid #d6b15d;background:radial-gradient(ellipse at 50% 48%,#167ba34d,transparent 58%),linear-gradient(180deg,#101c25,#070a0f);border-radius:12px}
+#page-weight .personal-scanner:before{border:1px solid #d7b66b99;box-shadow:0 0 0 5px #d6b15d16,0 0 25px #d6b15d28}
+#page-weight .personal-scanner:after{content:"";position:absolute;z-index:1;left:50%;top:46%;width:78%;aspect-ratio:1;border:1px solid #d7b66b75;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #d7b66b0d,0 0 22px #d7b66b20;pointer-events:none}
+#page-weight #weightHologram{object-fit:cover;object-position:center 42%;filter:drop-shadow(0 0 19px #45bde777)}
+#page-weight .scanner-caption{color:#e8c779;font:700 8px Orbitron;letter-spacing:1px}
+#page-weight .scan-side .scan-metric{border-bottom:1px solid #c49b4d44}
+#page-weight .scan-side .scan-metric small{color:#91c6e4;font:700 7px Orbitron;letter-spacing:.8px}
+#page-weight .scan-side .scan-metric strong{color:#f1d38d;font-family:Orbitron}
+#page-weight .scan-side .scan-metric span{color:#9aabb5}
+#page-weight .scanner-foot{border-color:#d1aa5c66;color:#9fc5d9}
+#page-weight .weight-stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:12px;margin:14px 0;border:1px solid #d4ad5e;border-radius:13px;background:repeating-linear-gradient(135deg,#ffffff05 0 2px,transparent 2px 5px),linear-gradient(145deg,#45171d,#210c11 76%);box-shadow:0 10px 28px #0008}
+#page-weight .weight-stat-grid .stat{min-width:0;border:1px solid #c49b4d75;border-radius:9px;background:linear-gradient(145deg,#191b1e,#0d1014);box-shadow:inset 0 1px #ffffff0a}
+#page-weight .weight-stat-grid .stat-label{color:#9fc7dc;font:700 7px Orbitron;letter-spacing:.8px}
+#page-weight .weight-stat-grid .stat-value{color:#f0ce7b;font:800 clamp(17px,4.8vw,23px) Orbitron;text-shadow:0 0 12px #d7b35b30}
+#page-weight .weight-stat-grid .stat-unit{color:#9eabb2;font-size:8px}
+#page-weight .weight-progress-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:13px 0 7px;color:#9fc7dc;font:700 8px Orbitron;letter-spacing:.6px}
+#page-weight .weight-progress-meta strong{color:#f0cb70;font-size:12px}
+#page-weight .progress-track{height:11px;border:1px solid #b58d4e;border-radius:99px;background:#090c10;overflow:hidden}
+#page-weight .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#9c242b 0%,#d66b35 52%,#f0c76b 100%);box-shadow:0 0 13px #d99d4b77;transition:width .45s ease}
+#page-weight .weight-action-grid{margin:13px 0 16px}
+#page-weight .weight-action-grid .btn:first-child,#page-weight .card > .btn:not(.btn-secondary){background:linear-gradient(180deg,#e3c477,#b88b3e);color:#21180a;border:1px solid #f0d58b;box-shadow:0 5px 15px #0006;font-weight:800}
+#page-weight .weight-action-grid .btn-secondary,#page-weight .btn-secondary{background:transparent;color:#9bcde8;border:1px solid #5595b8;box-shadow:inset 0 0 12px #2b719018}
+#page-weight h2{color:#e7c574;font-family:Orbitron;letter-spacing:.8px}
+#page-weight .eyebrow{color:#e0b85f}
+#page-weight .field-label{color:#a8c7d7}
+#page-weight .field{background:#090e13;border:1px solid #8f7447;color:#f0f2ee}
+#page-weight .import-status{border-color:#c6a45e;color:#e4c477}
+#page-weight .compare-model{border-color:#c5a15b;background:radial-gradient(ellipse at 50% 45%,#1d88b333,transparent 65%),#080d12}
+#page-weight .compare-model b{color:#e9c879}
+#page-weight .compare-model span{color:#a8d2e8}
+#page-weight .compare-slider{accent-color:#d5ad5e}
+#page-weight .notice,#page-weight .empty{color:#9babb7}
+@media(max-width:390px){#page-weight .weight-title-emblem{width:46px;height:46px;flex-basis:46px;font-size:27px}#page-weight .weight-stage-grid{grid-template-columns:minmax(0,1fr) 118px;gap:8px}#page-weight .weight-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 </head>
 <body>
@@ -299,13 +348,18 @@ h3{color:#e8edf3}
 <!-- PAGE 2 : POIDS / SCAN 3D -->
 <section class="page" id="page-weight">
   <div class="weight-hero-head">
-    <div class="eyebrow">STARK TECH // BIOMETRIC LAB</div>
-    <h1>POIDS <span>/ SCAN 3D</span></h1>
-    <p class="subtitle">Ton corps réel. Tes mesures. Ton évolution, étape par étape.</p>
+    <div class="weight-title-row">
+      <div class="weight-title-emblem" aria-hidden="true">✦</div>
+      <div>
+        <div class="eyebrow">INITIATIVE PERSONNELLE // LABORATOIRE BIOMÉTRIQUE</div>
+        <h1>POIDS <span>/ SCAN 3D</span></h1>
+        <p class="subtitle">SYSTÈME DE SUIVI PHYSIQUE • DONNÉES PERSONNELLES</p>
+      </div>
+    </div>
   </div>
 
   <div class="weight-stage hud-panel">
-    <div class="hud-head"><span>HOLOGRAPHIC BODY SCAN // SUBJECT 001</span><span class="hud-live" id="avatarStatus">PERSONNALISATION REQUISE</span></div>
+    <div class="hud-head"><span>HOLOGRAPHIC BODY SCAN // SUBJECT 001</span><span class="hud-live" id="avatarStatus">HOLOGRAMME ACTIF</span></div>
     <div class="weight-stage-grid">
       <div class="body-scanner personal-scanner" id="weightHologramStage" aria-label="Hologramme personnel à faire pivoter au doigt">
         <img id="weightHologram" src="./assets/poids-3d.webp" alt="Hologramme de scan corporel sur plateforme lumineuse" draggable="false">
@@ -354,7 +408,7 @@ h3{color:#e8edf3}
   <div class="stat-grid weight-stat-grid">
     <div class="stat"><div class="stat-label">POIDS ACTUEL</div><div class="stat-value" id="currentWeight">148.0</div><div class="stat-unit">KG</div></div>
     <div class="stat"><div class="stat-label">OBJECTIF</div><div class="stat-value" id="goalWeight">115</div><div class="stat-unit">KG</div></div>
-    <div class="stat"><div class="stat-label">ÉVOLUTION</div><div class="stat-value" id="weightDifference">0.0</div><div class="stat-unit">KG DEPUIS LE DÉPART</div></div>
+    <div class="stat"><div class="stat-label">POIDS ENREGISTRÉ</div><div class="stat-value" id="weightDifference">148.0</div><div class="stat-unit">KG • DERNIÈRE MESURE</div></div>
     <div class="stat"><div class="stat-label">IMC</div><div class="stat-value" id="weightBMI">43.2</div><div class="stat-unit">INDICATEUR CALCULÉ</div></div>
   </div>
 
@@ -377,7 +431,7 @@ h3{color:#e8edf3}
     <label class="field-label" for="goalInput">Poids cible (kg)</label>
     <input class="field" type="number" id="goalInput" placeholder="115" step="0.1" min="1">
     <button class="btn btn-secondary" onclick="saveGoal()">ACTUALISER MON OBJECTIF</button>
-    <div class="progress-track"><div class="progress-fill" id="weightProgress"></div></div>
+    <div class="weight-progress-meta"><span>PROGRESSION VERS TON OBJECTIF</span><strong id="weightProgressPercent">0 %</strong></div><div class="progress-track"><div class="progress-fill" id="weightProgress"></div></div>
     <p class="notice" id="weightProgressText">Ton parcours commence à 148 kg. Objectif : 115 kg.</p>
   </div>
 
@@ -790,10 +844,11 @@ function renderWeights(){
   const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
   set("homeWeight",latest?latest.weight.toFixed(1):"--");set("currentWeight",latest?latest.weight.toFixed(1):"--");set("goalWeight",state.goal?state.goal.toFixed(1):"--");const goalField=document.getElementById("goalInput");if(goalField)goalField.value=state.goal||"";
   const delta=first&&latest?latest.weight-first.weight:0;
-  set("weightDifference",first&&latest?(delta>0?"+":"")+delta.toFixed(1):"0.0");
+  set("weightDifference",latest?latest.weight.toFixed(1):"--");
   const height=(state.profile?.heightCm||185)/100,bmi=latest?(latest.weight/(height*height)).toFixed(1):"--";set("weightBMI",bmi);
   const progress=first&&latest&&state.goal!==null&&first.weight!==state.goal?Math.max(0,Math.min(100,((first.weight-latest.weight)/(first.weight-state.goal))*100)):0;
   const bar=document.getElementById("weightProgress");if(bar)bar.style.width=progress+"%";
+  set("weightProgressPercent",Math.round(progress)+" %");
   set("weightProgressText",latest?Math.round(progress)+" % du chemin vers "+state.goal+" kg. Progression mesurée depuis "+first.weight+" kg.":"Enregistre une pesée pour suivre ta progression.");
   const history=document.getElementById("weightHistory");
   if(history)history.innerHTML=values.length?[...values].reverse().map((item,index)=>'<div class="list-item"><span>'+formatDate(item.date)+(item.source==="baseline"?' · POINT DE DÉPART':'')+'</span><strong>'+item.weight.toFixed(1)+' kg</strong><button class="delete-btn" onclick="deleteItem(\'weights\','+(values.length-1-index)+')">×</button></div>').join(""):"<div class='empty'>Aucune pesée enregistrée.</div>";
