@@ -891,7 +891,7 @@ function buildAvatar(){
 </script><script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" })
+    navigator.serviceWorker.register("./sw.js?v=22", { updateViaCache: "none" })
       .then(reg => reg.update())
       .catch(err => console.warn("JARVIS offline cache update failed", err));
   });
