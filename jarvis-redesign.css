@@ -236,3 +236,6 @@ input[type=checkbox]{accent-color:var(--jp-gold)!important}
   #jarvis-action-launch{right:10px!important;bottom:calc(88px + env(safe-area-inset-bottom))!important}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+/* Preview rebuild trigger — isolated redesign branch. */
