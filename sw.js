@@ -1,10 +1,11 @@
-const CACHE = "jarvis-antoine-avengers-v28";
+const CACHE = "jarvis-antoine-avengers-v29";
 
 const FILES = [
   "./",
   "./index.html",
   "./manifest.json",
   "./jarvis-poids.js",
+  "./jarvis-redesign.css",
   "./assets/poids-3d.webp",
 ];
 
