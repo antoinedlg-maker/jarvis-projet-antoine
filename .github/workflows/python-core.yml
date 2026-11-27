@@ -1,0 +1,28 @@
+name: JARVIS Python Core
+
+on:
+  push:
+    branches:
+      - integration/openjarvis-python-core
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  python-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install build tools
+        run: python -m pip install --upgrade pip hatchling
+      - name: Compile Python source
+        run: python -m compileall -q src
+      - name: Build package
+        run: python -m pip wheel . --no-deps --no-build-isolation --wheel-dir dist
